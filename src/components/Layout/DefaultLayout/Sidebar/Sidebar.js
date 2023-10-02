@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Sidebar.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,28 +10,28 @@ function Sidebar() {
         <aside className={cx('sidebar')}>
             <ul>
                 <li>
-                    <Link to="/" className="nav-link">
+                    <NavLink to="/" className={cx('nav-link')}>
                         <FontAwesomeIcon icon={faHouse} />
                         <strong>Home</strong>
-                    </Link>
+                    </NavLink>
                 </li>
                 <li>
-                    <Link to="/tickets" className="nav-link">
+                    <NavLink to="/tickets" className={cx('nav-link')}>
                         <FontAwesomeIcon icon={faTicket} />
                         <strong>Tickets</strong>
-                    </Link>
+                    </NavLink>
                 </li>
                 <li>
-                    <Link to="/drinking-water" className="nav-link">
+                    <NavLink to="/drinking-water" className={cx('nav-link')}>
                         <FontAwesomeIcon icon={faMugSaucer} />
                         <strong>Drinking water</strong>
-                    </Link>
+                    </NavLink>
                 </li>
                 <li>
-                    <Link to="/foods" className="nav-link">
+                    <NavLink to="/foods" className={cx('nav-link')}>
                         <FontAwesomeIcon icon={faBurger} />
                         <strong>Foods</strong>
-                    </Link>
+                    </NavLink>
                 </li>
             </ul>
         </aside>

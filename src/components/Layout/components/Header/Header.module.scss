@@ -20,4 +20,17 @@
         text-align: center;
         flex: 1;
     }
+    .btn-new {
+        color: #4caf50;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        cursor: pointer;
+        :hover {
+            color: #4bcf51;
+        }
+    }
 }
