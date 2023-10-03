@@ -1,14 +1,12 @@
+import { CUSTOMER_TYPE } from '~/utils/constants';
 import { useState } from 'react';
 import Input from '~/components/Form/Input';
 import Select from '~/components/Form/Select';
-function CusomerAdd() {
+function CusomerAdd({ onSubmit }) {
     const [type, setType] = useState('flower');
     const [number, setNumber] = useState(1);
 
-    let optionsType = [
-        { key: 'flower', value: 'flower', label: 'Khách Vường hoa' },
-        { key: 'hotel', value: 'hotel', label: 'Khách Khách Sạn' },
-    ];
+    let optionsType = CUSTOMER_TYPE;
 
     const handleTypeChange = (type) => {
         setType(type);
@@ -19,6 +17,13 @@ function CusomerAdd() {
 
     const handleClick = () => {
         console.log(type, number);
+        const item = {
+            code: '00002',
+            type: type,
+            number: number,
+            date: '03-10-2023',
+        };
+        onSubmit(item);
         setType('flower');
         setNumber(1);
     };

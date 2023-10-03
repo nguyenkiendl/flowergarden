@@ -35,6 +35,7 @@ table {
 }
 .content {
     width: calc(100% - var(--sidebar-width));
+    min-height: calc(100vh - var(--header-height));
     margin-left: var(--sidebar-width);
     background: #f2f2f2;
     padding: 2rem 1rem 3rem;
@@ -60,15 +61,20 @@ button {
 button {
     color: #fff;
     background: var(--bg-primary);
+    opacity: 0.9;
     text-transform: uppercase;
     font-weight: 600;
     cursor: pointer;
+    &:hover {
+        opacity: 1;
+    }
 }
 
 .form-row {
     display: flex;
     gap: 4px;
     align-items: flex-end;
+    margin-bottom: 1em;
     .col {
         width: 100%;
         display: inline-flex;
