@@ -1,0 +1,16 @@
+.right-side {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 250px;
+    height: 100vh;
+    background: #f2f2f2;
+    box-shadow: -3px 2px 1px 0px rgba(0, 0, 0, 0.12);
+    z-index: 1;
+    padding: 1em 1em 2em;
+    transform: translateX(250px);
+    &.show {
+        transform: translateX(0);
+    }
+}

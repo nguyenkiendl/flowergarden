@@ -1,7 +1,9 @@
-const Select = ({ options, value, onChange }) => {
+const Select = ({ datas, onChange }) => {
+    console.log(datas);
+    let input = datas;
     return (
-        <select value={value} onChange={(e) => onChange(e.target.value)}>
-            {options.map((option, index) => {
+        <select id={input.id} className={input.class} value={input.value} onChange={(e) => onChange(e.target.value)}>
+            {input.options.map((option, index) => {
                 return (
                     <option key={option.key} value={option.value}>
                         {option.label}

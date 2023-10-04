@@ -1,8 +1,9 @@
 import { CUSTOMER_TYPE } from '~/utils/constants';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { AppContext } from '~/context/AppContext';
 import Input from '~/components/Form/Input';
 import Select from '~/components/Form/Select';
-function CusomerAdd({ props }) {
+function CusomerAdd({ onSubmit }) {
     const [type, setType] = useState('flower');
     const [number, setNumber] = useState(1);
 
@@ -15,15 +16,21 @@ function CusomerAdd({ props }) {
         setNumber(number);
     };
 
+    const { customerList, setCustomerList } = useContext(AppContext);
+
     const handleClick = () => {
-        console.log(props);
+        let id = customerList.length + 1;
         const item = {
+            id: id,
             code: '00002',
             type: type,
             number: number,
             date: '03-10-2023',
         };
-        props.onSubmit(item);
+        setCustomerList((prevDataList) => {
+            const newDataList = [...prevDataList, item];
+            return newDataList;
+        });
         setType('flower');
         setNumber(1);
     };
