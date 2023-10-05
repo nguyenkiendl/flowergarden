@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import { AppContext } from '~/context/AppContext';
 import { customerType } from '~/utils/filters';
 import classNames from 'classnames/bind';
@@ -12,16 +13,17 @@ function Customer() {
                 <div className={cx('customer')}>
                     {customerList.map((item, index) => {
                         let type = customerType(item.type);
-                        console.log(type);
                         return (
-                            <div key={index} className={cx('customer-item')}>
+                            <div key={item.id} className={cx('customer-item')}>
                                 <div className={cx('number')}>{item.number}</div>
                                 <div className={'customer-group'}>
                                     <div className={cx('code')}>{item.code}</div>
                                     <div className={cx('type')}>{type.label}</div>
                                 </div>
                                 <div className={cx('date')}>{item.date}</div>
-                                <button className={cx('btn-detail')}>Xem</button>
+                                <Link to={`/customer/${item.id}`} className={cx('btn-detail')}>
+                                    Xem
+                                </Link>
                             </div>
                         );
                     })}

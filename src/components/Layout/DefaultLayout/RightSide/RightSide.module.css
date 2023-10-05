@@ -8,9 +8,30 @@
     background: #f2f2f2;
     box-shadow: -3px 2px 1px 0px rgba(0, 0, 0, 0.12);
     z-index: 1;
-    padding: 1em 1em 2em;
+
     transform: translateX(250px);
+    transition: all 0.2s cubic-bezier(0.39, 0.58, 0.57, 1);
+    color: #333;
     &.show {
         transform: translateX(0);
+    }
+    .header {
+        position: relative;
+        > h3 {
+            padding: 0.5em 1em 0.5em;
+        }
+        .btn-close {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 50px;
+            height: 50px;
+            color: #ce0b0b;
+            font-size: 3rem;
+            background: transparent;
+        }
+    }
+    .body {
+        padding: 1em 1em 2em;
     }
 }

@@ -26,6 +26,9 @@
         flex: 1;
     }
     .btn-new {
+        position: relative;
+        opacity: 0.9;
+        background: transparent;
         color: #4caf50;
         width: 60px;
         height: 60px;
@@ -35,7 +38,7 @@
         font-size: 3rem;
         cursor: pointer;
         :hover {
-            color: #4bcf51;
+            opacity: 1;
         }
     }
 }

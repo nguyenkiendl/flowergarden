@@ -3,20 +3,26 @@ import classNames from 'classnames/bind';
 import styles from './Header.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { useContext } from 'react';
+import { AppContext } from '~/context/AppContext';
 const cx = classNames.bind(styles);
 function Header() {
+    const { openSide, setOpenSide } = useContext(AppContext);
+    const handleClick = (e) => {
+        setOpenSide(!openSide);
+    };
     return (
         <header className={cx('header')}>
             <div className={cx('inner')}>
                 <div className={cx('menu')}>
                     <FontAwesomeIcon icon={faBars} />
                 </div>
-                <div className={cx('page-title')}>
+                <Link to="/" className={cx('page-title')}>
                     <h1>FLOWER GARDEN</h1>
-                </div>
-                <Link to="/customer-add" className={cx('btn-new')}>
-                    <FontAwesomeIcon icon={faPlusCircle} />
                 </Link>
+                <button onClick={handleClick} className={cx('btn-new')}>
+                    <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
             </div>
         </header>
     );

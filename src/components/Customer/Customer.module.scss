@@ -36,12 +36,21 @@
     .type {
         font-weight: 800;
     }
-    button.btn-detail {
+    .btn-detail {
         position: absolute;
         right: 4px;
         bottom: 5px;
         width: 30%;
-        height: 25px;
+        padding: 2px 5px;
+        height: 35px;
         font-size: 13px;
+        background: var(--bg-primary);
+        color: #fff;
+        text-align: center;
+        text-decoration: none;
+        opacity: 0.9;
+        &:hover {
+            opacity: 1;
+        }
     }
 }

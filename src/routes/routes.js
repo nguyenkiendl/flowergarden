@@ -4,14 +4,14 @@ import { HeaderOnly } from '~/components/Layout';
 import Home from '~/pages/Home';
 import Article from '~/pages/Article';
 import Food from '~/pages/Food';
-import Customer from '~/pages/Customer';
+import CustomerDetail from '~/components/Customer/Detail';
 const publicRoutes = [
     { path: '/', component: Home },
     { path: '/tickets', component: Article },
     { path: '/drinking-water', component: Article },
     { path: '/foods', component: Food },
     { path: '/article', component: Article, layout: HeaderOnly },
-    { path: '/customer', component: Customer },
+    { path: '/customer/:customerId', component: CustomerDetail },
 ];
 
 const privateRoutes = [
