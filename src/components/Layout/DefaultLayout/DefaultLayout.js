@@ -3,6 +3,7 @@ import styles from './DefaultLayout.module.scss';
 import Header from '~/components/Layout/components/Header';
 import Sidebar from './Sidebar';
 import RightSide from './RightSide';
+import Service from './Service';
 
 const cx = classNames.bind(styles);
 
@@ -15,6 +16,7 @@ function DefaultLayout({ children }) {
                 <div className={cx('content')}>{children}</div>
             </div>
             <RightSide />
+            <Service />
         </div>
     );
 }

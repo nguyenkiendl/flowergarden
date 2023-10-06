@@ -36,21 +36,43 @@
     .type {
         font-weight: 800;
     }
+
     .btn-detail {
         position: absolute;
         right: 4px;
         bottom: 5px;
         width: 30%;
         padding: 2px 5px;
-        height: 35px;
         font-size: 13px;
         background: var(--bg-primary);
         color: #fff;
         text-align: center;
         text-decoration: none;
+        cursor: pointer;
         opacity: 0.9;
         &:hover {
             opacity: 1;
+        }
+    }
+    .btn-action {
+        position: absolute;
+        display: flex;
+        gap: 4px;
+        right: 4px;
+        bottom: 5px;
+        button {
+            font-size: 18px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            &.btn-print-ticket {
+                color: #fff;
+                background: var(--bg-default);
+            }
+            &.btn-service-add {
+                color: #fff;
+                background: var(--bg-primary);
+            }
         }
     }
 }

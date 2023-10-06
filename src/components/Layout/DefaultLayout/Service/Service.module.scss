@@ -1,15 +1,15 @@
-.right-side {
+.services {
     position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
-    width: 250px;
+    width: 350px;
     height: 100vh;
-    background: #f2f2f2;
+    background: #fff;
     box-shadow: -3px 2px 1px 0px rgba(0, 0, 0, 0.12);
     z-index: 1;
 
-    transform: translateX(250px);
+    transform: translateX(350px);
     transition: all 0.2s cubic-bezier(0.39, 0.58, 0.57, 1);
     color: #333;
     &.show {

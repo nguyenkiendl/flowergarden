@@ -35,6 +35,7 @@ function RightSide() {
             type: type,
             number: number,
             date: '03-10-2023',
+            services: [],
         };
         setCustomerList((prevDataList) => {
             const newDataList = [item, ...prevDataList];
@@ -79,7 +80,7 @@ function RightSide() {
                                 id="customer-number"
                                 className="customer-number"
                                 type="number"
-                                min="0"
+                                min="1"
                                 value={number}
                                 onChange={handleNumberChange}
                             />
@@ -87,7 +88,9 @@ function RightSide() {
                     </div>
                     <div className="form-row">
                         <div className="col">
-                            <button onClick={handleAddCustomer}>Thêm Và In Vé</button>
+                            <button className="btn-primary" onClick={handleAddCustomer}>
+                                Thêm Và In Vé
+                            </button>
                         </div>
                     </div>
                 </div>
