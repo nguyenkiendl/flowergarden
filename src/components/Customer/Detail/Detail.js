@@ -1,11 +1,12 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from '~/components/Customer/Customer.module.scss';
-import { customerType } from '~/utils/filters';
+import { customerType, formatPrice } from '~/utils/filters';
 import { useContext } from 'react';
 import { AppContext } from '~/context/AppContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileCirclePlus, faPrint } from '@fortawesome/free-solid-svg-icons';
+
 const cx = classNames.bind(styles);
 function Detail() {
     let { customerId } = useParams();
@@ -25,6 +26,7 @@ function Detail() {
     const handleServiceAdd = () => {
         setOpenService(!openService);
     };
+    let totalPrice = customer.services.reduce((total, item) => total + item.quantity * item.price, 0);
     return (
         <>
             <div className={cx('detail')}>
@@ -48,7 +50,7 @@ function Detail() {
                     <table>
                         <thead>
                             <tr>
-                                <th>STT</th>
+                                <th>#</th>
                                 <th>Tên</th>
                                 <th>Số lượng</th>
                                 <th>Giá</th>
@@ -61,11 +63,19 @@ function Detail() {
                                         <td>{index + 1}</td>
                                         <td>{service.name}</td>
                                         <td>{service.quantity}</td>
-                                        <td>{service.price}</td>
+                                        <td>
+                                            <span className="price">{formatPrice(service.price)}đ</span>
+                                        </td>
                                     </tr>
                                 );
                             })}
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>Tổng</td>
+                                <td colSpan={3}>{formatPrice(totalPrice)}đ</td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>

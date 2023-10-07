@@ -5,3 +5,10 @@ export const customerType = (type) => {
         return t.value === type;
     });
 };
+
+export const formatPrice = (value) => {
+    if (!value) {
+        return 0;
+    }
+    return value.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1.');
+};

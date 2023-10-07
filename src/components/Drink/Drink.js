@@ -5,62 +5,72 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAdd } from '@fortawesome/free-solid-svg-icons';
 import { AppContext } from '~/context/AppContext';
 import { useParams } from 'react-router-dom';
+import { formatPrice } from '~/utils/filters';
 
 const cx = classNames.bind(styles);
 function Drink() {
     let { customerId } = useParams();
-    const [drinks, setDrinks] = useState([]);
-    const { setCustomerList } = useContext(AppContext);
+    const [services, setServices] = useState([]);
+    const { setCustomerList, setOpenService } = useContext(AppContext);
     useEffect(() => {
-        let drinkData = [
+        let serviceDatas = [
             {
                 id: 1,
+                type: 'drink',
+                unit: 'lon',
                 name: 'Coca Cola',
                 price: 15000,
                 store: 2,
-                quantity: 1,
+                quantity: 0,
             },
             {
                 id: 2,
+                type: 'drink',
+                unit: 'lon',
                 name: 'Pepsi',
                 price: 15000,
                 store: 5,
-                quantity: 1,
+                quantity: 0,
             },
         ];
-        setDrinks(drinkData);
+        setServices(serviceDatas);
     }, []);
 
-    const handleAddToServices = (service) => {
-        const newService = { ...service, quantity: 1 };
+    const handleAddServiceToCart = (service) => {
+        let newService = { ...service };
+        const existService = services.find((s) => {
+            return s.id === newService.id;
+        });
+        if (existService) {
+            setServices((prevServices) => {
+                return prevServices.map((obj) => {
+                    if (obj.id === newService.id) {
+                        let newQuantity = obj.quantity + 1;
+                        let newStore = obj.store - 1;
+                        return { ...obj, quantity: newQuantity, store: newStore };
+                    }
+                    return obj;
+                });
+            });
+        } else {
+            setServices((prevServices) => {
+                return [...prevServices, newService];
+            });
+        }
+    };
+    let totalPrice = services.reduce((total, item) => total + item.quantity * item.price, 0);
 
+    const handleAddToServices = () => {
         setCustomerList((prevCustomerList) => {
             const newCustomerList = prevCustomerList.map((obj) => {
                 if (obj.id === Number(customerId)) {
-                    //uodate to service
-                    let servicesList = [...obj.services];
-
-                    const found = servicesList.find((s) => {
-                        return s.id === newService.id;
-                    });
-                    console.log(found);
-                    if (found) {
-                        obj.services = servicesList.map((obj) => {
-                            if (obj.id === newService.id) {
-                                let newQuantity = newService.quantity + 1;
-                                return { ...obj, quantity: newQuantity };
-                            }
-                            return obj;
-                        });
-                    } else {
-                        obj.services = [...servicesList, newService];
-                    }
+                    obj.services = services;
                 }
                 return obj;
             });
-            console.log(newCustomerList);
             return newCustomerList;
         });
+        setOpenService(false);
     };
     return (
         <>
@@ -68,34 +78,53 @@ function Drink() {
                 <table>
                     <thead>
                         <tr>
-                            <th>STT</th>
+                            <th width="20"></th>
+                            <th>SL</th>
                             <th>Tên</th>
                             <th>Giá</th>
-                            <th>Kho</th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {drinks.map((item, index) => {
+                        {services.map((item, index) => {
                             return (
-                                <tr key={item.id}>
-                                    <td>{index + 1}</td>
-                                    <td>{item.name}</td>
-                                    <td>{item.price}</td>
-                                    <td>{item.store}</td>
-                                    <td>
+                                <tr key={index}>
+                                    <td width="20">
                                         <button
-                                            onClick={() => handleAddToServices(item)}
-                                            className={cx('btn-add-to-services')}
+                                            onClick={() => handleAddServiceToCart(item)}
+                                            className={cx('btn-add-service-to-cart')}
+                                            disabled={item.store === 0}
                                         >
                                             <FontAwesomeIcon icon={faAdd} />
                                         </button>
                                     </td>
+                                    <td>
+                                        <button
+                                            onClick={() => handleAddServiceToCart(item)}
+                                            className={cx('btn-add-service-to-cart')}
+                                            disabled={item.store === 0}
+                                        >
+                                            <FontAwesomeIcon icon={faAdd} />
+                                        </button>
+                                        {item.quantity} {item.unit}
+                                    </td>
+                                    <td>
+                                        {item.name} ({item.store})
+                                    </td>
+                                    <td>{formatPrice(item.price)}đ</td>
                                 </tr>
                             );
                         })}
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>Tổng</td>
+                            <td colSpan={3}>{formatPrice(totalPrice)}đ</td>
+                        </tr>
+                    </tfoot>
                 </table>
+                <button onClick={() => handleAddToServices()} className={cx('btn-add-to-services')}>
+                    Thực hiện
+                </button>
             </div>
         </>
     );

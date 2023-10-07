@@ -1,0 +1,73 @@
+.services {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 2em;
+    .service-item {
+        position: relative;
+        display: flex;
+        flex: 0 0 50%;
+        flex-direction: column;
+        .thumbnail {
+            position: relative;
+            border: 1px solid #009688;
+            border-radius: 5px;
+            overflow: hidden;
+            img {
+                max-width: 100%;
+            }
+            .btn-group {
+                position: absolute;
+                right: 5px;
+                bottom: 5px;
+                display: flex;
+                gap: 5px;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid #009688;
+                border-radius: 20px 20px 20px 20px;
+                background: #fff;
+                button {
+                    width: 30px;
+                    height: 30px;
+                    background: #009688;
+                    color: #fff;
+                    border-radius: 100%;
+                    cursor: pointer;
+                }
+                .quantity {
+                    display: none;
+                    &.show {
+                        display: block;
+                    }
+                }
+                .btn-minus-service {
+                    display: none;
+                    &.show {
+                        display: block;
+                    }
+                }
+                .btn-add-service {
+                }
+            }
+        }
+        .name {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .price {
+            color: #961100;
+        }
+    }
+}
+.btn-add-to-services {
+    height: 40px;
+    background: #000;
+    background: var(--bg-primary);
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    opacity: 0.9;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 10px 15px;
+}

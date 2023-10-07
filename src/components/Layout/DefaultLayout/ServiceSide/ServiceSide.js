@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
-import styles from './Service.module.scss';
-import Drink from '~/components/Drink';
+import styles from './ServiceSide.module.scss';
+import Service from '~/components/Customer/Detail/Service';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { useContext } from 'react';
@@ -8,7 +8,7 @@ import { AppContext } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
 
-function Service() {
+function ServiceSide() {
     const { openService, setOpenService } = useContext(AppContext);
     const handleCloseService = () => {
         setOpenService(false);
@@ -23,11 +23,11 @@ function Service() {
                     </button>
                 </div>
                 <div className={cx('body')}>
-                    <Drink />
+                    <Service />
                 </div>
             </div>
         </>
     );
 }
 
-export default Service;
+export default ServiceSide;

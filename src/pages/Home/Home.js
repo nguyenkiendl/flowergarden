@@ -7,7 +7,7 @@ const cx = classNames.bind(styles);
 function Home() {
     return (
         <div className={cx('home')}>
-            <h2>Home page</h2>
+            <h2>Khách Hàng</h2>
             <Customer />
         </div>
     );

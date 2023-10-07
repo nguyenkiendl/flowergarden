@@ -1,9 +1,21 @@
 .drinks {
-    .btn-add-to-services {
+    .btn-add-service-to-cart {
         background: #000;
         background: #009688;
         color: #fff;
         border-radius: 4px;
         cursor: pointer;
+    }
+    .btn-add-to-services {
+        height: 40px;
+        background: #000;
+        background: var(--bg-primary);
+        color: #fff;
+        border-radius: 4px;
+        cursor: pointer;
+        opacity: 0.9;
+        text-transform: uppercase;
+        font-weight: 600;
+        padding: 10px 15px;
     }
 }
