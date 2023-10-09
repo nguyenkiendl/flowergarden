@@ -1,12 +1,13 @@
 .services {
     display: flex;
-    gap: 5px;
+    flex-wrap: wrap;
     margin-bottom: 2em;
     .service-item {
         position: relative;
         display: flex;
         flex: 0 0 50%;
         flex-direction: column;
+        padding: 5px 5px 10px;
         .thumbnail {
             position: relative;
             border: 1px solid #009688;

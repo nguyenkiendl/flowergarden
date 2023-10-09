@@ -6,6 +6,7 @@ import { faAdd, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { AppContext } from '~/context/AppContext';
 import { useParams } from 'react-router-dom';
 import { formatPrice } from '~/utils/filters';
+import * as productServices from '~/apiServices/productServices';
 
 import imagedefault from '~/assets/images/cocacola.jpg';
 
@@ -15,41 +16,26 @@ function Service() {
     const [services, setServices] = useState([]);
     const { setCustomerList, setOpenService } = useContext(AppContext);
     useEffect(() => {
-        let serviceDatas = [
-            {
-                id: 1,
-                type: 'Service',
-                unit: 'lon',
-                name: 'Coca Cola',
-                price: 15000,
-                store: 2,
-                quantity: 0,
-            },
-            {
-                id: 2,
-                type: 'Service',
-                unit: 'lon',
-                name: 'Pepsi',
-                price: 15000,
-                store: 5,
-                quantity: 0,
-            },
-        ];
-        setServices(serviceDatas);
+        const fetchApi = async () => {
+            const result = await productServices.products();
+            setServices(result);
+        };
+
+        fetchApi();
     }, []);
 
     const handleAddService = (service) => {
         let newService = { ...service };
         const existService = services.find((s) => {
-            return s.id === newService.id;
+            return s.product_id === newService.product_id;
         });
         if (existService) {
             setServices((prevServices) => {
                 return prevServices.map((obj) => {
-                    if (obj.id === newService.id) {
+                    if (obj.product_id === newService.product_id) {
                         let newQuantity = obj.quantity + 1;
-                        let newStore = obj.store - 1;
-                        return { ...obj, quantity: newQuantity, store: newStore };
+                        let newStore = obj.product_store - 1;
+                        return { ...obj, quantity: newQuantity, product_store: newStore };
                     }
                     return obj;
                 });
@@ -63,15 +49,15 @@ function Service() {
     const handleMinusService = (service) => {
         let newService = { ...service };
         const existService = services.find((s) => {
-            return s.id === newService.id;
+            return s.product_id === newService.product_id;
         });
         if (existService) {
             setServices((prevServices) => {
                 return prevServices.map((obj) => {
-                    if (obj.id === newService.id) {
+                    if (obj.product_id === newService.product_id) {
                         let newQuantity = obj.quantity - 1;
-                        let newStore = obj.store + 1;
-                        return { ...obj, quantity: newQuantity, store: newStore };
+                        let newStore = obj.product_store + 1;
+                        return { ...obj, quantity: newQuantity, product_store: newStore };
                     }
                     return obj;
                 });
@@ -85,7 +71,9 @@ function Service() {
         setCustomerList((prevCustomerList) => {
             const newCustomerList = prevCustomerList.map((obj) => {
                 if (obj.id === Number(customerId)) {
-                    obj.services = services;
+                    obj.services = services.filter((service) => {
+                        return service.quantity > 0;
+                    });
                 }
                 return obj;
             });
@@ -113,16 +101,16 @@ function Service() {
                                     <button
                                         onClick={() => handleAddService(item)}
                                         className={cx('btn-add-service')}
-                                        disabled={item.store === 0}
+                                        disabled={item.product_store === 0}
                                     >
                                         <FontAwesomeIcon icon={faAdd} />
                                     </button>
                                 </div>
                             </div>
                             <div className={cx('name')}>
-                                {item.name} ({item.store})
+                                {item.product_name} ({item.product_store})
                             </div>
-                            <div className={cx('price')}>{formatPrice(item.price)}đ</div>
+                            <div className={cx('price')}>{formatPrice(item.product_price)}đ</div>
                         </div>
                     );
                 })}

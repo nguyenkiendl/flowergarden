@@ -9,6 +9,8 @@ import { CUSTOMER_TYPE } from '~/utils/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 
+import * as customerServices from '~/apiServices/customerServices';
+
 const cx = classNames.bind(styles);
 
 function RightSide() {
@@ -26,21 +28,16 @@ function RightSide() {
         setNumber(number);
     };
 
-    const { openSide, setOpenSide, customerList, setCustomerList } = useContext(AppContext);
+    const { openSide, setOpenSide, setCustomerList } = useContext(AppContext);
     const handleAddCustomer = () => {
-        let id = customerList.length + 1;
-        const item = {
-            id: id,
-            code: '00002',
-            type: type,
-            number: number,
-            date: '03-10-2023',
-            services: [],
+        const addCustomer = async () => {
+            const item = await customerServices.addCustomer({ type, number });
+            setCustomerList((prevDataList) => {
+                const newDataList = [item, ...prevDataList];
+                return newDataList;
+            });
         };
-        setCustomerList((prevDataList) => {
-            const newDataList = [item, ...prevDataList];
-            return newDataList;
-        });
+        addCustomer();
         setType('flower');
         setNumber(1);
         setOpenSide(false);

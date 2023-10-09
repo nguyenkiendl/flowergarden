@@ -12,12 +12,13 @@ function Detail() {
     let { customerId } = useParams();
     const navigate = useNavigate();
     const { customerList, openService, setOpenService } = useContext(AppContext);
+
     const customer = customerList.find((c) => {
-        return c.id === Number(customerId);
+        return c.customer_id === Number(customerId);
     });
 
     if (customer === undefined) return navigate('/', { replace: true });
-    let type = customerType(customer.type);
+    let type = customerType(customer.customer_type);
 
     const handlePrintTicket = () => {
         console.log('print ticket');
@@ -26,17 +27,18 @@ function Detail() {
     const handleServiceAdd = () => {
         setOpenService(!openService);
     };
-    let totalPrice = customer.services.reduce((total, item) => total + item.quantity * item.price, 0);
+    console.log(customer);
+    let totalPrice = customer.services.reduce((total, item) => total + item.quantity * item.product_price, 0);
     return (
         <>
             <div className={cx('detail')}>
                 <div className={cx('customer-item')}>
-                    <div className={cx('number')}>{customer.number}</div>
+                    <div className={cx('number')}>{customer.customer_number}</div>
                     <div className={'customer-group'}>
-                        <div className={cx('code')}>{customer.code}</div>
+                        <div className={cx('code')}>{customer.customer_code}</div>
                         <div className={cx('type')}>{type.label}</div>
                     </div>
-                    <div className={cx('date')}>{customer.date}</div>
+                    <div className={cx('date')}>{customer.created_at}</div>
                     <div className={cx('btn-action')}>
                         <button onClick={handlePrintTicket} className={cx('btn-print-ticket')}>
                             <FontAwesomeIcon icon={faPrint} />
@@ -61,10 +63,10 @@ function Detail() {
                                 return (
                                     <tr key={index}>
                                         <td>{index + 1}</td>
-                                        <td>{service.name}</td>
+                                        <td>{service.product_name}</td>
                                         <td>{service.quantity}</td>
                                         <td>
-                                            <span className="price">{formatPrice(service.price)}đ</span>
+                                            <span className="price">{formatPrice(service.product_price)}đ</span>
                                         </td>
                                     </tr>
                                 );

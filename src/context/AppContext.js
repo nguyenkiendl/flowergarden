@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
-
+import * as customerSevices from '~/apiServices/customerServices';
 export const AppContext = createContext({});
 
 export const AppProvider = ({ children }) => {
@@ -8,33 +8,11 @@ export const AppProvider = ({ children }) => {
     const [customerList, setCustomerList] = useState([]);
 
     useEffect(() => {
-        let customerDatas = [
-            {
-                id: 1,
-                code: '00001',
-                type: 'flower',
-                number: 1,
-                date: '03-10-2023',
-                services: [],
-            },
-            {
-                id: 2,
-                code: '00002',
-                type: 'hotel',
-                number: 1,
-                date: '03-10-2023',
-                services: [],
-            },
-            {
-                id: 3,
-                code: '00003',
-                type: 'flower',
-                number: 10,
-                date: '03-10-2023',
-                services: [],
-            },
-        ];
-        setCustomerList(customerDatas);
+        const fetchCustomers = async () => {
+            const result = await customerSevices.getCustomers();
+            setCustomerList(result);
+        };
+        fetchCustomers();
     }, []);
     return (
         <AppContext.Provider

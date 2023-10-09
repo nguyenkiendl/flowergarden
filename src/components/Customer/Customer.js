@@ -12,16 +12,16 @@ function Customer() {
             <div>
                 <div className={cx('customer')}>
                     {customerList.map((item, index) => {
-                        let type = customerType(item.type);
+                        let type = customerType(item.customer_type);
                         return (
-                            <div key={item.id} className={cx('customer-item')}>
-                                <div className={cx('number')}>{item.number}</div>
+                            <div key={index} className={cx('customer-item')}>
+                                <div className={cx('number')}>{item.customer_number}</div>
                                 <div className={'customer-group'}>
-                                    <div className={cx('code')}>{item.code}</div>
+                                    <div className={cx('code')}>{item.customer_code}</div>
                                     <div className={cx('type')}>{type.label}</div>
                                 </div>
-                                <div className={cx('date')}>{item.date}</div>
-                                <Link to={`/customer/${item.id}`} className={cx('btn-detail')}>
+                                <div className={cx('date')}>{item.created_at}</div>
+                                <Link to={`/customer/${item.customer_id}`} className={cx('btn-detail')}>
                                     Xem
                                 </Link>
                             </div>
