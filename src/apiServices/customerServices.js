@@ -17,3 +17,21 @@ export const addCustomer = async (options) => {
         console.log(error);
     }
 };
+
+export const getOrders = async () => {
+    try {
+        const res = await request.get('get_orders.php');
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const addServices = async (services) => {
+    try {
+        const res = await request.post('add_services.php', services);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};

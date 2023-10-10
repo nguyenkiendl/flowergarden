@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
-import * as customerSevices from '~/apiServices/customerServices';
+import * as customerServices from '~/apiServices/customerServices';
 export const AppContext = createContext({});
 
 export const AppProvider = ({ children }) => {
@@ -9,7 +9,7 @@ export const AppProvider = ({ children }) => {
 
     useEffect(() => {
         const fetchCustomers = async () => {
-            const result = await customerSevices.getCustomers();
+            const result = await customerServices.getOrders();
             setCustomerList(result);
         };
         fetchCustomers();

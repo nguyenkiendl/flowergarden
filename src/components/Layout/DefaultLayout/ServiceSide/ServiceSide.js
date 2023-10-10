@@ -3,15 +3,17 @@ import styles from './ServiceSide.module.scss';
 import Service from '~/components/Customer/Detail/Service';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AppContext } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
 
 function ServiceSide() {
     const { openService, setOpenService } = useContext(AppContext);
+    const [counter, setCounter] = useState(0);
     const handleCloseService = () => {
         setOpenService(false);
+        setCounter(counter + 1);
     };
     return (
         <>
@@ -23,7 +25,7 @@ function ServiceSide() {
                     </button>
                 </div>
                 <div className={cx('body')}>
-                    <Service />
+                    <Service isChanged={counter} />
                 </div>
             </div>
         </>

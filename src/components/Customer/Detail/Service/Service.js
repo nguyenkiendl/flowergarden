@@ -7,12 +7,14 @@ import { AppContext } from '~/context/AppContext';
 import { useParams } from 'react-router-dom';
 import { formatPrice } from '~/utils/filters';
 import * as productServices from '~/apiServices/productServices';
+import * as customerServices from '~/apiServices/customerServices';
 
 import imagedefault from '~/assets/images/cocacola.jpg';
 
 const cx = classNames.bind(styles);
-function Service() {
+function Service({ isChanged }) {
     let { customerId } = useParams();
+    const [counter, setCounter] = useState(0);
     const [services, setServices] = useState([]);
     const { setCustomerList, setOpenService } = useContext(AppContext);
     useEffect(() => {
@@ -20,9 +22,8 @@ function Service() {
             const result = await productServices.products();
             setServices(result);
         };
-
         fetchApi();
-    }, []);
+    }, [counter, isChanged]);
 
     const handleAddService = (service) => {
         let newService = { ...service };
@@ -64,29 +65,38 @@ function Service() {
             });
         }
     };
-
-    let totalPrice = services.reduce((total, item) => total + item.quantity * item.price, 0);
-
     const handleAddToServices = () => {
-        setCustomerList((prevCustomerList) => {
-            const newCustomerList = prevCustomerList.map((obj) => {
-                if (obj.id === Number(customerId)) {
-                    obj.services = services.filter((service) => {
-                        return service.quantity > 0;
-                    });
-                }
-                return obj;
+        const addServices = async () => {
+            let newService = services.filter((service) => {
+                return service.quantity > 0;
             });
-            return newCustomerList;
-        });
-        setOpenService(false);
+            const result = await customerServices.addServices({
+                customer_id: Number(customerId),
+                services: newService,
+            });
+            if (result) {
+                setCustomerList((prevCustomerList) => {
+                    const newCustomerList = prevCustomerList.map((obj) => {
+                        if (obj.customer_id === Number(customerId)) {
+                            obj.services = newService;
+                        }
+                        return obj;
+                    });
+                    return newCustomerList;
+                });
+                setOpenService(false);
+                setCounter(counter + 1);
+            }
+        };
+        addServices();
     };
+
     return (
         <>
             <div className={cx('services')}>
                 {services.map((item, index) => {
                     return (
-                        <div key={index} className={cx('service-item')}>
+                        <div key={index} className={cx('service-item')} data-counter={isChanged}>
                             <div className={cx('thumbnail')}>
                                 <img src={imagedefault} alt={'thumnail'} />
                                 <div className={cx('btn-group')}>
@@ -115,9 +125,8 @@ function Service() {
                     );
                 })}
             </div>
-            <p>Tổng: {formatPrice(totalPrice)}đ</p>
             <button onClick={() => handleAddToServices()} className={cx('btn-add-to-services')}>
-                Thực hiện
+                Thêm vào đơn hàng
             </button>
         </>
     );

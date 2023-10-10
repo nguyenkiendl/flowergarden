@@ -27,7 +27,7 @@ function Detail() {
     const handleServiceAdd = () => {
         setOpenService(!openService);
     };
-    console.log(customer);
+
     let totalPrice = customer.services.reduce((total, item) => total + item.quantity * item.product_price, 0);
     return (
         <>
