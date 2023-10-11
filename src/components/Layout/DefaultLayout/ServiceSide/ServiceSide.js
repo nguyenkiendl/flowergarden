@@ -3,7 +3,7 @@ import styles from './ServiceSide.module.scss';
 import Service from '~/components/Customer/Detail/Service';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { AppContext } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
@@ -15,9 +15,28 @@ function ServiceSide() {
         setOpenService(false);
         setCounter(counter + 1);
     };
+
+    /**
+     * Hook that alerts clicks outside of the passed ref
+     */
+    function useOutsideAlerter(ref) {
+        useEffect(() => {
+            function handleClickOutside(event) {
+                if (ref.current && !ref.current.contains(event.target)) {
+                    setOpenService(false);
+                }
+            }
+            document.addEventListener('mousedown', handleClickOutside);
+            return () => {
+                document.removeEventListener('mousedown', handleClickOutside);
+            };
+        }, [ref]);
+    }
+    const wrapperRef = useRef(null);
+    useOutsideAlerter(wrapperRef);
     return (
         <>
-            <div className={cx('services', { show: openService })}>
+            <div ref={wrapperRef} className={cx('services', { show: openService })}>
                 <div className={cx('header')}>
                     <h3>Dịch vụ</h3>
                     <button onClick={handleCloseService} className={cx('btn-close')}>

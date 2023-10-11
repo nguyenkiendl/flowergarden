@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import styles from './RightSide.module.css';
 import Input from '~/components/Form/Input';
 import Select from '~/components/Form/Select';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '~/context/AppContext';
 import { CUSTOMER_TYPE } from '~/utils/constants';
@@ -48,9 +48,27 @@ function RightSide() {
         setOpenSide(!openSide);
     };
 
+    /**
+     * Hook that alerts clicks outside of the passed ref
+     */
+    function useOutsideAlerter(ref) {
+        useEffect(() => {
+            function handleClickOutside(event) {
+                if (ref.current && !ref.current.contains(event.target)) {
+                    setOpenSide(false);
+                }
+            }
+            document.addEventListener('mousedown', handleClickOutside);
+            return () => {
+                document.removeEventListener('mousedown', handleClickOutside);
+            };
+        }, [ref]);
+    }
+    const wrapperRef = useRef(null);
+    useOutsideAlerter(wrapperRef);
     return (
         <>
-            <div className={cx('right-side', { show: openSide })}>
+            <div ref={wrapperRef} className={cx('right-side', { show: openSide })}>
                 <div className={cx('header')}>
                     <h3>Thêm Khách Hàng</h3>
                     <button onClick={handleCloseRightSide} className={cx('btn-close')}>

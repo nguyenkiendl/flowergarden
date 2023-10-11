@@ -5,13 +5,13 @@ import { customerType, formatPrice } from '~/utils/filters';
 import { useContext } from 'react';
 import { AppContext } from '~/context/AppContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileCirclePlus, faPrint } from '@fortawesome/free-solid-svg-icons';
+import { faAdd, faFileCirclePlus, faMinus, faPrint } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(styles);
 function Detail() {
     let { customerId } = useParams();
     const navigate = useNavigate();
-    const { customerList, openService, setOpenService } = useContext(AppContext);
+    const { customerList, setCustomerList, openService, setOpenService } = useContext(AppContext);
 
     const customer = customerList.find((c) => {
         return c.customer_id === Number(customerId);
@@ -26,6 +26,46 @@ function Detail() {
 
     const handleServiceAdd = () => {
         setOpenService(!openService);
+    };
+
+    const handleMinus = (service) => {
+        if (customer.services.some((item) => item.product_id === service.product_id)) {
+            setCustomerList((prevCustomerList) => {
+                const newCustomerList = prevCustomerList.map((obj) => {
+                    if (obj.customer_id === Number(customerId)) {
+                        let newServices = obj.services.map((s) => {
+                            if (s.product_id === service.product_id) {
+                                return { ...s, quantity: service.quantity - 1 };
+                            }
+                            return s;
+                        });
+                        obj.services = newServices;
+                    }
+                    return obj;
+                });
+                return newCustomerList;
+            });
+        }
+    };
+
+    const handleAdd = (service) => {
+        if (customer.services.some((item) => item.product_id === service.product_id)) {
+            setCustomerList((prevCustomerList) => {
+                const newCustomerList = prevCustomerList.map((obj) => {
+                    if (obj.customer_id === Number(customerId)) {
+                        let newServices = obj.services.map((s) => {
+                            if (s.product_id === service.product_id) {
+                                return { ...s, quantity: service.quantity + 1 };
+                            }
+                            return s;
+                        });
+                        obj.services = newServices;
+                    }
+                    return obj;
+                });
+                return newCustomerList;
+            });
+        }
     };
 
     let totalPrice = customer.services.reduce((total, item) => total + item.quantity * item.product_price, 0);
@@ -56,6 +96,7 @@ function Detail() {
                                 <th>Tên</th>
                                 <th>Số lượng</th>
                                 <th>Giá</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -64,7 +105,25 @@ function Detail() {
                                     <tr key={index}>
                                         <td>{index + 1}</td>
                                         <td>{service.product_name}</td>
-                                        <td>{service.quantity}</td>
+                                        <td>
+                                            <div className={cx('btn-group')}>
+                                                <button
+                                                    onClick={() => handleMinus(service)}
+                                                    className={cx('btn-minus')}
+                                                    disabled={service.quantity === 0}
+                                                >
+                                                    <FontAwesomeIcon icon={faMinus} />
+                                                </button>
+                                                <span className={cx('quantity')}>{service.quantity}</span>
+                                                <button
+                                                    onClick={() => handleAdd(service)}
+                                                    className={cx('btn-add')}
+                                                    disabled={service.product_store === 0}
+                                                >
+                                                    <FontAwesomeIcon icon={faAdd} />
+                                                </button>
+                                            </div>
+                                        </td>
                                         <td>
                                             <span className="price">{formatPrice(service.product_price)}đ</span>
                                         </td>

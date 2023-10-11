@@ -65,20 +65,23 @@ function Service({ isChanged }) {
             });
         }
     };
+
+    let newServices = services.filter((service) => {
+        return service.quantity > 0;
+    });
+
     const handleAddToServices = () => {
         const addServices = async () => {
-            let newService = services.filter((service) => {
-                return service.quantity > 0;
-            });
             const result = await customerServices.addServices({
                 customer_id: Number(customerId),
-                services: newService,
+                services: newServices,
             });
             if (result) {
+                console.log(result);
                 setCustomerList((prevCustomerList) => {
                     const newCustomerList = prevCustomerList.map((obj) => {
                         if (obj.customer_id === Number(customerId)) {
-                            obj.services = newService;
+                            obj.services = result;
                         }
                         return obj;
                     });
@@ -125,7 +128,11 @@ function Service({ isChanged }) {
                     );
                 })}
             </div>
-            <button onClick={() => handleAddToServices()} className={cx('btn-add-to-services')}>
+            <button
+                onClick={() => handleAddToServices()}
+                className={cx('btn-add-to-services')}
+                disabled={newServices.length === 0}
+            >
                 Thêm vào đơn hàng
             </button>
         </>
