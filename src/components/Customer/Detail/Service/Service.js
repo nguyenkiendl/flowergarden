@@ -12,18 +12,18 @@ import * as customerServices from '~/apiServices/customerServices';
 import imagedefault from '~/assets/images/cocacola.jpg';
 
 const cx = classNames.bind(styles);
-function Service({ isChanged }) {
+function Service() {
     let { customerId } = useParams();
     const [counter, setCounter] = useState(0);
     const [services, setServices] = useState([]);
-    const { setCustomerList, setOpenService } = useContext(AppContext);
+    const { setCustomerList, openService, setOpenService } = useContext(AppContext);
     useEffect(() => {
         const fetchApi = async () => {
             const result = await productServices.products();
             setServices(result);
         };
         fetchApi();
-    }, [counter, isChanged]);
+    }, [counter, openService]);
 
     const handleAddService = (service) => {
         let newService = { ...service };
@@ -99,7 +99,7 @@ function Service({ isChanged }) {
             <div className={cx('services')}>
                 {services.map((item, index) => {
                     return (
-                        <div key={index} className={cx('service-item')} data-counter={isChanged}>
+                        <div key={index} className={cx('service-item')}>
                             <div className={cx('thumbnail')}>
                                 <img src={imagedefault} alt={'thumnail'} />
                                 <div className={cx('btn-group')}>

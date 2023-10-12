@@ -3,11 +3,14 @@ import classNames from 'classnames/bind';
 import styles from './Sidebar.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBurger, faHouse, faMugSaucer, faTicket } from '@fortawesome/free-solid-svg-icons';
+import { useContext } from 'react';
+import { AppContext } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
 function Sidebar() {
+    const { openBar } = useContext(AppContext);
     return (
-        <aside className={cx('sidebar')}>
+        <aside className={cx('sidebar', { show: openBar })}>
             <ul>
                 <li>
                     <NavLink to="/" className={cx('nav-link')}>

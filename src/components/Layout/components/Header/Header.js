@@ -7,14 +7,18 @@ import { useContext } from 'react';
 import { AppContext } from '~/context/AppContext';
 const cx = classNames.bind(styles);
 function Header() {
-    const { openSide, setOpenSide } = useContext(AppContext);
+    const { openBar, setOpenBar, openSide, setOpenSide } = useContext(AppContext);
     const handleClick = (e) => {
         setOpenSide(!openSide);
+    };
+
+    const handleClickBar = () => {
+        setOpenBar(!openBar);
     };
     return (
         <header className={cx('header')}>
             <div className={cx('inner')}>
-                <div className={cx('menu')}>
+                <div onClick={handleClickBar} className={cx('menu')}>
                     <FontAwesomeIcon icon={faBars} />
                 </div>
                 <Link to="/" className={cx('page-title')}>

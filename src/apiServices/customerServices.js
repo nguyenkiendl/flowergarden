@@ -18,6 +18,15 @@ export const addCustomer = async (options) => {
     }
 };
 
+export const updateCustomerStatus = async (options) => {
+    try {
+        const res = await request.post('add_customer.php', options);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const getOrders = async () => {
     try {
         const res = await request.get('get_orders.php');
@@ -30,6 +39,15 @@ export const getOrders = async () => {
 export const addServices = async (services) => {
     try {
         const res = await request.post('add_services.php', services);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const removeService = async (service) => {
+    try {
+        const res = await request.post('remove_services.php', service);
         return res.data;
     } catch (error) {
         console.log(error);

@@ -9,6 +9,10 @@
     min-height: 100px;
     padding: 1rem 1rem 2rem;
     margin-bottom: 1em;
+
+    &.new {
+        border: 1px solid #ff5722;
+    }
     .number {
         display: flex;
         align-items: center;
@@ -92,4 +96,14 @@
         border-radius: 100%;
         cursor: pointer;
     }
+}
+
+.btn-edit,
+.btn-remove {
+    cursor: pointer;
+}
+.btn-remove {
+    color: #fff;
+    background: red;
+    border-radius: 4px;
 }

@@ -3,6 +3,7 @@ import * as customerServices from '~/apiServices/customerServices';
 export const AppContext = createContext({});
 
 export const AppProvider = ({ children }) => {
+    const [openBar, setOpenBar] = useState(false);
     const [openSide, setOpenSide] = useState(false);
     const [openService, setOpenService] = useState(false);
     const [customerList, setCustomerList] = useState([]);
@@ -13,7 +14,11 @@ export const AppProvider = ({ children }) => {
             setCustomerList(result);
         };
         fetchCustomers();
-    }, []);
+        const interval = setInterval(() => {
+            fetchCustomers();
+        }, 1000 * 10);
+        return () => clearInterval(interval);
+    }, [openService]);
     return (
         <AppContext.Provider
             value={{
@@ -23,6 +28,8 @@ export const AppProvider = ({ children }) => {
                 setOpenSide,
                 openService,
                 setOpenService,
+                openBar,
+                setOpenBar,
             }}
         >
             {children}

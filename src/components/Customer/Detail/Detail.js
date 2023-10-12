@@ -1,25 +1,22 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from '~/components/Customer/Customer.module.scss';
 import { customerType, formatPrice } from '~/utils/filters';
 import { useContext } from 'react';
 import { AppContext } from '~/context/AppContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAdd, faFileCirclePlus, faMinus, faPrint } from '@fortawesome/free-solid-svg-icons';
+import { faAdd, faEdit, faFileCirclePlus, faMinus, faPrint, faRemove } from '@fortawesome/free-solid-svg-icons';
+import * as customerServices from '~/apiServices/customerServices';
 
 const cx = classNames.bind(styles);
 function Detail() {
-    let { customerId } = useParams();
-    const navigate = useNavigate();
+    let routeParams = useParams();
     const { customerList, setCustomerList, openService, setOpenService } = useContext(AppContext);
-
-    const customer = customerList.find((c) => {
+    const customerId = routeParams.customerId;
+    const customer = customerList?.find((c) => {
         return c.customer_id === Number(customerId);
     });
-
-    if (customer === undefined) return navigate('/', { replace: true });
-    let type = customerType(customer.customer_type);
-
+    if (customer === undefined) return;
     const handlePrintTicket = () => {
         console.log('print ticket');
     };
@@ -68,6 +65,29 @@ function Detail() {
         }
     };
 
+    const handleEdit = (service) => {};
+
+    const handleRemove = (service) => {
+        const removeService = async () => {
+            const result = await customerServices.removeService(service);
+            if (result) {
+                setCustomerList((prevCustomerList) => {
+                    const newCustomerList = prevCustomerList.map((obj) => {
+                        if (obj.customer_id === Number(customerId)) {
+                            let newServices = obj.services.filter((s) => {
+                                return s.product_id !== service.product_id;
+                            });
+                            obj.services = newServices;
+                        }
+                        return obj;
+                    });
+                    return newCustomerList;
+                });
+            }
+        };
+        removeService();
+    };
+    let type = customerType(customer.customer_type);
     let totalPrice = customer.services.reduce((total, item) => total + item.quantity * item.product_price, 0);
     return (
         <>
@@ -96,7 +116,7 @@ function Detail() {
                                 <th>Tên</th>
                                 <th>Số lượng</th>
                                 <th>Giá</th>
-                                <th></th>
+                                <th colSpan={2}></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -126,6 +146,16 @@ function Detail() {
                                         </td>
                                         <td>
                                             <span className="price">{formatPrice(service.product_price)}đ</span>
+                                        </td>
+                                        <td>
+                                            <button onClick={() => handleEdit()} className={cx('btn-edit')}>
+                                                <FontAwesomeIcon icon={faEdit} />
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button onClick={() => handleRemove(service)} className={cx('btn-remove')}>
+                                                <FontAwesomeIcon icon={faRemove} />
+                                            </button>
                                         </td>
                                     </tr>
                                 );

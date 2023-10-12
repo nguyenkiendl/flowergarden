@@ -77,9 +77,8 @@ table {
     display: flex;
 }
 .content {
-    width: calc(100% - var(--sidebar-width));
+    width: calc(100%);
     min-height: calc(100vh - var(--header-height));
-    margin-left: var(--sidebar-width);
     background: #f2f2f2;
     padding: 2rem 1rem 3rem;
 }
