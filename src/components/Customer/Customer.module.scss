@@ -9,9 +9,12 @@
     min-height: 100px;
     padding: 1rem 1rem 2rem;
     margin-bottom: 1em;
-
+    border: 1px solid;
     &.new {
-        border: 1px solid #ff5722;
+        border-color: var(--s-new);
+    }
+    &.ordering {
+        border-color: var(--s-ordering);
     }
     .number {
         display: flex;
@@ -40,21 +43,64 @@
     .type {
         font-weight: 800;
     }
-    .btn-detail {
+    .price {
+        position: absolute;
+        right: 8px;
+        top: 20px;
+        font-size: 1.25em;
+        font-style: normal;
+        font-weight: 500;
+        color: red;
+    }
+    .status {
+        display: inline-block;
+        padding: 2px 5px;
+        font-size: 13px;
+        border-radius: 4px;
+        color: #fff;
+        text-align: center;
+        &.new {
+            background: var(--s-new);
+        }
+        &.ordering {
+            background: var(--s-ordering);
+        }
+    }
+
+    .customer-action {
         position: absolute;
         right: 4px;
         bottom: 5px;
-        width: 30%;
-        padding: 2px 5px;
-        font-size: 13px;
-        background: var(--bg-primary);
-        color: #fff;
-        text-align: center;
-        text-decoration: none;
-        cursor: pointer;
-        opacity: 0.9;
-        &:hover {
-            opacity: 1;
+        display: flex;
+        gap: 3px;
+        .customer-services {
+            display: flex;
+            align-items: flex-end;
+        }
+        .service {
+            background: #00bcd4;
+            color: #fff;
+            width: 25px;
+            height: 25px;
+            display: inline-flex;
+            border-radius: 100%;
+            justify-content: center;
+            align-items: center;
+        }
+        .btn-detail {
+            width: auto;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            background: var(--bg-primary);
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            opacity: 0.9;
+            &:hover {
+                opacity: 1;
+            }
         }
     }
     .btn-action {
@@ -106,4 +152,6 @@
     color: #fff;
     background: red;
     border-radius: 4px;
+}
+input {
 }

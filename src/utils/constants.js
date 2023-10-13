@@ -7,3 +7,18 @@ export const CUSTOMER_TYPE = [
     { key: 'flower', value: 'flower', label: 'Khách Vường hoa' },
     { key: 'hotel', value: 'hotel', label: 'Khách Khách Sạn' },
 ];
+
+export const CUSTOMER_TAB = [
+    {
+        key: 'new',
+        value: 'NEW',
+    },
+    {
+        key: 'ordering',
+        value: 'ORDERING',
+    },
+    {
+        key: 'ordered',
+        value: 'ORDERED',
+    },
+];

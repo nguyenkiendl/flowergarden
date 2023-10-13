@@ -7,6 +7,7 @@ import { AppContext } from '~/context/AppContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAdd, faEdit, faFileCirclePlus, faMinus, faPrint, faRemove } from '@fortawesome/free-solid-svg-icons';
 import * as customerServices from '~/apiServices/customerServices';
+import Input from '~/components/Form/Input';
 
 const cx = classNames.bind(styles);
 function Detail() {
@@ -87,6 +88,11 @@ function Detail() {
         };
         removeService();
     };
+
+    const isFlower = () => {
+        return customer.customer_type === 'flower';
+    };
+    const handleOrderFreeChange = () => {};
     let type = customerType(customer.customer_type);
     let totalPrice = customer.services.reduce((total, item) => total + item.quantity * item.product_price, 0);
     return (
@@ -99,6 +105,7 @@ function Detail() {
                         <div className={cx('type')}>{type.label}</div>
                     </div>
                     <div className={cx('date')}>{customer.created_at}</div>
+                    <div className={cx('price')}>{formatPrice(customer.ticket_price)}đ</div>
                     <div className={cx('btn-action')}>
                         <button onClick={handlePrintTicket} className={cx('btn-print-ticket')}>
                             <FontAwesomeIcon icon={faPrint} />
@@ -112,7 +119,7 @@ function Detail() {
                     <table>
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th className="text-center">#</th>
                                 <th>Tên</th>
                                 <th>Số lượng</th>
                                 <th>Giá</th>
@@ -123,7 +130,7 @@ function Detail() {
                             {customer.services.map((service, index) => {
                                 return (
                                     <tr key={index}>
-                                        <td>{index + 1}</td>
+                                        <td className="text-center">{index + 1}</td>
                                         <td>{service.product_name}</td>
                                         <td>
                                             <div className={cx('btn-group')}>
@@ -147,12 +154,12 @@ function Detail() {
                                         <td>
                                             <span className="price">{formatPrice(service.product_price)}đ</span>
                                         </td>
-                                        <td>
+                                        <td className="text-center">
                                             <button onClick={() => handleEdit()} className={cx('btn-edit')}>
                                                 <FontAwesomeIcon icon={faEdit} />
                                             </button>
                                         </td>
-                                        <td>
+                                        <td className="text-center">
                                             <button onClick={() => handleRemove(service)} className={cx('btn-remove')}>
                                                 <FontAwesomeIcon icon={faRemove} />
                                             </button>

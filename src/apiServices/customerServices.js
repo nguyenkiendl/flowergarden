@@ -18,9 +18,9 @@ export const addCustomer = async (options) => {
     }
 };
 
-export const updateCustomerStatus = async (options) => {
+export const updateCustomerStatus = async (params) => {
     try {
-        const res = await request.post('add_customer.php', options);
+        const res = await request.post('update_customer_status.php', params);
         return res.data;
     } catch (error) {
         console.log(error);

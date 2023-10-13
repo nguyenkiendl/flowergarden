@@ -18,7 +18,7 @@ export const AppProvider = ({ children }) => {
             fetchCustomers();
         }, 1000 * 10);
         return () => clearInterval(interval);
-    }, [openService]);
+    }, []);
     return (
         <AppContext.Provider
             value={{
