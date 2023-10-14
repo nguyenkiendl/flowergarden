@@ -11,14 +11,17 @@ export const CUSTOMER_TYPE = [
 export const CUSTOMER_TAB = [
     {
         key: 'new',
-        value: 'NEW',
+        label: 'NEW',
+        active: true,
     },
     {
         key: 'ordering',
-        value: 'ORDERING',
+        label: 'ORDERING',
+        active: false,
     },
     {
         key: 'ordered',
-        value: 'ORDERED',
+        label: 'ORDERED',
+        active: false,
     },
 ];

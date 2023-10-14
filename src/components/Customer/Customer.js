@@ -21,7 +21,7 @@ function Customer() {
     };
     return (
         <>
-            <div>
+            <div className={cx('customers')}>
                 <Head />
                 <div className={cx('customer')}>
                     {customerList.map((item, index) => {

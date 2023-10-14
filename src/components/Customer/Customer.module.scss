@@ -153,5 +153,15 @@
     background: red;
     border-radius: 4px;
 }
-input {
+.tabs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    .tab-item {
+        padding: 5px 10px;
+        &.active {
+            font-weight: 600;
+        }
+    }
 }
