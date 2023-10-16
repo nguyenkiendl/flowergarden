@@ -8,17 +8,12 @@ import { AppContext } from '~/context/AppContext';
 import { CUSTOMER_TYPE } from '~/utils/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
-
-import * as customerServices from '~/apiServices/customerServices';
-
 const cx = classNames.bind(styles);
 
 function RightSide() {
     const navigate = useNavigate();
-
     const [type, setType] = useState('flower');
     const [number, setNumber] = useState(1);
-
     let optionsType = CUSTOMER_TYPE;
 
     const handleTypeChange = (type) => {
@@ -28,20 +23,14 @@ function RightSide() {
         setNumber(number);
     };
 
-    const { openSide, setOpenSide, setCustomerList } = useContext(AppContext);
+    const { openSide, setOpenSide, addCustomerItem } = useContext(AppContext);
     const handleAddCustomer = () => {
-        const addCustomer = async () => {
-            const item = await customerServices.addCustomer({ type, number });
-            setCustomerList((prevDataList) => {
-                const newDataList = [item, ...prevDataList];
-                return newDataList;
-            });
-        };
-        addCustomer();
-        setType('flower');
-        setNumber(1);
-        setOpenSide(false);
-        navigate('/', { replace: true });
+        console.log(1);
+        addCustomerItem({ type, number });
+        // setType('flower');
+        // setNumber(1);
+        // setOpenSide(false);
+        // navigate('/', { replace: true });
     };
 
     const handleCloseRightSide = () => {

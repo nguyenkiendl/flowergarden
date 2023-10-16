@@ -9,9 +9,9 @@ export const getCustomers = async () => {
     }
 };
 
-export const addCustomer = async (options) => {
+export const addCustomer = async (customer) => {
     try {
-        const res = await request.post('add_customer.php', options);
+        const res = await request.post('add_customer.php', customer);
         return res.data;
     } catch (error) {
         console.log(error);

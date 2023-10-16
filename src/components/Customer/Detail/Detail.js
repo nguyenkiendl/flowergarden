@@ -7,7 +7,6 @@ import { AppContext } from '~/context/AppContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAdd, faEdit, faFileCirclePlus, faMinus, faPrint, faRemove } from '@fortawesome/free-solid-svg-icons';
 import * as customerServices from '~/apiServices/customerServices';
-import Input from '~/components/Form/Input';
 
 const cx = classNames.bind(styles);
 function Detail() {
@@ -89,15 +88,11 @@ function Detail() {
         removeService();
     };
 
-    const isFlower = () => {
-        return customer.customer_type === 'flower';
-    };
-    const handleOrderFreeChange = () => {};
     let type = customerType(customer.customer_type);
     let totalPrice = customer.services.reduce((total, item) => total + item.quantity * item.product_price, 0);
     return (
         <>
-            <div className={cx('detail')}>
+            <div className={cx('customer')}>
                 <div className={cx('customer-item')}>
                     <div className={cx('number')}>{customer.customer_number}</div>
                     <div className={'customer-group'}>

@@ -1,3 +1,6 @@
+.customer {
+    padding: 0.5rem 1rem 2rem;
+}
 .customer-item {
     position: relative;
     width: 100%;
@@ -10,6 +13,9 @@
     padding: 1rem 1rem 2rem;
     margin-bottom: 1em;
     border: 1px solid;
+    &:first-child {
+        margin-top: 1rem;
+    }
     &.new {
         border-color: var(--s-new);
     }
@@ -160,8 +166,12 @@
     background: #fff;
     .tab-item {
         padding: 5px 10px;
+        border-bottom: 1px solid transparent;
+        cursor: pointer;
         &.active {
             font-weight: 600;
+            color: var(--bg-primary);
+            border-bottom: 1px solid var(--bg-primary);
         }
     }
 }
