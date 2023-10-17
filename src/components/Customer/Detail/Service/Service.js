@@ -78,15 +78,15 @@ function Service() {
             });
             if (result) {
                 console.log(result);
-                setCustomerList((prevCustomerList) => {
-                    const newCustomerList = prevCustomerList.map((obj) => {
-                        if (obj.customer_id === Number(customerId)) {
-                            obj.services = result;
-                        }
-                        return obj;
-                    });
-                    return newCustomerList;
-                });
+                // setCustomerList((prevCustomerList) => {
+                //     const newCustomerList = prevCustomerList.map((obj) => {
+                //         if (obj.customer_id === Number(customerId)) {
+                //             obj.services = result;
+                //         }
+                //         return obj;
+                //     });
+                //     return newCustomerList;
+                // });
                 setOpenService(false);
                 setCounter(counter + 1);
             }

@@ -9,25 +9,10 @@ import { CUSTOMER_TAB } from '~/utils/constants';
 const cx = classNames.bind(styles);
 
 function Customer() {
-    const { customerList, customerCouter, setCustomerCouter } = useContext(AppContext) || [];
+    const { customerList, keyword, searchCustomer, filters, filterCustomer } = useContext(AppContext) || [];
     const [q, setQ] = useState('');
     const [searchParam] = useState(['customer_code']);
-    const [filterParam, setFilterParam] = useState('new');
-    function search(items) {
-        return items.filter((item) => {
-            if (item.customer_status === filterParam) {
-                return searchParam.some((code) => {
-                    return item[code].toString().toLowerCase().indexOf(q.toLowerCase()) > -1;
-                });
-            } else if (filterParam === 'ALL') {
-                return searchParam.some((code) => {
-                    return item[code].toString().toLowerCase().indexOf(q.toLowerCase()) > -1;
-                });
-            } else {
-                return false;
-            }
-        });
-    }
+
     const handleClick = (customerId) => {
         const updateCustomerStatus = async () => {
             await customerServices.updateCustomerStatus({
@@ -36,7 +21,18 @@ function Customer() {
             });
         };
         updateCustomerStatus();
-        setCustomerCouter(customerCouter + 1);
+    };
+
+    const handleSearch = (keyword) => {
+        const timeOutId = setTimeout(() => {
+            console.log(keyword);
+            //searchCustomer(keyword)
+        }, 500);
+        return () => clearTimeout(timeOutId);
+    };
+
+    const handleFilterStatus = (status) => {
+        filterCustomer({ status });
     };
     return (
         <>
@@ -49,8 +45,8 @@ function Customer() {
                             id="search-form"
                             className={cx('search-input')}
                             placeholder="Search for..."
-                            value={q}
-                            onChange={(e) => setQ(e.target.value)}
+                            value={keyword}
+                            onChange={(e) => handleSearch(e.target.value)}
                         />
                     </div>
                     <div className={cx('tabs')}>
@@ -58,9 +54,9 @@ function Customer() {
                             return (
                                 <span
                                     key={tab.key}
-                                    className={cx('tab-item', { active: tab.key === filterParam })}
+                                    className={cx('tab-item', { active: tab.key === filters['status'] })}
                                     onClick={(e) => {
-                                        setFilterParam(tab.key);
+                                        handleFilterStatus(tab.key);
                                     }}
                                 >
                                     {tab.label}
@@ -70,7 +66,7 @@ function Customer() {
                     </div>
                 </nav>
                 <div className={cx('customer')}>
-                    {search(customerList).map((item, index) => {
+                    {customerList.map((item, index) => {
                         let type = customerType(item.customer_type);
                         return (
                             <div key={index} className={cx('customer-item', item.customer_status)}>

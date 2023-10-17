@@ -18,6 +18,16 @@ export const addCustomer = async (customer) => {
     }
 };
 
+export const getCustomer = async (params) => {
+    try {
+        console.log(params);
+        const res = await request.get('get_customer.php', params);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const updateCustomerStatus = async (params) => {
     try {
         const res = await request.post('update_customer_status.php', params);
@@ -27,9 +37,9 @@ export const updateCustomerStatus = async (params) => {
     }
 };
 
-export const getOrders = async () => {
+export const getOrders = async (params) => {
     try {
-        const res = await request.get('get_orders.php');
+        const res = await request.get('get_orders.php', params);
         return res.data;
     } catch (error) {
         console.log(error);

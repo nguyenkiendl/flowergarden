@@ -3,7 +3,7 @@ import styles from './RightSide.module.css';
 import Input from '~/components/Form/Input';
 import Select from '~/components/Form/Select';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
 import { AppContext } from '~/context/AppContext';
 import { CUSTOMER_TYPE } from '~/utils/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,7 +11,7 @@ import { faClose } from '@fortawesome/free-solid-svg-icons';
 const cx = classNames.bind(styles);
 
 function RightSide() {
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
     const [type, setType] = useState('flower');
     const [number, setNumber] = useState(1);
     let optionsType = CUSTOMER_TYPE;
@@ -25,7 +25,6 @@ function RightSide() {
 
     const { openSide, setOpenSide, addCustomerItem } = useContext(AppContext);
     const handleAddCustomer = () => {
-        console.log(1);
         addCustomerItem({ type, number });
         // setType('flower');
         // setNumber(1);

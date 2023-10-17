@@ -2,21 +2,21 @@ import { useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from '~/components/Customer/Customer.module.scss';
 import { customerType, formatPrice } from '~/utils/filters';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { AppContext } from '~/context/AppContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAdd, faEdit, faFileCirclePlus, faMinus, faPrint, faRemove } from '@fortawesome/free-solid-svg-icons';
-import * as customerServices from '~/apiServices/customerServices';
-
 const cx = classNames.bind(styles);
 function Detail() {
     let routeParams = useParams();
-    const { customerList, setCustomerList, openService, setOpenService } = useContext(AppContext);
+    const { removeService, customer, setCustomer, setCustomerList, openService, setOpenService } =
+        useContext(AppContext);
     const customerId = routeParams.customerId;
-    const customer = customerList?.find((c) => {
-        return c.customer_id === Number(customerId);
-    });
-    if (customer === undefined) return;
+    useEffect(() => {
+        setCustomer({ customer_id: Number(customerId) });
+    }, [customerId]);
+
+    if (Object.keys(customer).length === 0) return;
     const handlePrintTicket = () => {
         console.log('print ticket');
     };
@@ -24,7 +24,6 @@ function Detail() {
     const handleServiceAdd = () => {
         setOpenService(!openService);
     };
-
     const handleMinus = (service) => {
         if (customer.services.some((item) => item.product_id === service.product_id)) {
             setCustomerList((prevCustomerList) => {
@@ -44,7 +43,6 @@ function Detail() {
             });
         }
     };
-
     const handleAdd = (service) => {
         if (customer.services.some((item) => item.product_id === service.product_id)) {
             setCustomerList((prevCustomerList) => {
@@ -67,29 +65,7 @@ function Detail() {
 
     const handleEdit = (service) => {};
 
-    const handleRemove = (service) => {
-        const removeService = async () => {
-            const result = await customerServices.removeService(service);
-            if (result) {
-                setCustomerList((prevCustomerList) => {
-                    const newCustomerList = prevCustomerList.map((obj) => {
-                        if (obj.customer_id === Number(customerId)) {
-                            let newServices = obj.services.filter((s) => {
-                                return s.product_id !== service.product_id;
-                            });
-                            obj.services = newServices;
-                        }
-                        return obj;
-                    });
-                    return newCustomerList;
-                });
-            }
-        };
-        removeService();
-    };
-
-    let type = customerType(customer.customer_type);
-    let totalPrice = customer.services.reduce((total, item) => total + item.quantity * item.product_price, 0);
+    let totalPrice = customer.services?.reduce((total, item) => total + item.quantity * item.product_price, 0);
     return (
         <>
             <div className={cx('customer')}>
@@ -97,7 +73,7 @@ function Detail() {
                     <div className={cx('number')}>{customer.customer_number}</div>
                     <div className={'customer-group'}>
                         <div className={cx('code')}>{customer.customer_code}</div>
-                        <div className={cx('type')}>{type.label}</div>
+                        <div className={cx('type')}>{customerType(customer.customer_type)?.label}</div>
                     </div>
                     <div className={cx('date')}>{customer.created_at}</div>
                     <div className={cx('price')}>{formatPrice(customer.ticket_price)}đ</div>
@@ -155,7 +131,7 @@ function Detail() {
                                             </button>
                                         </td>
                                         <td className="text-center">
-                                            <button onClick={() => handleRemove(service)} className={cx('btn-remove')}>
+                                            <button onClick={() => removeService(service)} className={cx('btn-remove')}>
                                                 <FontAwesomeIcon icon={faRemove} />
                                             </button>
                                         </td>
