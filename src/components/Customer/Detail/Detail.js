@@ -2,68 +2,32 @@ import { useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from '~/components/Customer/Customer.module.scss';
 import { customerType, formatPrice } from '~/utils/filters';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '~/context/AppContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAdd, faEdit, faFileCirclePlus, faMinus, faPrint, faRemove } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faFileCirclePlus, faMinus, faPrint, faRemove } from '@fortawesome/free-solid-svg-icons';
+import { ORDERS_TAB } from '~/utils/constants';
 const cx = classNames.bind(styles);
 function Detail() {
-    let routeParams = useParams();
-    const { removeService, customer, setCustomer, setCustomerList, openService, setOpenService } =
-        useContext(AppContext);
-    const customerId = routeParams.customerId;
+    let { customerId } = useParams();
+    const [activeTab, setActiveTab] = useState('orders');
+    const { removeService, customer, setCustomer, openService, setOpenService } = useContext(AppContext);
     useEffect(() => {
         setCustomer({ customer_id: Number(customerId) });
     }, [customerId]);
 
     if (Object.keys(customer).length === 0) return;
+
     const handlePrintTicket = () => {
         console.log('print ticket');
     };
-
     const handleServiceAdd = () => {
         setOpenService(!openService);
     };
-    const handleMinus = (service) => {
-        if (customer.services.some((item) => item.product_id === service.product_id)) {
-            setCustomerList((prevCustomerList) => {
-                const newCustomerList = prevCustomerList.map((obj) => {
-                    if (obj.customer_id === Number(customerId)) {
-                        let newServices = obj.services.map((s) => {
-                            if (s.product_id === service.product_id) {
-                                return { ...s, quantity: service.quantity - 1 };
-                            }
-                            return s;
-                        });
-                        obj.services = newServices;
-                    }
-                    return obj;
-                });
-                return newCustomerList;
-            });
-        }
-    };
-    const handleAdd = (service) => {
-        if (customer.services.some((item) => item.product_id === service.product_id)) {
-            setCustomerList((prevCustomerList) => {
-                const newCustomerList = prevCustomerList.map((obj) => {
-                    if (obj.customer_id === Number(customerId)) {
-                        let newServices = obj.services.map((s) => {
-                            if (s.product_id === service.product_id) {
-                                return { ...s, quantity: service.quantity + 1 };
-                            }
-                            return s;
-                        });
-                        obj.services = newServices;
-                    }
-                    return obj;
-                });
-                return newCustomerList;
-            });
-        }
-    };
 
-    const handleEdit = (service) => {};
+    const handleTabControl = (tab) => {
+        setActiveTab(tab);
+    };
 
     let totalPrice = customer.services?.reduce((total, item) => total + item.quantity * item.product_price, 0);
     return (
@@ -76,7 +40,7 @@ function Detail() {
                         <div className={cx('type')}>{customerType(customer.customer_type)?.label}</div>
                     </div>
                     <div className={cx('date')}>{customer.created_at}</div>
-                    <div className={cx('price')}>{formatPrice(customer.ticket_price)}đ</div>
+                    <div className={cx('price')}>{formatPrice(customer.ticket_price * customer.customer_number)}đ</div>
                     <div className={cx('btn-action')}>
                         <button onClick={handlePrintTicket} className={cx('btn-print-ticket')}>
                             <FontAwesomeIcon icon={faPrint} />
@@ -86,13 +50,30 @@ function Detail() {
                         </button>
                     </div>
                 </div>
-                <div className={cx('drinks')}>
+                <nav className={cx('head')}>
+                    <div className={cx('tabs')}>
+                        {ORDERS_TAB.map((tab) => {
+                            return (
+                                <span
+                                    key={tab.key}
+                                    className={cx('tab-item', { active: tab.key === activeTab })}
+                                    onClick={() => {
+                                        handleTabControl(tab.key);
+                                    }}
+                                >
+                                    {tab.label}
+                                </span>
+                            );
+                        })}
+                    </div>
+                </nav>
+                <div id="order-list" className={cx('tab-content', { active: activeTab === 'orders' })}>
                     <table>
                         <thead>
                             <tr>
                                 <th className="text-center">#</th>
                                 <th>Tên</th>
-                                <th>Số lượng</th>
+                                <th>SL</th>
                                 <th>Giá</th>
                                 <th colSpan={2}></th>
                             </tr>
@@ -105,21 +86,54 @@ function Detail() {
                                         <td>{service.product_name}</td>
                                         <td>
                                             <div className={cx('btn-group')}>
-                                                <button
-                                                    onClick={() => handleMinus(service)}
-                                                    className={cx('btn-minus')}
-                                                    disabled={service.quantity === 0}
-                                                >
-                                                    <FontAwesomeIcon icon={faMinus} />
-                                                </button>
                                                 <span className={cx('quantity')}>{service.quantity}</span>
-                                                <button
-                                                    onClick={() => handleAdd(service)}
-                                                    className={cx('btn-add')}
-                                                    disabled={service.product_store === 0}
-                                                >
-                                                    <FontAwesomeIcon icon={faAdd} />
-                                                </button>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span className="price">{formatPrice(service.product_price)}đ</span>
+                                        </td>
+                                        <td className="text-center">
+                                            <button onClick={() => handleEdit()} className={cx('btn-edit')}>
+                                                <FontAwesomeIcon icon={faEdit} />
+                                            </button>
+                                        </td>
+                                        <td className="text-center">
+                                            <button onClick={() => removeService(service)} className={cx('btn-remove')}>
+                                                <FontAwesomeIcon icon={faRemove} />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>Tổng</td>
+                                <td colSpan={3}>{formatPrice(totalPrice)}đ</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div id="discount-list" className={cx('tab-content', { active: activeTab === 'discounts' })}>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th className="text-center">#</th>
+                                <th>Tên</th>
+                                <th>SL</th>
+                                <th>Giá</th>
+                                <th colSpan={2}></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {customer.discounts.map((service, index) => {
+                                return (
+                                    <tr key={index}>
+                                        <td className="text-center">{index + 1}</td>
+                                        <td>{service.product_name}</td>
+                                        <td>
+                                            <div className={cx('btn-group')}>
+                                                <span className={cx('quantity')}>{service.quantity}</span>
                                             </div>
                                         </td>
                                         <td>

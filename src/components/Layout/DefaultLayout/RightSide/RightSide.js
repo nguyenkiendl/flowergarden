@@ -28,7 +28,7 @@ function RightSide() {
         addCustomerItem({ type, number });
         // setType('flower');
         // setNumber(1);
-        // setOpenSide(false);
+        setOpenSide(false);
         // navigate('/', { replace: true });
     };
 

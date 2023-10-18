@@ -159,19 +159,3 @@
     background: red;
     border-radius: 4px;
 }
-.tabs {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #fff;
-    .tab-item {
-        padding: 5px 10px;
-        border-bottom: 1px solid transparent;
-        cursor: pointer;
-        &.active {
-            font-weight: 600;
-            color: var(--bg-primary);
-            border-bottom: 1px solid var(--bg-primary);
-        }
-    }
-}

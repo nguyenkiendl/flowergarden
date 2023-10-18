@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AppContext } from '~/context/AppContext';
 import { customerType, formatPrice } from '~/utils/filters';
@@ -9,10 +9,9 @@ import { CUSTOMER_TAB } from '~/utils/constants';
 const cx = classNames.bind(styles);
 
 function Customer() {
-    const { customerList, keyword, searchCustomer, filters, filterCustomer } = useContext(AppContext) || [];
+    const refInputSearch = useRef(null);
+    const { customerList, searchCustomer, filters, filterCustomer } = useContext(AppContext) || [];
     const [q, setQ] = useState('');
-    const [searchParam] = useState(['customer_code']);
-
     const handleClick = (customerId) => {
         const updateCustomerStatus = async () => {
             await customerServices.updateCustomerStatus({
@@ -23,17 +22,22 @@ function Customer() {
         updateCustomerStatus();
     };
 
-    const handleSearch = (keyword) => {
+    useEffect(() => {
         const timeOutId = setTimeout(() => {
-            console.log(keyword);
-            //searchCustomer(keyword)
-        }, 500);
+            searchCustomer(q);
+            refInputSearch.current.focus();
+        }, 700);
         return () => clearTimeout(timeOutId);
-    };
+    }, [q]);
 
     const handleFilterStatus = (status) => {
         filterCustomer({ status });
     };
+
+    const handleFocus = (event) => {
+        event.target.select();
+    };
+
     return (
         <>
             <div className={cx('customers')}>
@@ -41,12 +45,12 @@ function Customer() {
                     <div className={cx('customer-search')}>
                         <input
                             type="search"
-                            name="search-form"
-                            id="search-form"
                             className={cx('search-input')}
                             placeholder="Search for..."
-                            value={keyword}
-                            onChange={(e) => handleSearch(e.target.value)}
+                            ref={refInputSearch}
+                            value={q}
+                            onChange={(e) => setQ(e.target.value)}
+                            onFocus={handleFocus}
                         />
                     </div>
                     <div className={cx('tabs')}>
@@ -77,17 +81,17 @@ function Customer() {
                                     <div className={cx('status', item.customer_status)}>{item.customer_status}</div>
                                 </div>
                                 <div className={cx('date')}>{item.created_at}</div>
-                                <div className={cx('price')}>{formatPrice(item.ticket_price)}đ</div>
+                                <div className={cx('price')}>
+                                    {formatPrice(item.ticket_price * item.customer_number)}đ
+                                </div>
                                 <div className={cx('customer-action')}>
-                                    <div className={cx('customer-services')}>
-                                        {Object.keys(item.services).map((i) => {
-                                            return (
-                                                <span key={i} className={cx('service')}>
-                                                    {Number(i) + 1}
-                                                </span>
-                                            );
-                                        })}
-                                    </div>
+                                    {item.services > 0 ? (
+                                        <div className={cx('customer-services')}>
+                                            <span className={cx('service')}>{item.services}</span>
+                                        </div>
+                                    ) : (
+                                        ''
+                                    )}
                                     <Link
                                         onClick={() => handleClick(item.customer_id)}
                                         to={`/customer/${item.customer_id}`}

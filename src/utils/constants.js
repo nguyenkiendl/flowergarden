@@ -25,3 +25,29 @@ export const CUSTOMER_TAB = [
         active: false,
     },
 ];
+
+export const ORDERS_TAB = [
+    {
+        key: 'orders',
+        label: 'ORDER LIST',
+        active: true,
+    },
+    {
+        key: 'discounts',
+        label: 'DISCOUNTS',
+        active: false,
+    },
+];
+
+export const SERVICES_TAB = [
+    {
+        key: 'water',
+        label: 'WATERS',
+        active: true,
+    },
+    {
+        key: 'food',
+        label: 'FOODS',
+        active: false,
+    },
+];

@@ -152,3 +152,27 @@ button[disabled] {
     font-weight: 600;
     color: #961100;
 }
+
+.tabs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    .tab-item {
+        padding: 5px 10px;
+        border-bottom: 1px solid transparent;
+        cursor: pointer;
+        &.active {
+            font-weight: 600;
+            color: var(--bg-primary);
+            border-bottom: 1px solid var(--bg-primary);
+        }
+    }
+}
+.tab-content {
+    display: none;
+    min-height: calc(100vh - var(--header-height));
+    &.active {
+        display: block;
+    }
+}

@@ -6,32 +6,82 @@ const initialState = {
     },
     loading: true,
     page: 1,
-    totalPage: 1,
     error: '',
-    dataList: [],
+    customerList: [],
     customer: {},
+};
+
+export const actions = {
+    fetchCustomer: (payload) => {
+        return {
+            type: 'FETCH_SUCCESS',
+            payload: payload,
+        };
+    },
+    setCustomer: (data) => {
+        return {
+            type: 'SET_CUSTOMER',
+            payload: data,
+        };
+    },
+    addCustomerItem: (data) => {
+        return {
+            type: 'ADD_CUSTOMER_ITEM',
+            payload: data,
+        };
+    },
+    searchCustomer: (payload) => {
+        return {
+            type: 'SEARCH_CUSTOMER',
+            payload: payload,
+        };
+    },
+    filterCustomer: (payload) => {
+        return {
+            type: 'FILTER_CUSTOMER',
+            payload: payload,
+        };
+    },
+    addService: (payload) => {
+        return {
+            type: 'ADD_SERVICE',
+            payload: payload,
+        };
+    },
+    addServices: (payload) => {
+        return {
+            type: 'ADD_SERVICES',
+            payload: payload,
+        };
+    },
+    removeService: (service) => {
+        return {
+            type: 'REMOVE_SERVICE_ITEM',
+            payload: service,
+        };
+    },
 };
 
 const reducer = (state, action) => {
     const { type, payload } = action;
-    console.log(state);
+    console.log(type, state);
     switch (type) {
         case 'FETCH_SUCCESS':
             return {
                 ...state,
-                totalPage: payload.totalPage,
-                dataList: state.dataList.concat(payload),
+                keyword: payload.keyword,
+                filters: payload.filters,
+                customerList: state.customerList.concat(payload.dataList),
             };
         case 'FETCH_MORE':
             return {
                 ...state,
                 page: state.page + 1,
-                filters: state.filters,
             };
         case 'FETCH_ERROR':
             return {
                 ...state,
-                dataList: [],
+                customerList: [],
                 error: 'Something went wrong!',
             };
         case 'SEARCH_CUSTOMER':
@@ -39,29 +89,33 @@ const reducer = (state, action) => {
                 ...state,
                 page: 1,
                 keyword: payload.keyword,
-                dataList: payload.dataList,
+                customerList: payload.dataList,
             };
         case 'FILTER_CUSTOMER':
-            console.log(state);
             return {
                 ...state,
                 page: 1,
                 filters: payload.filters,
-                dataList: payload.dataList,
+                customerList: payload.dataList,
             };
         case 'ADD_CUSTOMER_ITEM':
             return {
                 ...state,
                 page: 1,
                 filters: { status: 'new' },
-                dataList: [...state.dataList, payload],
+                customerList: [...state.customerList, payload],
             };
-        case 'GET_CUSTOMER_DETAIL':
+        case 'SET_CUSTOMER':
             return {
                 ...state,
                 customer: payload,
             };
-        case 'REMOVE_SERVICE':
+        case 'ADD_SERVICE':
+            return {
+                ...state,
+                customer: { ...state.customer, services: [...state.customer.services, payload] },
+            };
+        case 'REMOVE_SERVICE_ITEM':
             const newServices = state.customer.services.filter((obj) => {
                 return obj.order_id !== payload.order_id;
             });
