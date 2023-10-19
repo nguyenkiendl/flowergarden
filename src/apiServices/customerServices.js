@@ -46,6 +46,15 @@ export const getOrders = async (params) => {
     }
 };
 
+export const addOrders = async (options) => {
+    try {
+        const res = await request.post('add_orders.php', options);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const addService = async (options) => {
     try {
         const res = await request.post('add_service.php', options);

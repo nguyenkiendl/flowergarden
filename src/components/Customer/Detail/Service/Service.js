@@ -1,22 +1,21 @@
 import classNames from 'classnames/bind';
 import styles from './Service.module.scss';
 import { useContext, useEffect, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAdd, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { AppContext } from '~/context/AppContext';
 import { useParams } from 'react-router-dom';
-import { formatPrice } from '~/utils/filters';
-import * as productServices from '~/apiServices/productServices';
 
-import imagedefault from '~/assets/images/cocacola.jpg';
+import * as productServices from '~/apiServices/productServices';
 import { SERVICES_TAB } from '~/utils/constants';
+import ServiceItem from './ServiceItem';
 
 const cx = classNames.bind(styles);
 function Service() {
     let { customerId } = useParams();
     const [activeTab, setActiveTab] = useState('water');
     const [services, setServices] = useState([]);
-    const { addService, openService } = useContext(AppContext);
+    const [carts, setCarts] = useState([]);
+    const [isReset, setIsReset] = useState(false);
+    const { addOrders, openService, setOpenService } = useContext(AppContext);
     useEffect(() => {
         const fetchApi = async () => {
             const result = await productServices.products();
@@ -24,22 +23,6 @@ function Service() {
         };
         fetchApi();
     }, [openService]);
-
-    const handleAddService = (productId) => {
-        addService({
-            customerId: Number(customerId),
-            productId: productId,
-        });
-        setServices((prevServices) => {
-            return prevServices.map((obj) => {
-                if (obj.product_id === productId) {
-                    let newStore = obj.product_store - 1;
-                    return { ...obj, product_store: newStore };
-                }
-                return obj;
-            });
-        });
-    };
 
     const handleTabControl = (tab) => {
         setActiveTab(tab);
@@ -49,6 +32,32 @@ function Service() {
         return services.filter((obj) => {
             return obj.product_type === type;
         });
+    };
+
+    const handleOk = () => {
+        setOpenService(false);
+        addOrders({
+            customer_id: Number(customerId),
+            services: carts,
+        });
+        setIsReset(true);
+    };
+
+    const handleAddServiceItem = (service) => {
+        const exist = carts.some((obj) => obj.product_id === service.product_id);
+        if (exist) {
+            setCarts((prevCarts) => {
+                return prevCarts.map((obj) => {
+                    if (obj.product_id === service.product_id) {
+                        const newQuantity = service.quantity;
+                        return { ...obj, quantity: newQuantity };
+                    }
+                    return obj;
+                });
+            });
+        } else {
+            setCarts([...carts, service]);
+        }
     };
     return (
         <>
@@ -74,24 +83,12 @@ function Service() {
                     <div className={cx('service-row')}>
                         {tabContent('water').map((item, index) => {
                             return (
-                                <div key={index} className={cx('service-item')}>
-                                    <div className={cx('thumbnail')}>
-                                        <img src={imagedefault} alt={'thumnail'} />
-                                        <div className={cx('btn-group')}>
-                                            <button
-                                                onClick={() => handleAddService(item.product_id)}
-                                                className={cx('btn-add-service')}
-                                                disabled={item.product_store === 0}
-                                            >
-                                                <FontAwesomeIcon icon={faAdd} />
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div className={cx('name')}>
-                                        {item.product_name} ({item.product_store})
-                                    </div>
-                                    <div className={cx('price')}>{formatPrice(item.product_price)}đ</div>
-                                </div>
+                                <ServiceItem
+                                    key={index}
+                                    item={item}
+                                    isReset={isReset}
+                                    onAddService={handleAddServiceItem}
+                                />
                             );
                         })}
                     </div>
@@ -100,27 +97,23 @@ function Service() {
                     <div className={cx('service-row')}>
                         {tabContent('food').map((item, index) => {
                             return (
-                                <div key={index} className={cx('service-item')}>
-                                    <div className={cx('thumbnail')}>
-                                        <img src={imagedefault} alt={'thumnail'} />
-                                        <div className={cx('btn-group')}>
-                                            <button
-                                                onClick={() => handleAddService(item.product_id)}
-                                                className={cx('btn-add-service')}
-                                                disabled={item.product_store === 0}
-                                            >
-                                                <FontAwesomeIcon icon={faAdd} />
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div className={cx('name')}>
-                                        {item.product_name} ({item.product_store})
-                                    </div>
-                                    <div className={cx('price')}>{formatPrice(item.product_price)}đ</div>
-                                </div>
+                                <ServiceItem
+                                    key={index}
+                                    item={item}
+                                    isReset={isReset}
+                                    onAddService={handleAddServiceItem}
+                                />
                             );
                         })}
                     </div>
+                </div>
+                <div className={cx('bottom-actions')}>
+                    <button className={cx('btn-back')} onClick={() => setOpenService(false)}>
+                        Quay lại
+                    </button>
+                    <button className={cx('btn-yes')} onClick={handleOk}>
+                        Đồng ý
+                    </button>
                 </div>
             </div>
         </>

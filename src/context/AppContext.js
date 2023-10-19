@@ -98,6 +98,18 @@ export const AppProvider = ({ children }) => {
         Remove();
     };
 
+    const addOrders = (payload) => {
+        const Add = async () => {
+            const response = await customerServices.addOrders({
+                customer_id: payload.customer_id,
+                services: payload.services,
+            });
+            if (response) {
+                dispatch(actions.addOrders(response));
+            }
+        };
+        Add();
+    };
     const searchCustomer = (keyword) => {
         const Search = async () => {
             const response = await customerServices.getOrders({
@@ -148,6 +160,7 @@ export const AppProvider = ({ children }) => {
         searchCustomer,
         filters,
         filterCustomer,
+        addOrders,
         addService,
         removeService,
         openSide,

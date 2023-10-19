@@ -60,6 +60,12 @@ export const actions = {
             payload: service,
         };
     },
+    addOrders: (payload) => {
+        return {
+            type: 'ADD_ORDERS',
+            payload: payload,
+        };
+    },
 };
 
 const reducer = (state, action) => {
@@ -122,6 +128,11 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 customer: { ...state.customer, services: newServices },
+            };
+        case 'ADD_ORDERS':
+            return {
+                ...state,
+                customer: { ...state.customer, services: [...state.customer.services, payload] },
             };
         default:
             return state;
