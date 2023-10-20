@@ -1,18 +1,20 @@
 import { createContext, useEffect, useState } from 'react';
 import * as customerServices from '~/apiServices/customerServices';
+import * as orderServices from '~/apiServices/orderServices';
 import { CustomerReducer, actions } from '~/reducer/CustomerReducer';
 
 export const AppContext = createContext({});
 
 export const AppProvider = ({ children }) => {
     const [openBar, setOpenBar] = useState(false);
-    const [openSide, setOpenSide] = useState(false);
-    const [openService, setOpenService] = useState(false);
+    const [customerSide, setCustomerSide] = useState(false);
+    const [productSide, setProductSide] = useState(false);
+    const [orderSide, setOrderSide] = useState(false);
     const [customerState, dispatch] = CustomerReducer();
     const { customerList, page, customer, keyword, filters } = customerState;
 
     const fetchCustomers = async () => {
-        const response = await customerServices.getOrders({
+        const response = await customerServices.getCustomers({
             params: {
                 page: page,
                 keyword: keyword,
@@ -74,35 +76,12 @@ export const AppProvider = ({ children }) => {
         };
         Add();
     };
-    const addService = (payload) => {
-        const Add = async () => {
-            const response = await customerServices.addService({
-                customer_id: payload.customerId,
-                product_id: payload.productId,
-            });
-            if (response) {
-                dispatch(actions.addService(response));
-            }
-        };
-        Add();
-    };
-    const removeService = (service) => {
-        const Remove = async () => {
-            const response = await customerServices.removeService(service);
-            if (response) {
-                dispatch(actions.removeService(service));
-            } else {
-                alert('Fails!');
-            }
-        };
-        Remove();
-    };
 
     const addOrders = (payload) => {
         const Add = async () => {
-            const response = await customerServices.addOrders({
+            const response = await orderServices.addOrders({
                 customer_id: payload.customer_id,
-                services: payload.services,
+                datas: payload.datas,
             });
             if (response) {
                 dispatch(actions.addOrders(response));
@@ -110,9 +89,23 @@ export const AppProvider = ({ children }) => {
         };
         Add();
     };
+
+    const updateOrders = (payload) => {
+        const Update = async () => {
+            const response = await orderServices.updateOrders({
+                customer_id: payload.customer_id,
+                datas: payload.datas,
+            });
+            if (response) {
+                dispatch(actions.updateOrders(response));
+            }
+        };
+        Update();
+    };
+
     const searchCustomer = (keyword) => {
         const Search = async () => {
-            const response = await customerServices.getOrders({
+            const response = await customerServices.getCustomers({
                 params: {
                     page: page,
                     keyword: keyword,
@@ -132,7 +125,7 @@ export const AppProvider = ({ children }) => {
 
     const filterCustomer = (filters) => {
         const Filter = async () => {
-            const response = await customerServices.getOrders({
+            const response = await customerServices.getCustomers({
                 params: {
                     page: 1,
                     keyword: keyword,
@@ -160,13 +153,14 @@ export const AppProvider = ({ children }) => {
         searchCustomer,
         filters,
         filterCustomer,
+        customerSide,
+        setCustomerSide,
+        productSide,
+        setProductSide,
+        orderSide,
+        setOrderSide,
         addOrders,
-        addService,
-        removeService,
-        openSide,
-        setOpenSide,
-        openService,
-        setOpenService,
+        updateOrders,
         openBar,
         setOpenBar,
     };

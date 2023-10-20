@@ -8,7 +8,10 @@ const initialState = {
     page: 1,
     error: '',
     customerList: [],
-    customer: {},
+    customer: {
+        orders: [],
+        discounts: [],
+    },
 };
 
 export const actions = {
@@ -66,6 +69,12 @@ export const actions = {
             payload: payload,
         };
     },
+    updateOrders: (payload) => {
+        return {
+            type: 'UPDATE_ORDERS',
+            payload: payload,
+        };
+    },
 };
 
 const reducer = (state, action) => {
@@ -116,23 +125,19 @@ const reducer = (state, action) => {
                 ...state,
                 customer: payload,
             };
-        case 'ADD_SERVICE':
-            return {
-                ...state,
-                customer: { ...state.customer, services: [...state.customer.services, payload] },
-            };
-        case 'REMOVE_SERVICE_ITEM':
-            const newServices = state.customer.services.filter((obj) => {
-                return obj.order_id !== payload.order_id;
-            });
-            return {
-                ...state,
-                customer: { ...state.customer, services: newServices },
-            };
         case 'ADD_ORDERS':
             return {
                 ...state,
-                customer: { ...state.customer, services: [...state.customer.services, payload] },
+                customer: { ...state.customer, orders: payload },
+            };
+        case 'UPDATE_ORDERS':
+            console.log({
+                ...state,
+                customer: { ...state.customer, orders: payload },
+            });
+            return {
+                ...state,
+                customer: { ...state.customer, orders: payload },
             };
         default:
             return state;

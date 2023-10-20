@@ -1,9 +1,9 @@
-.service-row {
+.order-row {
     display: flex;
     flex-wrap: wrap;
     margin-bottom: 2em;
     border-top: 1px solid #ccc;
-    .service-item {
+    .order-item {
         position: relative;
         display: flex;
         align-items: flex-end;
@@ -59,7 +59,7 @@
                     display: block;
                 }
             }
-            .btn-minus-service {
+            .btn-minus {
                 display: none;
                 &.show {
                     display: block;
@@ -67,7 +67,7 @@
                     color: #009688;
                 }
             }
-            .btn-add-service {
+            .btn-add {
                 &.show {
                     display: block;
                     background: transparent;
@@ -90,35 +90,6 @@
         }
         .price {
             color: #961100;
-        }
-    }
-}
-.btn-add-to-services {
-    height: 40px;
-    background: #000;
-    background: var(--bg-primary);
-    color: #fff;
-    border-radius: 4px;
-    cursor: pointer;
-    opacity: 0.9;
-    text-transform: uppercase;
-    font-weight: 600;
-    padding: 10px 15px;
-}
-.bottom-actions {
-    position: fixed;
-    bottom: 0;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    width: 100%;
-    border-top: 1px solid #ccc;
-    button {
-        flex: auto;
-        padding: 10px;
-        &.btn-yes {
-            background: var(--bg-primary);
-            color: #fff;
         }
     }
 }

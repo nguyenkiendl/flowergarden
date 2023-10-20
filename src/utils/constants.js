@@ -39,7 +39,7 @@ export const ORDERS_TAB = [
     },
 ];
 
-export const SERVICES_TAB = [
+export const PRODUCTS_TAB = [
     {
         key: 'water',
         label: 'WATERS',

@@ -1,17 +1,15 @@
 import classNames from 'classnames/bind';
-import styles from './RightSide.module.css';
+import styles from './CustomerSide.module.css';
 import Input from '~/components/Form/Input';
 import Select from '~/components/Form/Select';
 import { useContext, useEffect, useRef, useState } from 'react';
-//import { useNavigate } from 'react-router-dom';
 import { AppContext } from '~/context/AppContext';
 import { CUSTOMER_TYPE } from '~/utils/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 const cx = classNames.bind(styles);
 
-function RightSide() {
-    //const navigate = useNavigate();
+function CustomerSide() {
     const [type, setType] = useState('flower');
     const [number, setNumber] = useState(1);
     let optionsType = CUSTOMER_TYPE;
@@ -23,17 +21,14 @@ function RightSide() {
         setNumber(number);
     };
 
-    const { openSide, setOpenSide, addCustomerItem } = useContext(AppContext);
+    const { customerSide, setCustomerSide, addCustomerItem } = useContext(AppContext);
     const handleAddCustomer = () => {
         addCustomerItem({ type, number });
-        // setType('flower');
-        // setNumber(1);
-        setOpenSide(false);
-        // navigate('/', { replace: true });
+        setCustomerSide(false);
     };
 
-    const handleCloseRightSide = () => {
-        setOpenSide(!openSide);
+    const handleCloseCustomerSide = () => {
+        setCustomerSide(!customerSide);
     };
 
     /**
@@ -43,7 +38,7 @@ function RightSide() {
         useEffect(() => {
             function handleClickOutside(event) {
                 if (ref.current && !ref.current.contains(event.target)) {
-                    setOpenSide(false);
+                    setCustomerSide(false);
                 }
             }
             document.addEventListener('mousedown', handleClickOutside);
@@ -56,10 +51,10 @@ function RightSide() {
     useOutsideAlerter(wrapperRef);
     return (
         <>
-            <div ref={wrapperRef} className={cx('right-side', { show: openSide })}>
+            <div ref={wrapperRef} className={cx('right-sides', { show: customerSide })}>
                 <div className={cx('header')}>
                     <h3>Thêm Khách Hàng</h3>
-                    <button onClick={handleCloseRightSide} className={cx('btn-close')}>
+                    <button onClick={handleCloseCustomerSide} className={cx('btn-close')}>
                         <FontAwesomeIcon icon={faClose} />
                     </button>
                 </div>
@@ -102,4 +97,4 @@ function RightSide() {
     );
 }
 
-export default RightSide;
+export default CustomerSide;

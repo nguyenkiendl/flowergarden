@@ -1,8 +1,8 @@
 <?php
-require_once __DIR__ . '/core/database.php';
-require_once __DIR__ . '/core/function.php';
+require_once __DIR__ . '../../core/customers.class.php';
+require_once __DIR__ . '../../core/function.php';
 header('Content-Type: application/json; charset=utf-8');
-$database = new Database();
+$customers = new Customers();
 $page = 1;
 $perPage = 10;
 if(!empty($_GET['page'])) {
@@ -20,4 +20,4 @@ if(!empty($_GET['filters'])) {
     $filters = filter_input(INPUT_GET, 'filters', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 }
 
-return send_json(true, 'OK', $database->getOrders($perPage, $page, $keyword, $filters));
+return send_json(true, 'OK', $customers->getCustomers($perPage, $page, $keyword, $filters));

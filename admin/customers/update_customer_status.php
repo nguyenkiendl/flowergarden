@@ -1,7 +1,6 @@
 <?php
-require_once __DIR__ . '/core/database.php';
-require_once __DIR__ . '/core/function.php';
-
+require_once __DIR__ . '../../core/customers.class.php';
+require_once __DIR__ . '../../core/function.php';
 header('Content-type: application/json');
 $error = false;
 $request_body = file_get_contents('php://input');
@@ -19,8 +18,8 @@ if (empty($input['customer_status'])) {
 if ($error==false) {
     $custormerId = $input['customer_id'];
     $customerStatus = $input['customer_status'];
-    $database = new Database();
-    $response = $database->updateCustomerStatus($custormerId, $customerStatus);
+    $customers = new Customers();
+    $response = $customers->updateCustomerStatus($custormerId, $customerStatus);
     return send_json(true, 'OK', $response);
 } else {
     return send_json(false, 'FAILED');

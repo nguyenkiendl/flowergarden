@@ -7,9 +7,9 @@ import { useContext } from 'react';
 import { AppContext } from '~/context/AppContext';
 const cx = classNames.bind(styles);
 function Header() {
-    const { openBar, setOpenBar, openSide, setOpenSide } = useContext(AppContext);
+    const { openBar, setOpenBar, customerSide, setCustomerSide } = useContext(AppContext);
     const handleClick = (e) => {
-        setOpenSide(!openSide);
+        setCustomerSide(!customerSide);
     };
 
     const handleClickBar = () => {

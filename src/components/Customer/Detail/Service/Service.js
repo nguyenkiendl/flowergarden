@@ -15,14 +15,14 @@ function Service() {
     const [services, setServices] = useState([]);
     const [carts, setCarts] = useState([]);
     const [isReset, setIsReset] = useState(false);
-    const { addOrders, openService, setOpenService } = useContext(AppContext);
+    const { addOrders, productSide, setProductSide } = useContext(AppContext);
     useEffect(() => {
         const fetchApi = async () => {
             const result = await productServices.products();
             setServices(result);
         };
         fetchApi();
-    }, [openService]);
+    }, [productSide]);
 
     const handleTabControl = (tab) => {
         setActiveTab(tab);
@@ -35,7 +35,7 @@ function Service() {
     };
 
     const handleOk = () => {
-        setOpenService(false);
+        setProductSide(false);
         addOrders({
             customer_id: Number(customerId),
             services: carts,

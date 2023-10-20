@@ -5,24 +5,35 @@ import { customerType, formatPrice } from '~/utils/filters';
 import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '~/context/AppContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faFileCirclePlus, faMinus, faPrint, faRemove } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faFileCirclePlus, faFileEdit, faMinus, faPrint, faRemove } from '@fortawesome/free-solid-svg-icons';
 import { ORDERS_TAB } from '~/utils/constants';
+import * as customerServices from '~/apiServices/customerServices';
 const cx = classNames.bind(styles);
 function Detail() {
     let { customerId } = useParams();
     const [activeTab, setActiveTab] = useState('orders');
-    const { removeService, customer, setCustomer, openService, setOpenService } = useContext(AppContext);
+    const { customer, setCustomer, productSide, setProductSide, orderSide, setOrderSide } = useContext(AppContext);
     useEffect(() => {
         setCustomer({ customer_id: Number(customerId) });
+        // const fetchApi = async () => {
+        //     const result = await customerServices.getCustomer({
+        //         params: {
+        //             customer_id: Number(customerId),
+        //         },
+        //     });
+        //     setCustomer(result);
+        // };
+        // if (customerId) fetchApi();
     }, [customerId]);
 
     if (Object.keys(customer).length === 0) return;
 
-    const handlePrintTicket = () => {
-        console.log('print ticket');
+    const handleOrderEdit = () => {
+        console.log(customerId);
+        setOrderSide(!orderSide);
     };
     const handleServiceAdd = () => {
-        setOpenService(!openService);
+        setProductSide(!productSide);
     };
 
     const handleTabControl = (tab) => {
@@ -42,10 +53,10 @@ function Detail() {
                     <div className={cx('date')}>{customer.created_at}</div>
                     <div className={cx('price')}>{formatPrice(customer.ticket_price * customer.customer_number)}đ</div>
                     <div className={cx('btn-action')}>
-                        <button onClick={handlePrintTicket} className={cx('btn-print-ticket')}>
-                            <FontAwesomeIcon icon={faPrint} />
+                        <button onClick={handleOrderEdit} className={cx('btn-order-edit')}>
+                            <FontAwesomeIcon icon={faFileEdit} />
                         </button>
-                        <button onClick={handleServiceAdd} className={cx('btn-service-add')}>
+                        <button onClick={handleServiceAdd} className={cx('btn-order-add')}>
                             <FontAwesomeIcon icon={faFileCirclePlus} />
                         </button>
                     </div>
@@ -75,11 +86,10 @@ function Detail() {
                                 <th>Tên</th>
                                 <th>SL</th>
                                 <th>Giá</th>
-                                <th colSpan={2}></th>
                             </tr>
                         </thead>
                         <tbody>
-                            {customer.services.map((service, index) => {
+                            {customer.orders.map((service, index) => {
                                 return (
                                     <tr key={index}>
                                         <td className="text-center">{index + 1}</td>
@@ -91,16 +101,6 @@ function Detail() {
                                         </td>
                                         <td>
                                             <span className="price">{formatPrice(service.product_price)}đ</span>
-                                        </td>
-                                        <td className="text-center">
-                                            <button onClick={() => handleEdit()} className={cx('btn-edit')}>
-                                                <FontAwesomeIcon icon={faEdit} />
-                                            </button>
-                                        </td>
-                                        <td className="text-center">
-                                            <button onClick={() => removeService(service)} className={cx('btn-remove')}>
-                                                <FontAwesomeIcon icon={faRemove} />
-                                            </button>
                                         </td>
                                     </tr>
                                 );
@@ -122,7 +122,6 @@ function Detail() {
                                 <th>Tên</th>
                                 <th>SL</th>
                                 <th>Giá</th>
-                                <th colSpan={2}></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -138,16 +137,6 @@ function Detail() {
                                         </td>
                                         <td>
                                             <span className="price">{formatPrice(service.product_price)}đ</span>
-                                        </td>
-                                        <td className="text-center">
-                                            <button onClick={() => handleEdit()} className={cx('btn-edit')}>
-                                                <FontAwesomeIcon icon={faEdit} />
-                                            </button>
-                                        </td>
-                                        <td className="text-center">
-                                            <button onClick={() => removeService(service)} className={cx('btn-remove')}>
-                                                <FontAwesomeIcon icon={faRemove} />
-                                            </button>
                                         </td>
                                     </tr>
                                 );

@@ -1,7 +1,6 @@
 <?php
-require_once __DIR__ . '/core/database.php';
-require_once __DIR__ . '/core/function.php';
-
+require_once __DIR__ . '../../core/orders.class.php';
+require_once __DIR__ . '../../core/function.php';
 header('Content-type: application/json');
 $error = false;
 $request_body = file_get_contents('php://input');
@@ -11,26 +10,26 @@ if (empty($input['customer_id'])) {
     return send_json(false, 'Not Found Custormer');
 }
 
-if (empty($input['services'])) {
+if (empty($input['datas'])) {
     $error = true;
     return send_json(false, 'Empty Services');
 }
 
-if (!is_array($input['services'])) {
+if (!is_array($input['datas'])) {
     $error = true;
     return send_json(false, 'Not Is Array Services');
 }
 
-if ( count($input['services']) == 0){
+if ( count($input['datas']) == 0){
     $error = true;
     return send_json(false, 'Not Thing Item Services');
 }
 
 if ($error==false) {
     $customerId = $input['customer_id'];
-    $services = $input['services'];
-    $database = new Database();
-    $response = $database->addOrders($customerId, $services);
+    $datas = $input['datas'];
+    $orders = new Orders();
+    $response = $orders->updateOrders($customerId, $datas);
     return send_json(true, 'OK', $response);
 } else {
     return send_json(false, 'FAILED');

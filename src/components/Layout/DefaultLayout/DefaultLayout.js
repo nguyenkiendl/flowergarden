@@ -2,8 +2,9 @@ import classNames from 'classnames/bind';
 import styles from './DefaultLayout.module.scss';
 import Header from '~/components/Layout/components/Header';
 import Sidebar from './Sidebar';
-import RightSide from './RightSide';
-import ServiceSide from './ServiceSide';
+import CustomerSide from './CustomerSide';
+import ProductSide from './ProductSide';
+import OrderSide from './OrderSide';
 
 const cx = classNames.bind(styles);
 
@@ -15,8 +16,9 @@ function DefaultLayout({ children }) {
                 <Sidebar />
                 <div className={cx('content')}>{children}</div>
             </div>
-            <RightSide />
-            <ServiceSide />
+            <CustomerSide />
+            <ProductSide />
+            <OrderSide />
         </div>
     );
 }

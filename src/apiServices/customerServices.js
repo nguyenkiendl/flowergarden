@@ -1,17 +1,8 @@
 import * as request from '~/utils/request';
 
-export const getCustomers = async () => {
+export const getCustomers = async (params) => {
     try {
-        const res = await request.get('get_customers.php');
-        return res.data;
-    } catch (error) {
-        console.log(error);
-    }
-};
-
-export const addCustomer = async (customer) => {
-    try {
-        const res = await request.post('add_customer.php', customer);
+        const res = await request.get('customers/get_customers.php', params);
         return res.data;
     } catch (error) {
         console.log(error);
@@ -20,8 +11,16 @@ export const addCustomer = async (customer) => {
 
 export const getCustomer = async (params) => {
     try {
-        console.log(params);
-        const res = await request.get('get_customer.php', params);
+        const res = await request.get('customers/get_customer.php', params);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const addCustomer = async (customer) => {
+    try {
+        const res = await request.post('customers/add_customer.php', customer);
         return res.data;
     } catch (error) {
         console.log(error);
@@ -30,43 +29,7 @@ export const getCustomer = async (params) => {
 
 export const updateCustomerStatus = async (params) => {
     try {
-        const res = await request.post('update_customer_status.php', params);
-        return res.data;
-    } catch (error) {
-        console.log(error);
-    }
-};
-
-export const getOrders = async (params) => {
-    try {
-        const res = await request.get('get_orders.php', params);
-        return res.data;
-    } catch (error) {
-        console.log(error);
-    }
-};
-
-export const addOrders = async (options) => {
-    try {
-        const res = await request.post('add_orders.php', options);
-        return res.data;
-    } catch (error) {
-        console.log(error);
-    }
-};
-
-export const addService = async (options) => {
-    try {
-        const res = await request.post('add_service.php', options);
-        return res.data;
-    } catch (error) {
-        console.log(error);
-    }
-};
-
-export const removeService = async (service) => {
-    try {
-        const res = await request.post('remove_services.php', service);
+        const res = await request.post('customers/update_customer_status.php', params);
         return res.data;
     } catch (error) {
         console.log(error);

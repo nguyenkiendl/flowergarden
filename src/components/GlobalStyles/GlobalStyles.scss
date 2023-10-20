@@ -8,6 +8,7 @@
     --s-new: #4caf50;
     --s-ordering: #ff5722;
     --header-height: 60px;
+    --footer-height: 50px;
     --sidebar-width: 90px;
     --border-radius: 3px;
 }
@@ -171,7 +172,6 @@ button[disabled] {
 }
 .tab-content {
     display: none;
-    min-height: calc(100vh - var(--header-height));
     &.active {
         display: block;
     }

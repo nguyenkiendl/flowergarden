@@ -85,9 +85,9 @@ function Customer() {
                                     {formatPrice(item.ticket_price * item.customer_number)}đ
                                 </div>
                                 <div className={cx('customer-action')}>
-                                    {item.services > 0 ? (
+                                    {item.orders > 0 ? (
                                         <div className={cx('customer-services')}>
-                                            <span className={cx('service')}>{item.services}</span>
+                                            <span className={cx('service')}>{item.orders}</span>
                                         </div>
                                     ) : (
                                         ''
