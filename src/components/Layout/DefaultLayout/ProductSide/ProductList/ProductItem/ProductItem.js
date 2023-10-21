@@ -42,7 +42,7 @@ function ProductItem({ item, onChange }) {
                 </div>
                 <div className={cx('name')}>
                     <h4>{item.product_name}</h4>
-                    <span>Lon</span>
+                    <span>{item.product_unit}</span>
                 </div>
                 <div className={cx('btn-group')}>
                     <button

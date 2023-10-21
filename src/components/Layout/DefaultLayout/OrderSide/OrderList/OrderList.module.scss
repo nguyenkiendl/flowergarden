@@ -9,15 +9,16 @@
         align-items: flex-end;
         flex: auto;
         gap: 5px;
-        padding: 5px 5px 10px;
-        border-bottom: 1px solid #ccc;
+        padding: 5px 5px 5px;
+        border-bottom: 1px solid #efeaea;
+        width: 100%;
         .thumbnail {
             position: relative;
-            border: 1px solid #009688;
+            border: 1px solid #efeaea;
             border-radius: 5px;
             overflow: hidden;
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             img {
                 max-width: 100%;
             }
@@ -42,7 +43,7 @@
             height: 30px;
             align-items: center;
             justify-content: center;
-            border: 1px solid #009688;
+            border: 1px solid #ccc;
             border-radius: 20px 20px 20px 20px;
             background: #fff;
             button {
@@ -89,7 +90,10 @@
             }
         }
         .price {
-            color: #961100;
+            color: #ff5722;
+            font-weight: 600;
+            width: 100px;
+            text-align: right;
         }
     }
 }

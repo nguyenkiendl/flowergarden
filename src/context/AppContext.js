@@ -7,6 +7,7 @@ export const AppContext = createContext({});
 
 export const AppProvider = ({ children }) => {
     const [openBar, setOpenBar] = useState(false);
+    const [openModal, setOpenModal] = useState(false);
     const [customerSide, setCustomerSide] = useState(false);
     const [productSide, setProductSide] = useState(false);
     const [orderSide, setOrderSide] = useState(false);
@@ -163,6 +164,8 @@ export const AppProvider = ({ children }) => {
         updateOrders,
         openBar,
         setOpenBar,
+        openModal,
+        setOpenModal,
     };
     return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

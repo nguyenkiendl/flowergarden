@@ -68,7 +68,7 @@ function ProductSide() {
         <>
             <div ref={wrapperRef} className={cx('right-sides', { show: productSide })}>
                 <div className={cx('header')}>
-                    <h3>Dịch vụ</h3>
+                    <h3>Thêm Món</h3>
                     <button onClick={handleCloseService} className={cx('btn-close')}>
                         <FontAwesomeIcon icon={faClose} />
                     </button>

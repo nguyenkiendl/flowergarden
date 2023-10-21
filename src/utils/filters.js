@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { CUSTOMER_TYPE } from './constants';
 
 export const customerType = (type) => {
@@ -11,4 +12,11 @@ export const formatPrice = (value) => {
         return 0;
     }
     return value.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1.');
+};
+
+export const dateFormat = (value) => {
+    if (!value) {
+        return '-';
+    }
+    return moment(value).format('DD-MM-YY');
 };

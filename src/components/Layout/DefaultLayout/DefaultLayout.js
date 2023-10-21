@@ -5,7 +5,6 @@ import Sidebar from './Sidebar';
 import CustomerSide from './CustomerSide';
 import ProductSide from './ProductSide';
 import OrderSide from './OrderSide';
-
 const cx = classNames.bind(styles);
 
 function DefaultLayout({ children }) {

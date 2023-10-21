@@ -1,10 +1,10 @@
 // Layouts
-import { HeaderOnly } from '~/components/Layout';
-
+import { HeaderOnly, PrintLayout } from '~/components/Layout';
+import CustomerDetail from '~/components/Customer/Detail';
 import Home from '~/pages/Home';
 import Article from '~/pages/Article';
 import Food from '~/pages/Food';
-import CustomerDetail from '~/components/Customer/Detail';
+import Print from '~/pages/Print';
 const publicRoutes = [
     { path: '/', component: Home },
     { path: '/tickets', component: Article },
@@ -12,6 +12,7 @@ const publicRoutes = [
     { path: '/foods', component: Food },
     { path: '/article', component: Article, layout: HeaderOnly },
     { path: '/customer/:customerId', component: CustomerDetail },
+    { path: '/print/:customerId', component: Print, layout: PrintLayout },
 ];
 
 const privateRoutes = [

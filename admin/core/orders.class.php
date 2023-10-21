@@ -131,7 +131,7 @@ class Orders extends Database
         $results = [];
         $data = $db->query("
             SELECT 
-                orders.order_id, products.product_id, products.product_name, products.product_price, products.product_store, products.product_type, orders.quantity 
+                orders.order_id, products.product_id, products.product_name, products.product_price, products.product_store, products.product_type, products.product_unit, orders.quantity 
             FROM 
                 `orders` 
             LEFT JOIN 

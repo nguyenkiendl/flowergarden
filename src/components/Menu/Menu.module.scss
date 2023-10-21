@@ -1,0 +1,28 @@
+.menu-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 8px 12px;
+    button {
+        flex: auto;
+        padding: 15px 10px;
+        color: #fff;
+        margin-bottom: 5px;
+        cursor: pointer;
+        &.btn-print-processing {
+            background: #03a9f4;
+        }
+        &.btn-print-return {
+            background: #034ff4;
+        }
+        &.btn-print-invoice {
+            background: #03f453;
+        }
+        &.btn-save-invoice {
+            background: #5f03f4;
+        }
+        &.btn-sign-out {
+            background: #f46303;
+        }
+    }
+}

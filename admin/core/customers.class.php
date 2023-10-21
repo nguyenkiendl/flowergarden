@@ -106,7 +106,7 @@ class Customers extends Database
         $db=$this->connect();
         $data = $db->query("
             SELECT 
-                customers.customer_id, orders.order_id, products.product_id, products.product_name, products.product_price, products.product_store, products.product_type, orders.quantity 
+                customers.customer_id, orders.order_id, products.product_id, products.product_name, products.product_price, products.product_store, products.product_type, products.product_unit, orders.quantity 
             FROM 
                 `orders` 
             LEFT JOIN 
@@ -138,7 +138,7 @@ class Customers extends Database
         $db=$this->connect();
         $data = $db->query("
             SELECT 
-                customers.customer_id, discounts.discount_id, products.product_id, products.product_name, products.product_price, products.product_store, products.product_type, discounts.quantity 
+                customers.customer_id, discounts.discount_id, products.product_id, products.product_name, products.product_price, products.product_store, products.product_type, products.product_unit, discounts.quantity 
             FROM 
                 `discounts` 
             LEFT JOIN 
