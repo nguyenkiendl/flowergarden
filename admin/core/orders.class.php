@@ -41,7 +41,14 @@ class Orders extends Database
             if ($quantity == 0) {
                 $db->query("DELETE FROM orders WHERE order_id=$orderId");
             } else {
-                $db->query("UPDATE `orders` SET quantity=$quantity WHERE order_id=$orderId");
+                $order = $db->query("SELECT product_id, quantity FROM `orders` WHERE order_id=$orderId");
+                while($row = $order->fetch_object()){
+                    if ($row && $row->product_id && $row->quantity) {
+                        $db->query("UPDATE `orders` SET quantity=$quantity WHERE order_id=$orderId");
+                        $newQuantity = $quantity - $row->quantity;
+                        $this->updateProductStore($row->product_id, $newQuantity);
+                    }
+                }
             }
         }
         $resultsServices = $this->getOrderBy($customerId);
@@ -141,7 +148,7 @@ class Orders extends Database
             WHERE 
                 customers.customer_id = $customerId
             ORDER BY 
-                orders.order_id DESC
+                products.product_name ASC
         ");
         while ($row = $data->fetch_object()){
             $row->order_id = intval($row->order_id);

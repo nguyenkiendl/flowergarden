@@ -13,7 +13,7 @@ class Products extends Database
 	public function getProducts()
     {
         $db = $this->connect();
-        $data = $db->query("SELECT * FROM `products`");
+        $data = $db->query("SELECT * FROM `products` ORDER BY `product_name` ASC");
         $db->close();
         $products = [];
         while ($row = $data->fetch_object()){
