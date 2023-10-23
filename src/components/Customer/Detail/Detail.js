@@ -13,13 +13,13 @@ const cx = classNames.bind(styles);
 function Detail() {
     let { customerId } = useParams();
     const [activeTab, setActiveTab] = useState('orders');
-    const { customer, setCustomer, productSide, setProductSide, orderSide, setOrderSide } = useContext(AppContext);
+    const { customer, setCustomer, orderSide, setOrderSide } = useContext(AppContext);
     useEffect(() => {
         setCustomer({ customer_id: Number(customerId) });
     }, [customerId]);
 
     if (Object.keys(customer).length === 0) return;
-
+    console.log(customer);
     const handleOrderEdit = () => {
         setOrderSide(!orderSide);
     };
@@ -38,6 +38,7 @@ function Detail() {
                     <div className={'customer-group'}>
                         <div className={cx('code')}>{customer.customer_code}</div>
                         <div className={cx('type')}>{customerType(customer.customer_type)?.label}</div>
+                        <div className={cx('status', customer.customer_status)}>{customer.customer_status}</div>
                     </div>
                     <div className={cx('date')}>{customer.created_at}</div>
                     <div className={cx('price')}>{formatPrice(customer.ticket_price * customer.customer_number)}đ</div>

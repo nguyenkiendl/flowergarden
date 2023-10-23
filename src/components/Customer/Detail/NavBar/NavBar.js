@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faFolderPlus, faPlus, faPrint, faSave, faSignOut } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
+import * as customerServices from '~/apiServices/customerServices';
 import { AppContext } from '~/context/AppContext';
 import Modal from '~/components/Modal';
 import Menu from '~/components/Menu';
@@ -15,47 +16,50 @@ function NavBar() {
     const navigate = useNavigate();
     const { customerId } = useParams();
     const [isLoading, setIsLoading] = useState(true);
-    const { setProductSide, setOpenModal } = useContext(AppContext);
+    const { customer, setProductSide, setOpenModal } = useContext(AppContext);
 
     // const handleMessage = (event) => {
+    //     console.log(event.data.action);
     //     if (event.data.action === 'receipt-loaded') {
     //         setIsLoading(false);
     //     }
     // };
-
+    if (Object.keys(customer).length === 0) return;
+    useEffect(() => {
+        console.log(customer);
+    });
     const printIframe = (id) => {
         const iframe = document.frames ? document.frames[id] : document.getElementById(id);
         const iframeWindow = iframe.contentWindow || iframe;
 
         iframe.focus();
         iframeWindow.print();
+        //parent.postMessage({ action: 'receipt-loaded' });
 
+        return false;
+    };
+    useEffect(() => {
+        console.log(customer);
+        // window.addEventListener('message', handleMessage);
+        // return () => {
+        //     window.removeEventListener('message', handleMessage);
+        // };
+    }, []);
+
+    const handleChangeProcessing = () => {
         // update status
         const apiUpdate = async () => {
-            await customerServices.updateCustomerStatus({
+            const response = await customerServices.updateCustomerStatus({
                 customer_id: customerId,
                 customer_status: 'processing',
             });
+            if (response) setOpenModal(false);
         };
         apiUpdate();
-        return false;
     };
-    // useEffect(() => {
-    //     window.addEventListener('message', handleMessage);
-    //     return () => {
-    //         window.removeEventListener('message', handleMessage);
-    //     };
-    // }, []);
-
-    const handlePrintReturn = () => {
-        console.log('order add');
-    };
-    const handlePrintInvoice = () => {
-        console.log('order add');
-    };
-    const handleSaveInvoice = () => {
-        console.log('order add');
-    };
+    // const handleSaveInvoice = () => {
+    //     console.log('order add');
+    // };
     return (
         <>
             <div className={cx('navbar')}>
@@ -69,33 +73,29 @@ function NavBar() {
                     <FontAwesomeIcon icon={faPlus} /> Thêm Món
                 </button>
             </div>
-            <iframe id="printProcessing" src={`/print/${customerId}`} style={{ display: 'none' }} title="Processing" />
+            <iframe id="printInvoice" src={`/print/${customerId}`} style={{ display: 'none' }} title="PRINT INVOICE" />
             <Modal title={'Chức Năng'}>
                 <Menu className={'menu-list'}>
                     <MenuItem
-                        classes={'btn-print-processing'}
+                        show={customer.customer_status === 'ordering'}
+                        classes={'btn-change-processing'}
                         icon={faPrint}
-                        label={'IN CHẾ BIẾN'}
-                        onClick={() => printIframe('printProcessing')}
+                        label={'CHẾ BIẾN'}
+                        onClick={handleChangeProcessing}
                     />
                     <MenuItem
-                        classes={'btn-print-return'}
-                        icon={faPrint}
-                        label={'IN TRẢ MÓN'}
-                        onClick={handlePrintReturn}
-                    />
-                    <MenuItem
+                        show={customer.customer_status === 'ordering'}
                         classes={'btn-print-invoice'}
                         icon={faPrint}
                         label={'IN HÓA ĐƠN'}
-                        onClick={handlePrintInvoice}
+                        onClick={() => printIframe('printInvoice')}
                     />
-                    <MenuItem
+                    {/* <MenuItem
                         classes={'btn-save-invoice'}
                         icon={faSave}
                         label={'LƯU HÓA ĐƠN'}
                         onClick={handleSaveInvoice}
-                    />
+                    /> */}
                     <MenuItem
                         classes={'btn-sign-out'}
                         icon={faSignOut}

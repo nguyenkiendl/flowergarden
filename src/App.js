@@ -4,6 +4,7 @@ import { publicRoutes } from '~/routes';
 import { DefaultLayout } from '~/components/Layout';
 import { AppProvider } from '~/context/AppContext';
 function App() {
+    console.log(process.env.REACT_APP_BASEURL);
     return (
         <Router>
             <div className="App">

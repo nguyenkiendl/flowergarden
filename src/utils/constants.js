@@ -11,17 +11,27 @@ export const CUSTOMER_TYPE = [
 export const CUSTOMER_TAB = [
     {
         key: 'new',
-        label: 'NEW',
+        label: 'MỚI',
         active: true,
     },
     {
         key: 'ordering',
-        label: 'ORDERING',
+        label: 'ĐANG ORDER',
         active: false,
     },
     {
-        key: 'ordered',
-        label: 'ORDERED',
+        key: 'processing',
+        label: 'CHẾ BIẾN',
+        active: false,
+    },
+    {
+        key: 'return',
+        label: 'TRẢ MÓN',
+        active: false,
+    },
+    {
+        key: 'complete',
+        label: 'HOÀN TẤT',
         active: false,
     },
 ];
@@ -29,7 +39,7 @@ export const CUSTOMER_TAB = [
 export const ORDERS_TAB = [
     {
         key: 'orders',
-        label: 'ORDER LIST',
+        label: 'THỰC ĐƠN',
         active: true,
     },
     {
@@ -42,12 +52,12 @@ export const ORDERS_TAB = [
 export const PRODUCTS_TAB = [
     {
         key: 'water',
-        label: 'WATERS',
+        label: 'NƯỚC',
         active: true,
     },
     {
         key: 'food',
-        label: 'FOODS',
+        label: 'THỨC ĂN',
         active: false,
     },
 ];

@@ -12,8 +12,7 @@ export const AppProvider = ({ children }) => {
     const [productSide, setProductSide] = useState(false);
     const [orderSide, setOrderSide] = useState(false);
     const [customerState, dispatch] = CustomerReducer();
-    const { customerList, page, customer, keyword, filters } = customerState;
-
+    const { customer, customerList, page, keyword, filters } = customerState;
     const fetchCustomers = async () => {
         const response = await customerServices.getCustomers({
             params: {
@@ -35,7 +34,9 @@ export const AppProvider = ({ children }) => {
         }
     };
     useEffect(() => {
-        fetchCustomers();
+        if (window.location.pathname === '/') {
+            fetchCustomers();
+        }
         // const interval = setInterval(() => {
         //     fetchCustomers();
         // }, 1000 * 10);
@@ -52,7 +53,7 @@ export const AppProvider = ({ children }) => {
     };
 
     useEffect(() => {
-        console.log('====> run effect 2');
+        //console.log('====> run effect 2');
         window.addEventListener('scroll', handleScroll);
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

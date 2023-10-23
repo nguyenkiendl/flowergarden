@@ -141,6 +141,7 @@ button[disabled] {
     gap: 4px;
     align-items: flex-end;
     margin-bottom: 1em;
+    padding: 0 1em;
     .col {
         width: 100%;
         display: inline-flex;
@@ -157,10 +158,17 @@ button[disabled] {
         padding: 5px 10px;
         border-bottom: 1px solid transparent;
         cursor: pointer;
+        font-size: 12px;
+        text-align: center;
+        height: 47px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
         &.active {
             font-weight: 600;
             color: var(--bg-primary);
-            border-bottom: 1px solid var(--bg-primary);
+            border-bottom: 2px solid var(--bg-primary);
         }
     }
 }
@@ -179,5 +187,21 @@ button[disabled] {
     }
     #print-content {
         display: auto;
+    }
+}
+
+.btn-detail {
+    width: auto;
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    background: var(--bg-primary);
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    opacity: 0.9;
+    &:hover {
+        opacity: 1;
     }
 }

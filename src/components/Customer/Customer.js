@@ -1,34 +1,29 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AppContext } from '~/context/AppContext';
 import { customerType, formatPrice } from '~/utils/filters';
 import * as customerServices from '~/apiServices/customerServices';
 import classNames from 'classnames/bind';
 import styles from './Customer.module.scss';
 import { CUSTOMER_TAB } from '~/utils/constants';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import Button from './Button';
 const cx = classNames.bind(styles);
 
 function Customer() {
+    const navigate = useNavigate();
     const refInputSearch = useRef(null);
     const { customerList, searchCustomer, filters, filterCustomer } = useContext(AppContext) || [];
     const [q, setQ] = useState('');
-    const handleClick = (customerId) => {
-        const updateCustomerStatus = async () => {
-            await customerServices.updateCustomerStatus({
-                customer_id: customerId,
-                customer_status: 'ordering',
-            });
-        };
-        updateCustomerStatus();
-    };
 
-    useEffect(() => {
-        const timeOutId = setTimeout(() => {
-            searchCustomer(q);
-            refInputSearch.current.focus();
-        }, 700);
-        return () => clearTimeout(timeOutId);
-    }, [q]);
+    // useEffect(() => {
+    //     const timeOutId = setTimeout(() => {
+    //         searchCustomer(q);
+    //         refInputSearch.current.focus();
+    //     }, 700);
+    //     return () => clearTimeout(timeOutId);
+    // }, [q]);
 
     const handleFilterStatus = (status) => {
         filterCustomer({ status });
@@ -38,6 +33,41 @@ function Customer() {
         event.target.select();
     };
 
+    const handleSearch = () => {
+        searchCustomer(q);
+    };
+
+    const handleClickNew = (customerId) => {
+        const apiUpdate = async () => {
+            const response = await customerServices.updateCustomerStatus({
+                customer_id: customerId,
+                customer_status: 'ordering',
+            });
+            if (response) navigate(`/customer/${customerId}`);
+        };
+        apiUpdate();
+    };
+
+    const handleClickOrdering = (customerId) => {
+        navigate(`/customer/${customerId}`);
+    };
+
+    const btnAction = (customerId, status) => {
+        switch (status) {
+            case 'new':
+                return <Button onClick={() => handleClickNew(customerId)} text={'Gọi món'} />;
+            case 'ordering':
+                return <Button onClick={() => handleClickOrdering(customerId)} text={'xem'} />;
+            case 'processing':
+                return <Button onClick={() => handleClickOrdering(customerId)} text={'xem'} />;
+            case 'return':
+                return <Button onClick={() => handleClickOrdering(customerId)} text={'xem'} />;
+            case 'complete':
+                return <Button onClick={() => handleClickOrdering(customerId)} text={'xem'} />;
+            default:
+                return '';
+        }
+    };
     return (
         <>
             <div className={cx('customers')}>
@@ -52,6 +82,9 @@ function Customer() {
                             onChange={(e) => setQ(e.target.value)}
                             onFocus={handleFocus}
                         />
+                        <button className={cx('btn-search')} onClick={handleSearch}>
+                            <FontAwesomeIcon icon={faSearch} />
+                        </button>
                     </div>
                     <div className={cx('tabs')}>
                         {CUSTOMER_TAB.map((tab) => {
@@ -92,13 +125,7 @@ function Customer() {
                                     ) : (
                                         ''
                                     )}
-                                    <Link
-                                        onClick={() => handleClick(item.customer_id)}
-                                        to={`/customer/${item.customer_id}`}
-                                        className={cx('btn-detail')}
-                                    >
-                                        Gọi món
-                                    </Link>
+                                    {btnAction(item.customer_id, item.customer_status)}
                                 </div>
                             </div>
                         );

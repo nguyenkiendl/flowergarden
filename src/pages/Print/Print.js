@@ -1,14 +1,16 @@
 import classNames from 'classnames/bind';
 import styles from './Print.module.scss';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 const cx = classNames.bind(styles);
 import * as customerServices from '~/apiServices/customerServices';
 import { useParams } from 'react-router-dom';
 import { customerType, dateFormat, formatPrice } from '~/utils/filters';
+import { AppContext } from '~/context/AppContext';
 function Print() {
     const { customerId } = useParams();
     const [customer, setCustomer] = useState({ orders: [] });
-    console.log(customerId);
+    //const { customer } = useContext(AppContext);
+    if (Object.keys(customer).length === 0) return;
     useEffect(() => {
         const fetchApi = async () => {
             const response = await customerServices.getCustomer({
@@ -20,6 +22,7 @@ function Print() {
         };
         fetchApi();
     }, []);
+    console.log('customer', customer);
     let totalPrice = customer.orders?.reduce((total, item) => total + item.quantity * item.product_price, 0);
     return (
         <>

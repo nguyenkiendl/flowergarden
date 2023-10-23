@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import styles from './CustomerSide.module.css';
+import styles from '~/components/Layout/DefaultLayout/DefaultLayout.module.scss';
 import Input from '~/components/Form/Input';
 import Select from '~/components/Form/Select';
 import { useContext, useEffect, useRef, useState } from 'react';
@@ -22,13 +22,14 @@ function CustomerSide() {
     };
 
     const { customerSide, setCustomerSide, addCustomerItem } = useContext(AppContext);
+
     const handleAddCustomer = () => {
         addCustomerItem({ type, number });
         setCustomerSide(false);
     };
 
     const handleCloseCustomerSide = () => {
-        setCustomerSide(!customerSide);
+        setCustomerSide(false);
     };
 
     /**

@@ -3,13 +3,13 @@ import classNames from 'classnames/bind';
 import styles from './Header.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { AppContext } from '~/context/AppContext';
 const cx = classNames.bind(styles);
 function Header() {
     const { openBar, setOpenBar, customerSide, setCustomerSide } = useContext(AppContext);
     const handleClick = (e) => {
-        setCustomerSide(!customerSide);
+        setCustomerSide(true);
     };
 
     const handleClickBar = () => {
