@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faFolderPlus, faPlus, faPrint, faSave, faSignOut } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
-import * as customerServices from '~/apiServices/customerServices';
+import * as orderServices from '~/apiServices/orderServices';
 import { AppContext } from '~/context/AppContext';
 import Modal from '~/components/Modal';
 import Menu from '~/components/Menu';
@@ -14,7 +14,7 @@ const cx = classNames.bind(styles);
 
 function NavBar() {
     const navigate = useNavigate();
-    const { customerId } = useParams();
+    const { customerId, orderId } = useParams();
     const [isLoading, setIsLoading] = useState(true);
     const { customer, setProductSide, setOpenModal } = useContext(AppContext);
 
@@ -49,11 +49,12 @@ function NavBar() {
     const handleChangeProcessing = () => {
         // update status
         const apiUpdate = async () => {
-            const response = await customerServices.updateCustomerStatus({
-                customer_id: customerId,
-                customer_status: 'processing',
+            const response = await orderServices.updateOrderStatus({
+                order_id: Number(orderId),
+                status: 'processing',
             });
             if (response) setOpenModal(false);
+            //window.location.reload(false);
         };
         apiUpdate();
     };

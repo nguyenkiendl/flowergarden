@@ -13,7 +13,7 @@ function OrderList({ sendDatas }) {
     const { orderSide } = useContext(AppContext);
     useEffect(() => {
         const fetchApi = async () => {
-            const response = await orderServices.getOrders({
+            const response = await orderServices.getOrdersBy({
                 params: {
                     customer_id: customerId,
                 },

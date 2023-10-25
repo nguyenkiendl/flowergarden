@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from 'react';
 import * as customerServices from '~/apiServices/customerServices';
 import * as orderServices from '~/apiServices/orderServices';
 import { CustomerReducer, actions } from '~/reducer/CustomerReducer';
+import { OrderReducer } from '~/reducer/OrderReducer';
 
 export const AppContext = createContext({});
 
@@ -13,6 +14,24 @@ export const AppProvider = ({ children }) => {
     const [orderSide, setOrderSide] = useState(false);
     const [customerState, dispatch] = CustomerReducer();
     const { customer, customerList, page, keyword, filters } = customerState;
+    const [orderState, orderDispatch] = OrderReducer();
+    const { orderList } = orderState;
+    const fetchOrders = async () => {
+        const response = await orderServices.getOrders({
+            params: {
+                page: page,
+                keyword: keyword,
+            },
+        });
+        if (response) {
+            orderDispatch({
+                type: 'FETCH_SUCCESS',
+                payload: response,
+            });
+        } else {
+            dispatch({ type: 'FETCH_ERROR' });
+        }
+    };
     const fetchCustomers = async () => {
         const response = await customerServices.getCustomers({
             params: {
@@ -33,29 +52,30 @@ export const AppProvider = ({ children }) => {
             dispatch({ type: 'FETCH_ERROR' });
         }
     };
-    useEffect(() => {
-        if (window.location.pathname === '/') {
-            fetchCustomers();
-        }
-        // const interval = setInterval(() => {
-        //     fetchCustomers();
-        // }, 1000 * 10);
-        // return () => clearInterval(interval);
-    }, [page]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const handleScroll = () => {
-        if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
-            if (window.location.pathname === '/') {
-                console.log('totalPages >>>');
-                dispatch({ type: 'FETCH_MORE', payload: filters });
-            }
-        }
-    };
+    // useEffect(() => {
+    //     //if (window.location.pathname === '/') {
+    //     fetchCustomers();
+    //     //}
+    //     // const interval = setInterval(() => {
+    //     //     fetchCustomers();
+    //     // }, 1000 * 10);
+    //     // return () => clearInterval(interval);
+    // }, [page]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    useEffect(() => {
-        //console.log('====> run effect 2');
-        window.addEventListener('scroll', handleScroll);
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    // const handleScroll = () => {
+    //     if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
+    //         //if (window.location.pathname === '/') {
+    //         console.log('totalPages >>>');
+    //         dispatch({ type: 'FETCH_MORE', payload: filters });
+    //         //}
+    //     }
+    // };
+
+    // useEffect(() => {
+    //     //console.log('====> run effect 2');
+    //     window.addEventListener('scroll', handleScroll);
+    // }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const setCustomer = (input) => {
         const customerDetail = async () => {
@@ -82,7 +102,7 @@ export const AppProvider = ({ children }) => {
     const addOrders = (payload) => {
         const Add = async () => {
             const response = await orderServices.addOrders({
-                customer_id: payload.customer_id,
+                order_id: payload.order_id,
                 datas: payload.datas,
             });
             if (response) {
@@ -111,7 +131,6 @@ export const AppProvider = ({ children }) => {
                 params: {
                     page: page,
                     keyword: keyword,
-                    filters: filters,
                 },
             });
             if (response)
@@ -147,7 +166,10 @@ export const AppProvider = ({ children }) => {
     };
 
     const value = {
+        orderList,
+        fetchOrders,
         customerList,
+        fetchCustomers,
         addCustomerItem,
         customer,
         setCustomer,

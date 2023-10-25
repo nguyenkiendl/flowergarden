@@ -2,20 +2,17 @@
 require_once __DIR__ . '../../core/orders.class.php';
 require_once __DIR__ . '../../core/function.php';
 header('Content-Type: application/json; charset=utf-8');
-$error = false;
-$customerId = 0;
-if(!empty($_GET['customer_id'])) {
-    $customerId = filter_input(INPUT_GET, 'customer_id', FILTER_DEFAULT);
+$orders = new Orders();
+$page = 1;
+$perPage = 10;
+if(!empty($_GET['page'])) {
+    $page = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT);
+    if(false === $page) {
+        $page = 1;
+    }
 }
-
-if ($customerId == 0) {
-    $error = true;
-    return send_json(false, 'Not Found Custormer');
+$keyword = '';
+if(!empty($_GET['keyword'])) {
+    $keyword = filter_input(INPUT_GET, 'keyword', FILTER_DEFAULT);
 }
-
-if ($error==false) {
-    $orders = new Orders();
-    return send_json(true, 'OK', $orders->getOrderBy($customerId));
-} else {
-    return send_json(false, 'FAILED');
-}
+return send_json(true, 'OK', $orders->getOrders($perPage, $page, $keyword));

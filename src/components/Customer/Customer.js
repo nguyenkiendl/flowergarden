@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppContext } from '~/context/AppContext';
-import { customerType, formatPrice } from '~/utils/filters';
+import { customerType, dateFormat, formatPrice, mergeCustomers, timeAgo } from '~/utils/filters';
 import * as customerServices from '~/apiServices/customerServices';
 import classNames from 'classnames/bind';
 import styles from './Customer.module.scss';
@@ -11,10 +11,12 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Button from './Button';
 const cx = classNames.bind(styles);
 
-function Customer() {
+function Customer({ showButton = true }) {
     const navigate = useNavigate();
     const refInputSearch = useRef(null);
-    const { customerList, searchCustomer, filters, filterCustomer } = useContext(AppContext) || [];
+    const [page, setPage] = useState(1);
+    const [customerList, setCustomerList] = useState([]);
+    const { searchCustomer, filters, filterCustomer } = useContext(AppContext) || [];
     const [q, setQ] = useState('');
 
     // useEffect(() => {
@@ -24,6 +26,39 @@ function Customer() {
     //     }, 700);
     //     return () => clearTimeout(timeOutId);
     // }, [q]);
+
+    const fetchCustomers = async () => {
+        const response = await customerServices.getCustomers({
+            params: {
+                page: page,
+            },
+        });
+        if (response) {
+            setCustomerList([...customerList, ...response]);
+        }
+    };
+
+    useEffect(() => {
+        fetchCustomers();
+    }, [page]);
+
+    useEffect(() => {
+        const ping = async () => {
+            const result = await customerServices.ping();
+            if (result && result.length > 0) {
+                const newCustomerList = mergeCustomers(result, customerList);
+                setCustomerList(newCustomerList);
+            }
+        };
+        const interval = setInterval(() => {
+            ping();
+        }, 1000 * 5);
+        return () => clearInterval(interval);
+    }, [customerList]);
+
+    const handleLoadMore = () => {
+        setPage(page + 1);
+    };
 
     const handleFilterStatus = (status) => {
         filterCustomer({ status });
@@ -38,14 +73,15 @@ function Customer() {
     };
 
     const handleClickNew = (customerId) => {
-        const apiUpdate = async () => {
-            const response = await customerServices.updateCustomerStatus({
-                customer_id: customerId,
-                customer_status: 'ordering',
-            });
-            if (response) navigate(`/customer/${customerId}`);
-        };
-        apiUpdate();
+        // const apiUpdate = async () => {
+        //     const response = await customerServices.updateCustomerStatus({
+        //         customer_id: customerId,
+        //         customer_status: 'ordering',
+        //     });
+        //     if (response) navigate(`/customer/${customerId}`);
+        // };
+        // apiUpdate();
+        navigate(`/customer/${customerId}`);
     };
 
     const handleClickOrdering = (customerId) => {
@@ -55,7 +91,7 @@ function Customer() {
     const btnAction = (customerId, status) => {
         switch (status) {
             case 'new':
-                return <Button onClick={() => handleClickNew(customerId)} text={'Gọi món'} />;
+                return <Button onClick={() => handleClickNew(customerId)} text={'Chi tiết'} />;
             case 'ordering':
                 return <Button onClick={() => handleClickOrdering(customerId)} text={'xem'} />;
             case 'processing':
@@ -71,49 +107,20 @@ function Customer() {
     return (
         <>
             <div className={cx('customers')}>
-                <nav className={cx('head')}>
-                    <div className={cx('customer-search')}>
-                        <input
-                            type="search"
-                            className={cx('search-input')}
-                            placeholder="Search for..."
-                            ref={refInputSearch}
-                            value={q}
-                            onChange={(e) => setQ(e.target.value)}
-                            onFocus={handleFocus}
-                        />
-                        <button className={cx('btn-search')} onClick={handleSearch}>
-                            <FontAwesomeIcon icon={faSearch} />
-                        </button>
-                    </div>
-                    <div className={cx('tabs')}>
-                        {CUSTOMER_TAB.map((tab) => {
-                            return (
-                                <span
-                                    key={tab.key}
-                                    className={cx('tab-item', { active: tab.key === filters['status'] })}
-                                    onClick={(e) => {
-                                        handleFilterStatus(tab.key);
-                                    }}
-                                >
-                                    {tab.label}
-                                </span>
-                            );
-                        })}
-                    </div>
-                </nav>
                 <div className={cx('customer')}>
-                    {customerList.map((item, index) => {
-                        let type = customerType(item.customer_type);
+                    {customerList?.map((item, index) => {
                         return (
                             <div key={index} className={cx('customer-item', item.customer_status)}>
                                 <div className={cx('number')}>{item.customer_number}</div>
                                 <div className={'customer-group'}>
-                                    <div className={cx('code')}>{item.customer_code}</div>
-                                    <div className={cx('type')}>{type.label}</div>
+                                    <div className={cx('code')}>{item.customer_id}</div>
+                                    <div className={cx('type')}>{item.ticket_name}</div>
                                     <div className={cx('status', item.customer_status)}>{item.customer_status}</div>
                                 </div>
-                                <div className={cx('date')}>{item.created_at}</div>
+                                <div className={cx('date')}>
+                                    {dateFormat(item.created_at)}{' '}
+                                    <span className={cx('time-ago')}>{timeAgo(item.created_at)}</span>
+                                </div>
                                 <div className={cx('price')}>
                                     {formatPrice(item.ticket_price * item.customer_number)}đ
                                 </div>
@@ -125,11 +132,14 @@ function Customer() {
                                     ) : (
                                         ''
                                     )}
-                                    {btnAction(item.customer_id, item.customer_status)}
+                                    {showButton ? btnAction(item.customer_id, item.customer_status) : ''}
                                 </div>
                             </div>
                         );
                     })}
+                    <button className="load-more" onClick={handleLoadMore}>
+                        Loadmore
+                    </button>
                 </div>
             </div>
         </>

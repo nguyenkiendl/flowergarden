@@ -11,7 +11,7 @@ import * as orderServices from '~/apiServices/orderServices';
 const cx = classNames.bind(styles);
 
 function ProductSide() {
-    const { customerId } = useParams();
+    const { orderId } = useParams();
     const [carts, setCarts] = useState([]);
     const { addOrders, productSide, setProductSide } = useContext(AppContext);
     const handleCloseService = () => {
@@ -38,7 +38,7 @@ function ProductSide() {
     const handleOk = () => {
         setProductSide(false);
         addOrders({
-            customer_id: Number(customerId),
+            order_id: Number(orderId),
             datas: carts,
         });
 

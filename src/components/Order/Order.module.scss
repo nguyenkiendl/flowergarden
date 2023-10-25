@@ -1,0 +1,117 @@
+.order-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 2em;
+    border-top: 1px solid #ccc;
+    justify-content: space-around;
+    .order-item {
+        position: relative;
+        display: flex;
+        flex: auto;
+        gap: 5px;
+        padding: 5px 5px 5px;
+        border-bottom: 1px solid #efeaea;
+        width: 100%;
+        background: #fff;
+        margin-bottom: 10px;
+        .thumbnail {
+            position: relative;
+            border: 1px solid #efeaea;
+            border-radius: 5px;
+            width: 50px;
+            height: 50px;
+            img {
+                max-width: 100%;
+            }
+            .store {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: absolute;
+                left: 2px;
+                top: 2px;
+                background: #03a9f4;
+                color: #fff;
+                border-radius: 50px;
+                width: 18px;
+                height: 18px;
+                font-size: 13px;
+            }
+        }
+        .date {
+            position: absolute;
+            right: 7px;
+            top: 3px;
+            font-size: 0.75em;
+            font-style: italic;
+            font-weight: 500;
+            text-align: right;
+            .time-ago {
+                color: #ff9800;
+            }
+        }
+        .name {
+            font-size: 16px;
+            font-weight: 500;
+            flex: 1;
+            h4 {
+                font-weight: 500;
+            }
+            span {
+                font-size: 12px;
+                font-weight: 600;
+                color: var(--bg-primary);
+            }
+            strong {
+                color: var(--bg-primary);
+            }
+        }
+        .quantity {
+            color: red;
+            font-weight: 600;
+        }
+        .price {
+            color: #ff5722;
+            font-weight: 600;
+            width: 100px;
+            text-align: right;
+        }
+        .status {
+            position: absolute;
+            left: 10px;
+            bottom: 4px;
+            display: inline-block;
+            padding: 2px 5px;
+            font-size: 11px;
+            border-radius: 4px;
+            color: #fff;
+            background: var(--bg-default);
+            text-align: center;
+            &.ok {
+                background: var(--bg-success);
+            }
+        }
+        .order-action {
+            position: absolute;
+            display: flex;
+            gap: 4px;
+            right: 4px;
+            bottom: 5px;
+            button {
+                width: auto;
+                padding: 5px 12px;
+                border-radius: 4px;
+                font-size: 13px;
+                background: var(--bg-primary);
+                color: #fff;
+                text-align: center;
+                text-decoration: none;
+                cursor: pointer;
+                opacity: 0.9;
+                &:hover {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+}

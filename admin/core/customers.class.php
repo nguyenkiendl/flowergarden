@@ -10,9 +10,46 @@ class Customers extends Database
 		
 	}
 
+    public function ping()
+    {
+        $db=$this->connect();
+        $data = $db->query("SELECT COUNT(*) as count FROM `customers` WHERE customer_status='new' AND customers.created_at >= NOW() - INTERVAL 1 MINUTE");
+        
+        $count = 0;
+        $customers = [];
+        while ($row = $data->fetch_object()){
+            $count = intval($row->count);
+        }
+
+        if ($count > 0) {
+            $data = $db->query("
+                SELECT 
+                    customers.customer_id, customers.customer_code, customers.customer_number, customers.customer_type, customers.created_at, customers.customer_status, tickets.ticket_price, tickets.ticket_name, tickets.ticket_payment
+                FROM 
+                    `customers` 
+                LEFT JOIN
+                    `tickets` ON tickets.ticket_id = customers.ticket_id
+                WHERE 
+                    customers.customer_status='new' AND customers.created_at >= NOW() - INTERVAL 1 MINUTE
+                ORDER BY 
+                    customers.customer_id DESC
+            ");
+            while ($row = $data->fetch_object()){
+                if ($row->customer_id) {
+                    $row->customer_id = intval($row->customer_id);
+                    $row->customer_number = intval($row->customer_number);
+                    $row->ticket_price = intval($row->ticket_price);
+                    $row->orders = $this->countOrders($row->customer_id);
+                    $customers[] = $row;
+                }
+            }
+        }
+        $db->close();
+        return $customers;
+    }
+
 	public function getCustomers($perPage, $page, $keyword='', $filters=[])
     {
-
     	$db=$this->connect();
         $offset = ($page - 1) * $perPage;
         $where = "1=1 ";
@@ -25,7 +62,7 @@ class Customers extends Database
         }
         $data = $db->query("
             SELECT 
-                customers.customer_id, customers.customer_code, customers.customer_number, customers.customer_type, customers.created_at, customers.customer_status, tickets.ticket_price 
+                customers.customer_id, customers.customer_code, customers.customer_number, customers.customer_type, customers.created_at, customers.customer_status, tickets.ticket_price, tickets.ticket_name, tickets.ticket_payment
             FROM 
                 `customers` 
             LEFT JOIN
@@ -75,11 +112,13 @@ class Customers extends Database
         $db=$this->connect();
         $data = $db->query("
             SELECT 
-                customers.customer_id, customers.customer_code, customers.customer_number, customers.customer_type, customers.created_at, customers.customer_status, tickets.ticket_price 
+                orders.order_id, orders.created_at, customers.customer_id, tickets.ticket_payment
             FROM 
-                `customers` 
+                `orders`
+            LEFT JOIN 
+                `customers` on customers.customer_id = orders.customer_id 
             LEFT JOIN
-                `tickets` ON tickets.ticket_id = customers.ticket_id
+                `tickets` ON tickets.ticket_id = orders.ticket_id
             WHERE 
                 customers.customer_id = $customerId
             ORDER BY 
@@ -89,11 +128,9 @@ class Customers extends Database
         $customer = [];
         while ($row = $data->fetch_object()){
             if ($row->customer_id) {
+                $row->order_id = intval($row->order_id);
                 $row->customer_id = intval($row->customer_id);
-                $row->customer_number = intval($row->customer_number);
-                $row->ticket_price = intval($row->ticket_price);
                 $row->orders = $this->getOrders($row->customer_id);
-                $row->discounts = $this->getDiscounts($row->customer_id);
                 $customer = $row;
             }
         }
@@ -106,13 +143,15 @@ class Customers extends Database
         $db=$this->connect();
         $data = $db->query("
             SELECT 
-                customers.customer_id, orders.order_id, products.product_id, products.product_name, products.product_price, products.product_store, products.product_type, products.product_unit, orders.quantity 
+                detail.detail_id, customers.customer_id, orders.order_id, products.product_id, products.product_name, products.product_price, products.product_store, products.product_type, products.product_unit, detail.quantity, detail.status 
             FROM 
                 `orders` 
             LEFT JOIN 
+                `order_detail` as detail on detail.order_id = orders.order_id
+            LEFT JOIN 
                 `customers` on customers.customer_id = orders.customer_id
             LEFT JOIN 
-                `products` on products.product_id = orders.product_id 
+                `products` on products.product_id = detail.product_id 
             WHERE 
                 customers.customer_id = $customerId
             ORDER BY 
@@ -121,13 +160,16 @@ class Customers extends Database
         $db->close();
         $orders = [];
         while ($row = $data->fetch_object()){
-            $row->customer_id = intval($row->customer_id);
-            $row->order_id = intval($row->order_id);
-            $row->product_id = intval($row->product_id);
-            $row->product_price = intval($row->product_price);
-            $row->product_store = intval($row->product_store);
-            $row->quantity = intval($row->quantity);
-            $orders[] = $row;
+            if($row->detail_id){
+                $row->detail_id = intval($row->detail_id);
+                $row->customer_id = intval($row->customer_id);
+                $row->order_id = intval($row->order_id);
+                $row->product_id = intval($row->product_id);
+                $row->product_price = intval($row->product_price);
+                $row->product_store = intval($row->product_store);
+                $row->quantity = intval($row->quantity);
+                $orders[] = $row;
+            }
         }
         return $orders;
     }
@@ -176,13 +218,19 @@ class Customers extends Database
         ");
         $customer = false;
         if ($db->insert_id) {
-            $customer_id = $db->insert_id;
-            $data = $db->query("SELECT * FROM `customers` WHERE customer_id=$customer_id");
-            while ($row = $data->fetch_object()){
-                $row->customer_id = intval($row->customer_id);
-                $row->customer_number = intval($row->customer_number);
-                $customer = $row;
-                $customer->orders = [];
+            $customerId = $db->insert_id;
+            $db->query("
+                INSERT INTO `orders` ( `customer_id`, `ticket_id`, `created_at`) 
+                VALUES ($customerId, $ticketId, '$createdAt')
+            ");
+            if ($db->insert_id) {
+            $data = $db->query("SELECT * FROM `customers` WHERE customer_id=$customerId");
+                while ($row = $data->fetch_object()){
+                    $row->customer_id = intval($row->customer_id);
+                    $row->customer_number = intval($row->customer_number);
+                    $customer = $row;
+                    $customer->orders = [];
+                }
             }
         }
         $db->close();

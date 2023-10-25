@@ -2,9 +2,8 @@ import classNames from 'classnames/bind';
 import styles from './ProductList.module.scss';
 import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '~/context/AppContext';
-import { useParams } from 'react-router-dom';
 import * as productServices from '~/apiServices/productServices';
-import { PRODUCTS_TAB } from '~/utils/constants';
+import { PRODUCTS, WATERS } from '~/utils/constants';
 import ProductItem from './ProductItem';
 
 const cx = classNames.bind(styles);
@@ -30,16 +29,21 @@ function ProductList({ onChange }) {
             return obj.product_type === type;
         });
     };
+    const subHeadTitle = (type) => {
+        return WATERS.find((obj) => {
+            return obj.key === type;
+        })?.label;
+    };
 
     return (
         <>
             <div className={cx('product-list')}>
                 <nav className={cx('head')}>
                     <div className={cx('tabs')}>
-                        {PRODUCTS_TAB.map((tab) => {
+                        {PRODUCTS.map((tab, index) => {
                             return (
                                 <span
-                                    key={tab.key}
+                                    key={index}
                                     className={cx('tab-item', { active: tab.key === activeTab })}
                                     onClick={(e) => {
                                         handleTabControl(tab.key);
@@ -51,19 +55,26 @@ function ProductList({ onChange }) {
                         })}
                     </div>
                 </nav>
-                <div className={cx('tab-content', { active: activeTab === 'water' })}>
-                    <div className={cx('product-row')}>
-                        {tabContent('water').map((item, index) => {
-                            return <ProductItem key={index} item={item} isReset={isReset} onChange={onChange} />;
-                        })}
-                    </div>
-                </div>
-                <div className={cx('tab-content', { active: activeTab === 'food' })}>
-                    <div className={cx('product-row')}>
-                        {tabContent('food').map((item, index) => {
-                            return <ProductItem key={index} item={item} isReset={isReset} onChange={onChange} />;
-                        })}
-                    </div>
+                <div className={cx('tab-content', { active: 'water' === activeTab })}>
+                    {WATERS.map((obj) => {
+                        return (
+                            <div key={obj.key} className={cx('product-section')}>
+                                <h4>{subHeadTitle(obj.key)}</h4>
+                                <div className={cx('product-row')}>
+                                    {tabContent(obj.key).map((item) => {
+                                        return (
+                                            <ProductItem
+                                                key={item.product_id}
+                                                item={item}
+                                                isReset={isReset}
+                                                onChange={onChange}
+                                            />
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         </>

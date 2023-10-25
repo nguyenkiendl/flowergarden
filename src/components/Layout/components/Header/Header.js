@@ -21,9 +21,9 @@ function Header() {
                 <div onClick={handleClickBar} className={cx('menu')}>
                     <FontAwesomeIcon icon={faBars} />
                 </div>
-                <Link to="/" className={cx('page-title')}>
+                <a href="" className={cx('page-title')}>
                     <h1>FLOWER GARDEN</h1>
-                </Link>
+                </a>
                 <button onClick={handleClick} className={cx('btn-new')}>
                     <FontAwesomeIcon icon={faPlusCircle} />
                 </button>

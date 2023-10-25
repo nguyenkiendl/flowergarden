@@ -4,8 +4,8 @@
 // });
 
 export const CUSTOMER_TYPE = [
-    { key: 'flower', value: 'flower', label: 'Khách Vường hoa' },
-    { key: 'hotel', value: 'hotel', label: 'Khách Khách Sạn' },
+    { key: 'flower', value: 'flower', label: 'Khách Vườn hoa' },
+    { key: 'hotel', value: 'hotel', label: 'Khách lẻ' },
 ];
 
 export const CUSTOMER_TAB = [
@@ -49,7 +49,7 @@ export const ORDERS_TAB = [
     },
 ];
 
-export const PRODUCTS_TAB = [
+export const PRODUCTS = [
     {
         key: 'water',
         label: 'NƯỚC',
@@ -57,7 +57,47 @@ export const PRODUCTS_TAB = [
     },
     {
         key: 'food',
-        label: 'THỨC ĂN',
+        label: 'ĐỒ ĂN',
         active: false,
     },
 ];
+
+export const WATERS = [
+    {
+        key: 'tea',
+        label: 'TRÀ',
+        active: true,
+    },
+    {
+        key: 'coffee',
+        label: 'Coffee',
+        active: false,
+    },
+    {
+        key: 'beer',
+        label: 'Bia & rượu',
+        active: false,
+    },
+    {
+        key: 'cream',
+        label: 'Kem',
+        active: false,
+    },
+    {
+        key: 'juice',
+        label: 'Nước ép',
+        active: false,
+    },
+    {
+        key: 'soda',
+        label: 'Nước ngọt',
+        active: false,
+    },
+];
+
+export const ORDER_STATUS = {
+    holding: 'Giữ',
+    ok: 'OK',
+    doing: 'Đang Pha chế',
+    done: 'Đã Pha xong',
+};

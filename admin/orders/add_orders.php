@@ -6,9 +6,9 @@ header('Content-type: application/json');
 $error = false;
 $request_body = file_get_contents('php://input');
 $input = json_decode($request_body, true);
-if (empty($input['customer_id'])) {
+if (empty($input['order_id'])) {
     $error = true;
-    return send_json(false, 'Not Found Custormer');
+    return send_json(false, 'Not Found Order');
 }
 
 if (empty($input['datas'])) {
@@ -27,10 +27,10 @@ if ( count($input['datas']) == 0){
 }
 
 if ($error==false) {
-    $customerId = $input['customer_id'];
+    $orderId = $input['order_id'];
     $datas = $input['datas'];
     $orders = new Orders();
-    $response = $orders->addOrders($customerId, $datas);
+    $response = $orders->addOrders($orderId, $datas);
     return send_json(true, 'OK', $response);
 } else {
     return send_json(false, 'FAILED');

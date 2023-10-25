@@ -1,4 +1,6 @@
 import moment from 'moment';
+import 'moment/locale/vi';
+moment.locale('vi');
 import { CUSTOMER_TYPE } from './constants';
 
 export const customerType = (type) => {
@@ -18,5 +20,36 @@ export const dateFormat = (value) => {
     if (!value) {
         return '-';
     }
-    return moment(value).format('DD-MM-YY');
+    return moment(value).format('DD/MM/YY');
+};
+
+export const timeAgo = (value) => {
+    if (!value) {
+        return '-';
+    }
+    return moment(value).fromNow();
+};
+
+export const mergeCustomers = (arr1, arr2) => {
+    let combinedArr = [];
+
+    arr1.forEach((item) => {
+        if (!arr2.some((obj) => obj.customer_id === item.customer_id)) {
+            combinedArr.push(item);
+        }
+    });
+
+    return combinedArr.concat(arr2);
+};
+
+export const mergeOrders = (arr1, arr2) => {
+    let combinedArr = [];
+
+    arr1.forEach((item) => {
+        if (!arr2.some((obj) => obj.order_id === item.order_id)) {
+            combinedArr.push(item);
+        }
+    });
+
+    return combinedArr.concat(arr2);
 };

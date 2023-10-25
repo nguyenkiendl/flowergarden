@@ -1,5 +1,14 @@
 import * as request from '~/utils/request';
 
+export const ping = async () => {
+    try {
+        const res = await request.get('customers/ping.php');
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const getCustomers = async (params) => {
     try {
         const res = await request.get('customers/get_customers.php', params);

@@ -7,9 +7,11 @@ import { AppContext } from '~/context/AppContext';
 import { CUSTOMER_TYPE } from '~/utils/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
 function CustomerSide() {
+    const navigate = useNavigate();
     const [type, setType] = useState('flower');
     const [number, setNumber] = useState(1);
     let optionsType = CUSTOMER_TYPE;
@@ -26,6 +28,8 @@ function CustomerSide() {
     const handleAddCustomer = () => {
         addCustomerItem({ type, number });
         setCustomerSide(false);
+        navigate('/tickets');
+        //window.location.reload(false);
     };
 
     const handleCloseCustomerSide = () => {

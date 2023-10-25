@@ -1,9 +1,26 @@
 import * as request from '~/utils/request';
 
+export const ping = async () => {
+    try {
+        const res = await request.get('orders/ping.php');
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const getOrders = async (params) => {
     try {
-        console.log(params);
         const res = await request.get('orders/get_orders.php', params);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getOrdersBy = async (params) => {
+    try {
+        const res = await request.get('orders/get_orders_by.php', params);
         return res.data;
     } catch (error) {
         console.log(error);
@@ -28,18 +45,36 @@ export const updateOrders = async (datas) => {
     }
 };
 
-export const addService = async (options) => {
+export const removeOrder = async (datas) => {
     try {
-        const res = await request.post('add_service.php', options);
+        const res = await request.post('orders/remove.php', datas);
         return res.data;
     } catch (error) {
         console.log(error);
     }
 };
 
-export const removeService = async (service) => {
+export const updateOrderStatus = async (datas) => {
     try {
-        const res = await request.post('remove_services.php', service);
+        const res = await request.post('orders/update_order_status.php', datas);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const updateDetailStatus = async (datas) => {
+    try {
+        const res = await request.post('orders/update_detail_status.php', datas);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const addNewOrder = async (options) => {
+    try {
+        const res = await request.post('orders/add_new_order.php', options);
         return res.data;
     } catch (error) {
         console.log(error);
