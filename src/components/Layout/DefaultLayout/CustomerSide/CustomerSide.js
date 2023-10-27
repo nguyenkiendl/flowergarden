@@ -8,28 +8,62 @@ import { CUSTOMER_TYPE } from '~/utils/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
+import * as customerServices from '~/apiServices/customerServices';
 const cx = classNames.bind(styles);
 
 function CustomerSide() {
     const navigate = useNavigate();
-    const [type, setType] = useState('flower');
     const [number, setNumber] = useState(1);
+    const [phone, setPhone] = useState('');
     let optionsType = CUSTOMER_TYPE;
 
-    const handleTypeChange = (type) => {
-        setType(type);
-    };
     const handleNumberChange = (number) => {
         setNumber(number);
+    };
+
+    const handlePhoneChange = (phone) => {
+        setPhone(phone);
     };
 
     const { customerSide, setCustomerSide, addCustomerItem } = useContext(AppContext);
 
     const handleAddCustomer = () => {
-        addCustomerItem({ type, number });
-        setCustomerSide(false);
-        navigate('/tickets');
+        //addCustomerItem({ number, phone }).then(() => {});
+        const Add = async () => {
+            const res = await customerServices.addCustomer({
+                number: number,
+                phone: phone,
+            });
+            if (res.status) {
+                const data = res.data;
+                handlePrintContent(data.customer_id);
+                setCustomerSide(false);
+            } else {
+                alert(res.message);
+            }
+            navigate('/');
+        };
+        Add();
+
         //window.location.reload(false);
+    };
+    const handlePrintContent = (customerId) => {
+        const apiFetchPrint = async () => {
+            const response = await customerServices.printCustomerTicket({
+                params: {
+                    customer_id: customerId,
+                },
+            });
+            if (response) {
+                const w = window.open(window.location.href, '_blank');
+                w.document.open();
+                w.document.write(response);
+                w.document.close();
+                w.window.print();
+                w.window.close();
+            }
+        };
+        apiFetchPrint();
     };
 
     const handleCloseCustomerSide = () => {
@@ -66,18 +100,6 @@ function CustomerSide() {
                 <div className={cx('body')}>
                     <div className="form-row">
                         <label className="col">
-                            Loại khách:
-                            <Select
-                                id="customer-type"
-                                className="customer-type"
-                                options={optionsType}
-                                value={type}
-                                onChange={handleTypeChange}
-                            />
-                        </label>
-                    </div>
-                    <div className="form-row">
-                        <label className="col">
                             Số lượng:
                             <Input
                                 id="customer-number"
@@ -86,6 +108,18 @@ function CustomerSide() {
                                 min="1"
                                 value={number}
                                 onChange={handleNumberChange}
+                            />
+                        </label>
+                    </div>
+                    <div className="form-row">
+                        <label className="col">
+                            SĐT:
+                            <Input
+                                id="customer-phone"
+                                className="customer-phone"
+                                type="phone"
+                                value={phone}
+                                onChange={handlePhoneChange}
                             />
                         </label>
                     </div>

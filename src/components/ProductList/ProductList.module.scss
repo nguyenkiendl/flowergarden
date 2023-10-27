@@ -1,0 +1,109 @@
+.product-row {
+    display: flex;
+    flex-wrap: wrap;
+    border-top: 1px solid #ccc;
+    padding-bottom: 20px;
+    > h4 {
+        display: block;
+        width: 100%;
+    }
+    .product-item {
+        position: relative;
+        flex: 0 0 33.33%;
+        gap: 5px;
+        padding: 5px 5px 10px;
+        border-bottom: 1px solid #ccc;
+
+        &:active {
+            background-color: yellow;
+        }
+        .thumbnail {
+            position: relative;
+            border: 1px solid #009688;
+            border-radius: 5px;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            img {
+                max-width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            .store {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: absolute;
+                left: 2px;
+                top: 2px;
+                background: #03a9f4;
+                color: #fff;
+                border-radius: 50px;
+                width: 18px;
+                height: 18px;
+                font-size: 13px;
+            }
+        }
+        .btn-group {
+            position: absolute;
+            bottom: 3px;
+            right: 3px;
+            display: flex;
+            gap: 5px;
+            height: 30px;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #009688;
+            border-radius: 20px 20px 20px 20px;
+            background: #fff;
+            button {
+                width: 30px;
+                height: 30px;
+                background: #009688;
+                color: #fff;
+                border-radius: 100%;
+                cursor: pointer;
+            }
+            .quantity {
+                display: none;
+                &.show {
+                    display: block;
+                }
+            }
+            .btn-minus {
+                display: none;
+                &.show {
+                    display: block;
+                    background: transparent;
+                    color: #009688;
+                }
+            }
+            .btn-add {
+                &.show {
+                    display: block;
+                    background: transparent;
+                    color: #009688;
+                }
+            }
+        }
+        .name {
+            font-size: 13px;
+            font-weight: 500;
+            position: absolute;
+            left: 3px;
+            bottom: 0;
+            background: #817d7d;
+            color: #fff;
+            width: 100%;
+            text-align: center;
+        }
+        .price {
+            color: #ff5722;
+            position: absolute;
+            right: 4px;
+            top: 3px;
+            font-weight: 600;
+        }
+    }
+}

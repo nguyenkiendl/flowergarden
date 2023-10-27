@@ -275,7 +275,7 @@ class Orders extends Database
     {
         $db=$this->connect();
         $updateAt = date('Y-m-d H:i:s');
-        $db->query("UPDATE `order_detail` SET status='$status', updated_at='$updateAt' WHERE order_id=$orderId AND status IN ('new')");
+        $db->query("UPDATE `order_detail` SET status=$status, updated_at='$updateAt' WHERE order_id=$orderId");
         $db->close();
         return true;
     }
@@ -364,5 +364,87 @@ class Orders extends Database
         }
         $db->close();
         return $order;
+    }
+
+    public function bookingBegin($tableId, $type)
+    {
+        $db=$this->connect();
+        $createdAt = date('Y-m-d H:i:s');
+        $ticketId = $this->getTicketId($type);
+        $db->query("
+            INSERT INTO `orders` ( `table_id`, `ticket_id`, `created_at`) 
+            VALUES ($tableId, $ticketId, '$createdAt')
+        ");
+        $order=(object)[];
+        if ($db->insert_id) {
+            $db->query("UPDATE `tables` SET table_status=1 WHERE table_id=$tableId");
+            $data = $db->query("
+                SELECT 
+                    orders.order_id, tickets.ticket_payment, orders.created_at 
+                FROM 
+                    `orders` 
+                LEFT JOIN 
+                    `tickets` on tickets.ticket_id = orders.ticket_id
+                WHERE 
+                    orders.table_id = $tableId AND orders.status = 0
+                ORDER BY 
+                    orders.order_id ASC
+            ");
+            while ($row = $data->fetch_object()){
+                $row->order_id = intval($row->order_id);
+                $order = $row;
+            }
+        }
+        $db->close();
+        return $order;
+    }
+
+    public function bookingEnd($tableId)
+    {
+        $db=$this->connect();
+        $db->query("UPDATE `tables` SET table_status=0 WHERE table_id=$tableId");
+        $db->close();
+        return true;
+    }
+
+    public function getTicketId($type)
+    {
+        $ticketId = 0;
+        $db = $this->connect();
+        $data = $db->query("SELECT ticket_id FROM `tickets` WHERE ticket_key='$type'");
+        while ($row = $data->fetch_object()){
+            $ticketId = intval($row->ticket_id);
+        }
+        $db->close();
+        return $ticketId;
+    }
+
+    public function getOrdersProcessing($orderId)
+    {
+        $db=$this->connect();
+        $updateAt = date('Y-m-d H:i:s');
+        $results = [];
+        $data = $db->query("
+            SELECT 
+                detail.*, products.*
+            FROM 
+                `order_detail` as detail
+            LEFT JOIN 
+                `products` on products.product_id = detail.product_id 
+            WHERE 
+                detail.order_id = $orderId
+            ORDER BY 
+                products.product_name ASC
+        ");
+        while ($row = $data->fetch_object()){
+            $row->order_id = intval($row->order_id);
+            $row->product_id = intval($row->product_id);
+            $row->product_price = intval($row->product_price);
+            $row->product_store = intval($row->product_store);
+            $row->quantity = intval($row->quantity);
+            $results[] = $row;
+        }
+        $db->close();
+        return $results;
     }
 }

@@ -37,25 +37,13 @@ function Sidebar() {
                 <li>
                     <NavLink to="/" className="nav-link" onClick={handleNavClick}>
                         <FontAwesomeIcon icon={faHouse} />
-                        <strong>Home</strong>
-                    </NavLink>
-                </li>
-                <li>
-                    <NavLink to="/tickets" className="nav-link" onClick={handleNavClick}>
-                        <FontAwesomeIcon icon={faTicket} />
                         <strong>NV BÁN VÉ</strong>
                     </NavLink>
                 </li>
                 <li>
-                    <NavLink to="/customers" className="nav-link" onClick={handleNavClick}>
+                    <NavLink to="/tables" className="nav-link" onClick={handleNavClick}>
                         <FontAwesomeIcon icon={faBurger} />
                         <strong>NV ORDER</strong>
-                    </NavLink>
-                </li>
-                <li>
-                    <NavLink to="/bartenders" className="nav-link" onClick={handleNavClick}>
-                        <FontAwesomeIcon icon={faMugSaucer} />
-                        <strong>NV PHA CHẾ</strong>
                     </NavLink>
                 </li>
             </ul>

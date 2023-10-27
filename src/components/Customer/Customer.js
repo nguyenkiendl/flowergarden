@@ -9,6 +9,7 @@ import { CUSTOMER_TAB } from '~/utils/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Button from './Button';
+import CustomerItem from './CustomerItem';
 const cx = classNames.bind(styles);
 
 function Customer({ showButton = true }) {
@@ -109,33 +110,7 @@ function Customer({ showButton = true }) {
             <div className={cx('customers')}>
                 <div className={cx('customer')}>
                     {customerList?.map((item, index) => {
-                        return (
-                            <div key={index} className={cx('customer-item', item.customer_status)}>
-                                <div className={cx('number')}>{item.customer_number}</div>
-                                <div className={'customer-group'}>
-                                    <div className={cx('code')}>{item.customer_id}</div>
-                                    <div className={cx('type')}>{item.ticket_name}</div>
-                                    <div className={cx('status', item.customer_status)}>{item.customer_status}</div>
-                                </div>
-                                <div className={cx('date')}>
-                                    {dateFormat(item.created_at)}{' '}
-                                    <span className={cx('time-ago')}>{timeAgo(item.created_at)}</span>
-                                </div>
-                                <div className={cx('price')}>
-                                    {formatPrice(item.ticket_price * item.customer_number)}đ
-                                </div>
-                                <div className={cx('customer-action')}>
-                                    {item.orders > 0 ? (
-                                        <div className={cx('customer-services')}>
-                                            <span className={cx('service')}>{item.orders}</span>
-                                        </div>
-                                    ) : (
-                                        ''
-                                    )}
-                                    {showButton ? btnAction(item.customer_id, item.customer_status) : ''}
-                                </div>
-                            </div>
-                        );
+                        return <CustomerItem key={index} item={item} showButton={showButton} />;
                     })}
                     <button className="load-more" onClick={handleLoadMore}>
                         Loadmore

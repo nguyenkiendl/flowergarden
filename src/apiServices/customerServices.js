@@ -9,6 +9,15 @@ export const ping = async () => {
     }
 };
 
+export const getNewCustomers = async () => {
+    try {
+        const res = await request.get('customers/get_new_customers.php');
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const getCustomers = async (params) => {
     try {
         const res = await request.get('customers/get_customers.php', params);
@@ -30,9 +39,9 @@ export const getCustomer = async (params) => {
 export const addCustomer = async (customer) => {
     try {
         const res = await request.post('customers/add_customer.php', customer);
-        return res.data;
+        return res;
     } catch (error) {
-        console.log(error);
+        return error;
     }
 };
 
@@ -40,6 +49,15 @@ export const updateCustomerStatus = async (params) => {
     try {
         const res = await request.post('customers/update_customer_status.php', params);
         return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const printCustomerTicket = async (params) => {
+    try {
+        const html = await request.get('prints/ticket.php', params);
+        return html;
     } catch (error) {
         console.log(error);
     }

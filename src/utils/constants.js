@@ -4,8 +4,8 @@
 // });
 
 export const CUSTOMER_TYPE = [
-    { key: 'flower', value: 'flower', label: 'Khách Vườn hoa' },
     { key: 'hotel', value: 'hotel', label: 'Khách lẻ' },
+    { key: 'flower', value: 'flower', label: 'Khách Vườn hoa' },
 ];
 
 export const CUSTOMER_TAB = [
@@ -96,8 +96,17 @@ export const WATERS = [
 ];
 
 export const ORDER_STATUS = {
-    holding: 'Giữ',
-    ok: 'OK',
-    doing: 'Đang Pha chế',
-    done: 'Đã Pha xong',
+    0: 'OK',
+    1: 'Đang Pha chế',
+    2: 'Đã Pha xong',
+};
+
+export const PAYMENT_STATUS = {
+    paid: 'Đã Thanh Toán',
+    unpaid: 'Chưa Thanh Toán',
+};
+
+export const TABLE_STATUS = {
+    0: 'Bàn Trống',
+    1: 'Đang Có Khách',
 };

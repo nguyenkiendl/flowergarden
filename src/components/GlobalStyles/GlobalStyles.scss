@@ -212,9 +212,12 @@ button[disabled] {
 
 .page-title {
     background: #03a9f4;
+    font-weight: 600;
     font-size: 18px;
     padding: 1rem;
-    color: #ffeb3b;
+    color: #ffffff;
+    display: flex;
+    justify-content: space-between;
 }
 .load-more {
     margin: 0 auto;

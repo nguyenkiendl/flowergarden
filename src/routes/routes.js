@@ -1,18 +1,18 @@
 // Layouts
-import { HeaderOnly, PrintLayout } from '~/components/Layout';
+import { PrintLayout } from '~/components/Layout';
 import CustomerDetail from '~/components/Customer/Detail';
 import Home from '~/pages/Home';
-import Ticket from '~/pages/Ticket';
 import Bartender from '~/pages/Bartender';
-import Customer from '~/pages/Customer';
-import Order from '~/pages/Order';
+import Table from '~/pages/Table';
+import TableDetail from '~/pages/Table/TableDetail';
+import Booking from '~/pages/Table/TableDetail/Booking';
 import Print from '~/pages/Print';
 const publicRoutes = [
     { path: '/', component: Home },
-    { path: '/tickets', component: Ticket },
     { path: '/bartenders', component: Bartender },
-    { path: '/customers', component: Customer },
-    { path: '/customer/:customerId/', component: Order },
+    { path: '/tables', component: Table },
+    { path: '/table/:tableId/', component: TableDetail },
+    { path: '/table/:tableId/:orderId', component: Booking },
     { path: '/customer/:customerId/:orderId', component: CustomerDetail },
     { path: '/print/:customerId', component: Print, layout: PrintLayout },
 ];

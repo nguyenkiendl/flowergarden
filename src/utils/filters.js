@@ -16,6 +16,10 @@ export const formatPrice = (value) => {
     return value.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1.');
 };
 
+export const dateNow = () => {
+    return moment().format('DD/MM/YY');
+};
+
 export const dateFormat = (value) => {
     if (!value) {
         return '-';

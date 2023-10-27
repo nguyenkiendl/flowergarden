@@ -1,0 +1,25 @@
+.table-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 2em;
+    .table-item {
+        position: relative;
+        flex: 0 0 25%;
+        gap: 5px;
+        border-top: 1px solid #ccc;
+        padding: 15px 5px;
+        border: 1px solid #efeaea;
+        width: 100%;
+        background: #fff;
+        margin-bottom: 10px;
+        text-align: center;
+        &.status-0 {
+            color: #fff;
+            background: #4caf50;
+        }
+        &.status-1 {
+            color: #fff;
+            background: #ff5722;
+        }
+    }
+}

@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileEdit, faRemove } from '@fortawesome/free-solid-svg-icons';
 import * as orderServices from '~/apiServices/orderServices';
 import * as customerServices from '~/apiServices/customerServices';
-import NavBar from './NavBar';
+import NavBar from '~/components/NavBar';
 import imagedefault from '~/assets/images/cocacola.jpg';
 const cx = classNames.bind(styles);
 function Detail() {

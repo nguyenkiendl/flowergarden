@@ -80,3 +80,39 @@ export const addNewOrder = async (options) => {
         console.log(error);
     }
 };
+
+export const bookingBegin = async (options) => {
+    try {
+        const res = await request.post('orders/booking_begin.php', options);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const bookingEnd = async (options) => {
+    try {
+        const res = await request.post('orders/booking_end.php', options);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const printOrderProcessing = async (params) => {
+    try {
+        const html = await request.get('prints/processing.php', params);
+        return html;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const printOrderBill = async (params) => {
+    try {
+        const html = await request.get('prints/bill.php', params);
+        return html;
+    } catch (error) {
+        console.log(error);
+    }
+};

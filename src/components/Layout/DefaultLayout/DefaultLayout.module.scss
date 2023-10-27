@@ -59,6 +59,10 @@
                 background: var(--bg-primary);
                 color: #fff;
             }
+            &.btn-close {
+                background: #ff5722;
+                color: #fff;
+            }
         }
     }
 }

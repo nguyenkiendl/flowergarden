@@ -1,0 +1,11 @@
+.thumbnail {
+    position: relative;
+    border: 1px solid #009688;
+    border-radius: 5px;
+    overflow: hidden;
+    width: 50px;
+    height: 50px;
+    img {
+        max-width: 100%;
+    }
+}

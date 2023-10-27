@@ -10,6 +10,33 @@ class Customers extends Database
 		
 	}
 
+    public function getNewCustomers()
+    {
+        $db=$this->connect();
+        $data = $db->query("
+            SELECT 
+                customers.customer_id, customers.created_at, tickets.ticket_name, tickets.ticket_price, tickets.ticket_payment
+            FROM 
+                `customers` 
+            LEFT JOIN
+                `tickets` ON tickets.ticket_id = customers.ticket_id
+            ORDER BY 
+                customers.customer_id DESC
+        ");
+        $db->close();
+        $customers = [];
+        while ($row = $data->fetch_object()){
+            if ($row->customer_id) {
+                $cusotmer = [
+                    'value' => intval($row->customer_id),
+                    'label' => 'KH-'. $row->customer_id . ' (' .number_format($row->ticket_price).'đ)'
+                ];
+                $customers[] = $cusotmer;
+            }
+        }
+        return $customers;
+    }
+
     public function ping()
     {
         $db=$this->connect();
@@ -58,11 +85,11 @@ class Customers extends Database
             $where .= "AND customers.customer_status = '$status'";
         }
         if ($keyword!='') {
-            $where .= "AND customers.customer_code LIKE '%$keyword%'";
+            $where .= "AND customers.customer_id LIKE '%$keyword%'";
         }
         $data = $db->query("
             SELECT 
-                customers.customer_id, customers.customer_code, customers.customer_number, customers.customer_type, customers.created_at, customers.customer_status, tickets.ticket_price, tickets.ticket_name, tickets.ticket_payment
+                customers.customer_id, customers.customer_number, customers.customer_type, customers.created_at, tickets.ticket_price, tickets.ticket_name, tickets.ticket_payment
             FROM 
                 `customers` 
             LEFT JOIN
@@ -80,7 +107,6 @@ class Customers extends Database
                 $row->customer_id = intval($row->customer_id);
                 $row->customer_number = intval($row->customer_number);
                 $row->ticket_price = intval($row->ticket_price);
-                $row->orders = $this->countOrders($row->customer_id);
                 $customers[] = $row;
             }
         }
@@ -206,31 +232,24 @@ class Customers extends Database
         return $discounts;
     }
 
-    public function addCustomer($customerType, $customerNumber)
+    public function addCustomer($customerNumber, $customerPhone)
     {
         $db = $this->connect();
         $createdAt = date('Y-m-d H:i:s');
-        $customerCode = sprintf("%010d", $this->getMaxCustomerId());
-        $ticketId = $this->getTicketId($customerType);
+        $ticketId = $this->getTicketId('flower');
         $db->query("
-            INSERT INTO `customers` (`customer_code`, `customer_type`, `ticket_id`, `customer_number`, `created_at`) 
-            VALUES ('$customerCode', '$customerType', $ticketId, $customerNumber, '$createdAt')
+            INSERT INTO `customers` (`customer_phone`, `customer_type`, `ticket_id`, `customer_number`, `created_at`) 
+            VALUES ('$customerPhone', 'flower', $ticketId, $customerNumber, '$createdAt')
         ");
-        $customer = false;
+        $customer = (object)[];
         if ($db->insert_id) {
             $customerId = $db->insert_id;
-            $db->query("
-                INSERT INTO `orders` ( `customer_id`, `ticket_id`, `created_at`) 
-                VALUES ($customerId, $ticketId, '$createdAt')
-            ");
-            if ($db->insert_id) {
             $data = $db->query("SELECT * FROM `customers` WHERE customer_id=$customerId");
-                while ($row = $data->fetch_object()){
-                    $row->customer_id = intval($row->customer_id);
-                    $row->customer_number = intval($row->customer_number);
-                    $customer = $row;
-                    $customer->orders = [];
-                }
+            while ($row = $data->fetch_object()){
+                $row->customer_id = intval($row->customer_id);
+                $row->customer_number = intval($row->customer_number);
+                $customer = $row;
+                $customer->orders = [];
             }
         }
         $db->close();
@@ -270,5 +289,33 @@ class Customers extends Database
         $db->query("UPDATE `customers` SET customer_status='$customerStatus' WHERE customer_id=$customerId");
         $db->close();
         return true;
+    }
+
+    public function getNewCustomerData($customerId)
+    {
+        $db=$this->connect();
+        $data = $db->query("
+            SELECT 
+                customers.customer_id, customers.customer_number, customers.customer_phone, customers.created_at, tickets.ticket_price
+            FROM 
+                `customers`
+            LEFT JOIN
+                `tickets` ON tickets.ticket_id = customers.ticket_id
+            WHERE 
+                customers.customer_id = $customerId
+            ORDER BY 
+                customers.customer_id DESC
+        ");
+        $db->close();
+        $customer = false;
+        while ($row = $data->fetch_object()){
+            if ($row->customer_id) {
+                $row->customer_id = intval($row->customer_id);
+                $row->customer_number = intval($row->customer_number);
+                $customer = $row;
+            }
+        }
+
+        return $customer;
     }
 }

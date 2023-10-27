@@ -1,0 +1,103 @@
+.btn-wrapper {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    justify-content: center;
+    background: #fff;
+    padding: 10px;
+    &.hide {
+        display: none;
+    }
+    .btn-booking-begin {
+        background: #00bcd4;
+        color: #fff;
+        font-size: 1em;
+        text-align: center;
+        padding: 7px 12px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+}
+
+.order-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 0.5em;
+    border-top: 1px solid #ccc;
+    .order-item {
+        position: relative;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        flex: auto;
+        gap: 5px;
+        padding: 5px 5px 5px;
+        border-bottom: 1px solid #ccc;
+        width: 100%;
+        background: #fff;
+        .thumbnail {
+            position: relative;
+            border: 1px solid #009688;
+            border-radius: 5px;
+            overflow: hidden;
+            width: 50px;
+            height: 50px;
+            img {
+                max-width: 100%;
+            }
+            .store {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: absolute;
+                left: 2px;
+                top: 2px;
+                background: #03a9f4;
+                color: #fff;
+                border-radius: 50px;
+                width: 18px;
+                height: 18px;
+                font-size: 13px;
+            }
+        }
+        .name {
+            font-size: 16px;
+            font-weight: 500;
+            flex: 1;
+            h4 {
+                font-weight: 500;
+            }
+            span {
+                font-size: 12px;
+                font-weight: 600;
+            }
+        }
+        .quantity {
+            color: #ff5722;
+        }
+        .unit {
+            color: var(--bg-primary);
+        }
+        .price {
+            color: #ff5722;
+            font-weight: 600;
+        }
+        .status {
+            display: inline-block;
+            padding: 2px 5px;
+            font-size: 11px;
+            border-radius: 4px;
+            color: #fff;
+            text-align: center;
+            background: var(--bg-default);
+            &.holding {
+                background: var(--bg-default);
+            }
+            &.ok {
+                background: var(--bg-success);
+            }
+            &.doing {
+            }
+        }
+    }
+}

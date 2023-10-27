@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
+import * as settingServices from '~/apiServices/settingServices';
 import * as customerServices from '~/apiServices/customerServices';
 import * as orderServices from '~/apiServices/orderServices';
 import { CustomerReducer, actions } from '~/reducer/CustomerReducer';
@@ -12,10 +13,12 @@ export const AppProvider = ({ children }) => {
     const [customerSide, setCustomerSide] = useState(false);
     const [productSide, setProductSide] = useState(false);
     const [orderSide, setOrderSide] = useState(false);
+    const [cartCount, setCartCount] = useState(0);
     const [customerState, dispatch] = CustomerReducer();
     const { customer, customerList, page, keyword, filters } = customerState;
     const [orderState, orderDispatch] = OrderReducer();
     const { orderList } = orderState;
+
     const fetchOrders = async () => {
         const response = await orderServices.getOrders({
             params: {
@@ -93,6 +96,7 @@ export const AppProvider = ({ children }) => {
             const response = await customerServices.addCustomer({
                 type: payload.type,
                 number: payload.number,
+                phone: payload.phone,
             });
             if (response) dispatch(actions.addCustomerItem(response));
         };
@@ -189,6 +193,8 @@ export const AppProvider = ({ children }) => {
         setOpenBar,
         openModal,
         setOpenModal,
+        cartCount,
+        setCartCount,
     };
     return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
