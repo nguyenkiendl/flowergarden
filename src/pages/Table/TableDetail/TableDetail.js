@@ -5,9 +5,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import * as tableServices from '~/apiServices/tableServices';
 import * as orderServices from '~/apiServices/orderServices';
-import { CUSTOMER_TYPE, ORDER_STATUS, PAYMENT_STATUS, TABLE_STATUS } from '~/utils/constants';
-import Select from '~/components/Form/Select';
-import { dateFormat, dateNow, timeAgo } from '~/utils/filters';
+import { ORDER_STATUS, TABLE_STATUS } from '~/utils/constants';
+import { dateNow, timeAgo } from '~/utils/filters';
 function TableDetail() {
     const navigate = useNavigate();
     const { tableId } = useParams();
@@ -60,9 +59,9 @@ function TableDetail() {
                     <thead>
                         <tr>
                             <th className="text-center">STT</th>
-                            <th className="text-center">ID</th>
-                            <th className="text-center">TT</th>
-                            <th>Ngày</th>
+                            <th className="text-center">ORDER</th>
+                            <th className="text-center">T.Thái</th>
+                            <th>Thời gian</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -70,19 +69,17 @@ function TableDetail() {
                         {detail.orders?.map((item, index) => {
                             return (
                                 <tr key={index}>
-                                    <td width={20} className="text-center">
-                                        #{index + 1}
+                                    <td className="text-center">#{index + 1}</td>
+                                    <td className="text-center">{item.order_id}</td>
+                                    <td className="text-center">
+                                        <span className={cx('status', `status-${item.status}`)}>
+                                            {ORDER_STATUS[item.order_status]}
+                                        </span>
                                     </td>
-                                    <td width={20} className="text-center">
-                                        {item.order_id}
-                                    </td>
-                                    <td width={50} className="text-center">
-                                        {ORDER_STATUS[item.status]}
-                                    </td>
-                                    <td width={150}>
+                                    <td>
                                         <div className={cx('time-ago')}>{timeAgo(item.created_at)}</div>
                                     </td>
-                                    <td width={100} className="text-right">
+                                    <td className="text-right">
                                         <button
                                             className="btn-detail"
                                             onClick={() => {

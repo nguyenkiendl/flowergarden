@@ -82,22 +82,20 @@
             color: #ff5722;
             font-weight: 600;
         }
-        .status {
-            display: inline-block;
-            padding: 2px 5px;
-            font-size: 11px;
-            border-radius: 4px;
-            color: #fff;
-            text-align: center;
-            background: var(--bg-default);
-            &.holding {
-                background: var(--bg-default);
-            }
-            &.ok {
-                background: var(--bg-success);
-            }
-            &.doing {
-            }
-        }
+    }
+}
+.status {
+    display: inline-block;
+    padding: 2px 5px;
+    font-size: 11px;
+    border-radius: 4px;
+    color: #fff;
+    text-align: center;
+    background: var(--bg-default);
+    &.status-0 {
+        background: var(--order-open);
+    }
+    &.status-1 {
+        background: var(--order-close);
     }
 }

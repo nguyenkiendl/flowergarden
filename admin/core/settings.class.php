@@ -2,7 +2,7 @@
 /**
  * SETTINGS CLASS
  */
-require_once __DIR__ . './database.php';
+require_once __DIR__ . '/database.php';
 class Settings extends Database
 {
 	function __construct()

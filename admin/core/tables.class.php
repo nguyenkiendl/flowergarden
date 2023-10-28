@@ -2,7 +2,7 @@
 /**
  * TABLES CLASS
  */
-require_once __DIR__ . './database.php';
+require_once __DIR__ . '/database.php';
 class Tables extends Database
 {
 	function __construct()
@@ -52,7 +52,7 @@ class Tables extends Database
         if ($table) {
             $data = $db->query("
                 SELECT 
-                    tables.table_id, tables.table_name, orders.order_id, orders.created_at, orders.status, tickets.ticket_payment
+                    tables.table_id, tables.table_name, orders.order_id, orders.created_at, orders.order_status, tickets.ticket_payment
                 FROM 
                     `orders`
                 LEFT JOIN 
@@ -60,7 +60,7 @@ class Tables extends Database
                 LEFT JOIN
                     `tickets` ON tickets.ticket_id = orders.ticket_id
                 WHERE 
-                    tables.table_id = $tableId
+                    tables.table_id = $tableId AND orders.created_at >= NOW() - INTERVAL 24 HOUR
                 ORDER BY 
                     orders.order_id DESC
             ");
@@ -69,6 +69,7 @@ class Tables extends Database
             while ($row = $data->fetch_object()){
                 if ($row->order_id) {
                     $row->order_id = intval($row->order_id);
+                    $row->order_status = intval($row->order_status);
                     $orders[] = $row;
                 }
             }

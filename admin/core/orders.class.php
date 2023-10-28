@@ -2,7 +2,7 @@
 /**
  * ORDERS CLASS
  */
-require_once __DIR__ . './database.php';
+require_once __DIR__ . '/database.php';
 class Orders extends Database
 {
 	function __construct()
@@ -386,7 +386,7 @@ class Orders extends Database
                 LEFT JOIN 
                     `tickets` on tickets.ticket_id = orders.ticket_id
                 WHERE 
-                    orders.table_id = $tableId AND orders.status = 0
+                    orders.table_id = $tableId AND orders.order_status = 0
                 ORDER BY 
                     orders.order_id ASC
             ");
@@ -399,10 +399,11 @@ class Orders extends Database
         return $order;
     }
 
-    public function bookingEnd($tableId)
+    public function bookingEnd($tableId, $orderId)
     {
         $db=$this->connect();
         $db->query("UPDATE `tables` SET table_status=0 WHERE table_id=$tableId");
+        $db->query("UPDATE `orders` SET order_status=1 WHERE order_id=$orderId");
         $db->close();
         return true;
     }
@@ -423,28 +424,85 @@ class Orders extends Database
     {
         $db=$this->connect();
         $updateAt = date('Y-m-d H:i:s');
-        $results = [];
-        $data = $db->query("
-            SELECT 
-                detail.*, products.*
-            FROM 
-                `order_detail` as detail
-            LEFT JOIN 
-                `products` on products.product_id = detail.product_id 
-            WHERE 
-                detail.order_id = $orderId
-            ORDER BY 
-                products.product_name ASC
-        ");
+        $table = (object)[];
+        $table->orders = [];
+        $data = $db->query("SELECT tables.* ,orders.* FROM `tables` LEFT JOIN orders ON orders.table_id = tables.table_id WHERE orders.order_id=$orderId");
         while ($row = $data->fetch_object()){
-            $row->order_id = intval($row->order_id);
-            $row->product_id = intval($row->product_id);
-            $row->product_price = intval($row->product_price);
-            $row->product_store = intval($row->product_store);
-            $row->quantity = intval($row->quantity);
-            $results[] = $row;
+            if ($row->table_id) {
+                $tableId = intval($row->table_id);
+                $table=$row;
+            }
         }
+        if ($table) {
+            $orders = [];
+            $data = $db->query("
+                SELECT 
+                    detail.*, products.*
+                FROM 
+                    `order_detail` as detail
+                LEFT JOIN 
+                    `products` on products.product_id = detail.product_id 
+                WHERE 
+                    detail.order_id = $orderId AND detail.status = 0
+                ORDER BY 
+                    products.product_name ASC
+            ");
+            while ($row = $data->fetch_object()){
+                $row->order_id = intval($row->order_id);
+                $row->product_id = intval($row->product_id);
+                $row->product_price = intval($row->product_price);
+                $row->product_store = intval($row->product_store);
+                $row->quantity = intval($row->quantity);
+                $orders[] = $row;
+            }
+
+            $table->orders = $orders;
+        }
+        
         $db->close();
-        return $results;
+        return $table;
+    }
+
+    public function getOrdersBill($orderId)
+    {
+        $db=$this->connect();
+        $updateAt = date('Y-m-d H:i:s');
+        $table = (object)[];
+        $table->orders = [];
+        $data = $db->query("SELECT tables.* ,orders.* FROM `tables` LEFT JOIN orders ON orders.table_id = tables.table_id WHERE orders.order_id=$orderId");
+        while ($row = $data->fetch_object()){
+            if ($row->table_id) {
+                $tableId = intval($row->table_id);
+                $table=$row;
+            }
+        }
+        if ($table) {
+            $orders = [];
+            $data = $db->query("
+                SELECT 
+                    detail.*, products.*
+                FROM 
+                    `order_detail` as detail
+                LEFT JOIN 
+                    `products` on products.product_id = detail.product_id 
+                WHERE 
+                    detail.order_id = $orderId
+                ORDER BY 
+                    products.product_name ASC
+            ");
+            while ($row = $data->fetch_object()){
+                $row->order_id = intval($row->order_id);
+                $row->product_id = intval($row->product_id);
+                $row->product_price = intval($row->product_price);
+                $row->product_store = intval($row->product_store);
+                $row->quantity = intval($row->quantity);
+                $orders[] = $row;
+            }
+
+            $table->orders = $orders;
+        }
+        
+        $db->close();
+        return $table;
     }
 }

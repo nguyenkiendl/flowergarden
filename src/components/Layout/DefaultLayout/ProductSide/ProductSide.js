@@ -1,6 +1,5 @@
 import classNames from 'classnames/bind';
 import styles from '~/components/Layout/DefaultLayout/DefaultLayout.module.scss';
-import ProductList from './ProductList';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faClose } from '@fortawesome/free-solid-svg-icons';
 import { useContext, useEffect, useRef, useState } from 'react';
@@ -8,7 +7,6 @@ import { AppContext } from '~/context/AppContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as orderServices from '~/apiServices/orderServices';
 import Cart from '~/components/Cart';
-
 const cx = classNames.bind(styles);
 
 function ProductSide() {
@@ -19,27 +17,11 @@ function ProductSide() {
         setProductSide(false);
     };
 
-    // const handleChangeCart = (product) => {
-    //     const exist = carts.some((obj) => obj.product_id === product.product_id);
-    //     if (exist) {
-    //         setCarts((prevCarts) => {
-    //             return prevCarts.map((obj) => {
-    //                 if (obj.product_id === product.product_id) {
-    //                     const newQuantity = product.quantity;
-    //                     return { ...obj, quantity: newQuantity };
-    //                 }
-    //                 return obj;
-    //             });
-    //         });
-    //     } else {
-    //         setCarts([...carts, product]);
-    //     }
-    // };
-
     const handleCloseTable = () => {
         const apiUpdate = async () => {
             const response = await orderServices.bookingEnd({
                 table_id: Number(tableId),
+                order_id: Number(orderId),
             });
             if (response) {
                 setProductSide(false);
@@ -50,43 +32,51 @@ function ProductSide() {
     };
 
     const handleProcessing = () => {
-        const apiFetchPrint = async () => {
-            const response = await orderServices.printOrderProcessing({
-                params: {
-                    order_id: Number(orderId),
-                },
+        const f = document.frames ? document.frames[id] : document.getElementById('iframe-processing');
+        const w = f.contentWindow || f;
+        w.postMessage({ action: 'print-processing' }, f.src);
+        const apiUpdate = async () => {
+            await orderServices.updateOrderStatus({
+                order_id: Number(orderId),
+                status: 1,
             });
-            if (response) {
-                const w = window.open(window.location.href, '_blank');
-                w.document.open();
-                w.document.write(response);
-                w.document.close();
-                w.window.print();
-                w.window.close();
-                //setProductSide(false);
-            }
         };
-        apiFetchPrint();
+        setTimeout(() => {
+            apiUpdate();
+        }, 1000);
     };
 
     const handlePrint = () => {
-        const apiFetchPrint = async () => {
-            const response = await orderServices.printOrderBill({
-                params: {
-                    order_id: Number(orderId),
-                },
-            });
-            if (response) {
-                const w = window.open(window.location.href, '_blank');
-                w.document.open();
-                w.document.write(response);
-                w.document.close();
-                w.window.print();
-                w.window.close();
-                //setProductSide(false);
-            }
-        };
-        apiFetchPrint();
+        // const apiFetchPrint = async () => {
+        //     const response = await orderServices.printOrderBill({
+        //         params: {
+        //             order_id: Number(orderId),
+        //         },
+        //     });
+        //     if (response) {
+        //         const w = window.open(window.location.href, '_blank');
+        //         w.document.open();
+        //         w.document.write(response);
+        //         //w.document.getElementById('qrcode-payment').src = qrcodePayent;
+        //         w.document.close();
+        //         setTimeout(() => {
+        //             w.window.print();
+        //             w.window.close();
+        //         }, 50);
+        //         // w.window.print();
+
+        //         //setProductSide(false);
+
+        //     }
+        // };
+        // apiFetchPrint();
+        const f = document.frames ? document.frames[id] : document.getElementById('iframe-bill');
+        const w = f.contentWindow || f;
+        w.postMessage({ action: 'print-bill' }, f.src);
+    };
+
+    const handleBack = () => {
+        setProductSide(false);
     };
 
     /**
@@ -111,6 +101,20 @@ function ProductSide() {
     return (
         <>
             <div ref={wrapperRef} className={cx('right-sides', { show: productSide })}>
+                <iframe
+                    id="iframe-bill"
+                    src={`${process.env.REACT_APP_BASEURL}/prints/bill.php?order_id=${orderId}&time=${Date.now()}`}
+                    style={{ display: 'none' }}
+                    title="PRINT BILL"
+                />
+                <iframe
+                    id="iframe-processing"
+                    src={`${
+                        process.env.REACT_APP_BASEURL
+                    }/prints/processing.php?order_id=${orderId}&time=${Date.now()}`}
+                    style={{ display: 'none' }}
+                    title="PRINT BILL"
+                />
                 <div className={cx('header')}>
                     <h3>Giỏ Hàng</h3>
                     <button onClick={handleCloseService} className={cx('btn-close')}>
@@ -121,7 +125,7 @@ function ProductSide() {
                     <Cart orderId={orderId} />
                 </div>
                 <div className={cx('footer')}>
-                    <button className={cx('btn-back')} onClick={() => setProductSide(false)}>
+                    <button className={cx('btn-back')} onClick={() => handleBack()}>
                         <FontAwesomeIcon icon={faChevronLeft} />
                     </button>
                     <button className={cx('btn-processing')} onClick={handleProcessing}>

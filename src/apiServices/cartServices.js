@@ -9,6 +9,24 @@ export const addToCart = async (datas) => {
     }
 };
 
+export const updateCartQuantity = async (datas) => {
+    try {
+        const res = await request.post('carts/update_cart_quantity.php', datas);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const removeCartItem = async (datas) => {
+    try {
+        const res = await request.post('carts/remove_cart_item.php', datas);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const getCarts = async (params) => {
     try {
         const res = await request.get('carts/get_carts.php', params);

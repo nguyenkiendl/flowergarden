@@ -108,6 +108,14 @@ else :
         </table>
     </div>
     <div class="print-footer"></div>
+    <script type="text/javascript">
+        window.addEventListener("message", function(event) {
+            if (event.data.action === 'print-ticket') {
+                window.focus();
+                window.print();
+            }
+        }); 
+    </script>
 </body>
 </html>
 <?php

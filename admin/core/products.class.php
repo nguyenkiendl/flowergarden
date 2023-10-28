@@ -2,7 +2,7 @@
 /**
  * PRODUCTS CLASS
  */
-require_once __DIR__ . './database.php';
+require_once __DIR__ . '/database.php';
 class Products extends Database
 {
 	function __construct()

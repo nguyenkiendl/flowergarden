@@ -112,9 +112,9 @@ function Customer({ showButton = true }) {
                     {customerList?.map((item, index) => {
                         return <CustomerItem key={index} item={item} showButton={showButton} />;
                     })}
-                    <button className="load-more" onClick={handleLoadMore}>
+                    {/* <button className="load-more" onClick={handleLoadMore}>
                         Loadmore
-                    </button>
+                    </button> */}
                 </div>
             </div>
         </>

@@ -2,7 +2,7 @@
 /**
  * CUSTOMER CLASS
  */
-require_once __DIR__ . './database.php';
+require_once __DIR__ . '/database.php';
 class Customers extends Database
 {
 	function __construct()
@@ -40,8 +40,7 @@ class Customers extends Database
     public function ping()
     {
         $db=$this->connect();
-        $data = $db->query("SELECT COUNT(*) as count FROM `customers` WHERE customer_status='new' AND customers.created_at >= NOW() - INTERVAL 1 MINUTE");
-        
+        $data = $db->query("SELECT COUNT(*) as count FROM `customers` WHERE customers.created_at >= NOW() - INTERVAL 1 MINUTE");
         $count = 0;
         $customers = [];
         while ($row = $data->fetch_object()){
@@ -51,13 +50,13 @@ class Customers extends Database
         if ($count > 0) {
             $data = $db->query("
                 SELECT 
-                    customers.customer_id, customers.customer_code, customers.customer_number, customers.customer_type, customers.created_at, customers.customer_status, tickets.ticket_price, tickets.ticket_name, tickets.ticket_payment
+                    customers.*, tickets.*
                 FROM 
                     `customers` 
                 LEFT JOIN
                     `tickets` ON tickets.ticket_id = customers.ticket_id
                 WHERE 
-                    customers.customer_status='new' AND customers.created_at >= NOW() - INTERVAL 1 MINUTE
+                    customers.created_at >= NOW() - INTERVAL 1 MINUTE
                 ORDER BY 
                     customers.customer_id DESC
             ");
@@ -66,7 +65,6 @@ class Customers extends Database
                     $row->customer_id = intval($row->customer_id);
                     $row->customer_number = intval($row->customer_number);
                     $row->ticket_price = intval($row->ticket_price);
-                    $row->orders = $this->countOrders($row->customer_id);
                     $customers[] = $row;
                 }
             }
@@ -95,7 +93,7 @@ class Customers extends Database
             LEFT JOIN
                 `tickets` ON tickets.ticket_id = customers.ticket_id
             WHERE 
-                $where
+                 customers.created_at >= NOW() - INTERVAL 24 HOUR
             ORDER BY 
                 customers.customer_id DESC
             LIMIT $offset,$perPage

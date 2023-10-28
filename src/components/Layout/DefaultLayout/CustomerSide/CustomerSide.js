@@ -14,6 +14,7 @@ const cx = classNames.bind(styles);
 function CustomerSide() {
     const navigate = useNavigate();
     const [number, setNumber] = useState(1);
+    const [customerId, setCustomerId] = useState(0);
     const [phone, setPhone] = useState('');
     let optionsType = CUSTOMER_TYPE;
 
@@ -36,8 +37,12 @@ function CustomerSide() {
             });
             if (res.status) {
                 const data = res.data;
-                handlePrintContent(data.customer_id);
+                setCustomerId(data.customer_id);
+                //handlePrintContent(data.customer_id);
                 setCustomerSide(false);
+                setTimeout(() => {
+                    handlePrint();
+                }, 500);
             } else {
                 alert(res.message);
             }
@@ -46,6 +51,12 @@ function CustomerSide() {
         Add();
 
         //window.location.reload(false);
+    };
+
+    const handlePrint = () => {
+        const f = document.frames ? document.frames[id] : document.getElementById('iframe-ticket');
+        const w = f.contentWindow || f;
+        w.postMessage({ action: 'print-ticket' }, f.src);
     };
     const handlePrintContent = (customerId) => {
         const apiFetchPrint = async () => {
@@ -91,6 +102,14 @@ function CustomerSide() {
     return (
         <>
             <div ref={wrapperRef} className={cx('right-sides', { show: customerSide })}>
+                <iframe
+                    id="iframe-ticket"
+                    src={`${
+                        process.env.REACT_APP_BASEURL
+                    }/prints/ticket.php?customer_id=${customerId}&time=${Date.now()}`}
+                    style={{ display: 'none' }}
+                    title="PRINT TICKET"
+                />
                 <div className={cx('header')}>
                     <h3>Thêm Khách Hàng</h3>
                     <button onClick={handleCloseCustomerSide} className={cx('btn-close')}>

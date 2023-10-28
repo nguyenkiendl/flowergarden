@@ -9,3 +9,48 @@
         max-width: 100%;
     }
 }
+.btn-remove {
+    color: red;
+    background: #fff;
+    border: 1px solid red;
+    border-radius: 3px;
+}
+.btn-group {
+    display: flex;
+    gap: 5px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #009688;
+    border-radius: 20px 20px 20px 20px;
+    background: #fff;
+    button {
+        width: 30px;
+        height: 30px;
+        background: #009688;
+        color: #fff;
+        border-radius: 100%;
+        cursor: pointer;
+    }
+    .quantity {
+        display: none;
+        &.show {
+            display: block;
+        }
+    }
+    .btn-minus {
+        display: none;
+        &.show {
+            display: block;
+            background: transparent;
+            color: #009688;
+        }
+    }
+    .btn-add {
+        &.show {
+            display: block;
+            background: transparent;
+            color: #009688;
+        }
+    }
+}

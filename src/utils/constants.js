@@ -95,10 +95,15 @@ export const WATERS = [
     },
 ];
 
-export const ORDER_STATUS = {
-    0: 'OK',
-    1: 'Đang Pha chế',
+export const CART_STATUS = {
+    0: 'Mới',
+    1: 'Pha chế',
     2: 'Đã Pha xong',
+};
+
+export const ORDER_STATUS = {
+    0: 'Mở bàn',
+    1: 'Đóng bàn',
 };
 
 export const PAYMENT_STATUS = {

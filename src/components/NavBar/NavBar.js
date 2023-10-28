@@ -38,11 +38,13 @@ function NavBar({ detail }) {
         };
         apiUpdate();
     };
-
+    const handleBack = () => {
+        navigate(`/table/${tableId}`);
+    };
     return (
         <>
             <div className={cx('navbar')}>
-                <button className={cx('btn-back')} onClick={() => navigate(-1)}>
+                <button className={cx('btn-back')} onClick={handleBack}>
                     <FontAwesomeIcon icon={faChevronLeft} /> Quay lại
                 </button>
                 {/* <button className={cx('btn-services')} onClick={() => setOpenModal(true)}>
