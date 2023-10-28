@@ -11,97 +11,8 @@ export const AppProvider = ({ children }) => {
     const [openBar, setOpenBar] = useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [customerSide, setCustomerSide] = useState(false);
-    const [productSide, setProductSide] = useState(false);
-    const [orderSide, setOrderSide] = useState(false);
+    const [cartSide, setCartSide] = useState(false);
     const [cartCount, setCartCount] = useState(0);
-    const [customerState, dispatch] = CustomerReducer();
-    const { customer, customerList, page, keyword, filters } = customerState;
-    const [orderState, orderDispatch] = OrderReducer();
-    const { orderList } = orderState;
-
-    const fetchOrders = async () => {
-        const response = await orderServices.getOrders({
-            params: {
-                page: page,
-                keyword: keyword,
-            },
-        });
-        if (response) {
-            orderDispatch({
-                type: 'FETCH_SUCCESS',
-                payload: response,
-            });
-        } else {
-            dispatch({ type: 'FETCH_ERROR' });
-        }
-    };
-    const fetchCustomers = async () => {
-        const response = await customerServices.getCustomers({
-            params: {
-                page: page,
-                keyword: keyword,
-                filters: filters,
-            },
-        });
-        if (response) {
-            dispatch(
-                actions.fetchCustomer({
-                    dataList: response,
-                    keyword: keyword,
-                    filters: filters,
-                }),
-            );
-        } else {
-            dispatch({ type: 'FETCH_ERROR' });
-        }
-    };
-
-    // useEffect(() => {
-    //     //if (window.location.pathname === '/') {
-    //     fetchCustomers();
-    //     //}
-    //     // const interval = setInterval(() => {
-    //     //     fetchCustomers();
-    //     // }, 1000 * 10);
-    //     // return () => clearInterval(interval);
-    // }, [page]); // eslint-disable-line react-hooks/exhaustive-deps
-
-    // const handleScroll = () => {
-    //     if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
-    //         //if (window.location.pathname === '/') {
-    //         console.log('totalPages >>>');
-    //         dispatch({ type: 'FETCH_MORE', payload: filters });
-    //         //}
-    //     }
-    // };
-
-    // useEffect(() => {
-    //     //console.log('====> run effect 2');
-    //     window.addEventListener('scroll', handleScroll);
-    // }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-    const setCustomer = (input) => {
-        const customerDetail = async () => {
-            const response = await customerServices.getCustomer({
-                params: {
-                    customer_id: input.customer_id,
-                },
-            });
-            if (response) dispatch(actions.setCustomer(response));
-        };
-        customerDetail();
-    };
-    const addCustomerItem = (payload) => {
-        const Add = async () => {
-            const response = await customerServices.addCustomer({
-                type: payload.type,
-                number: payload.number,
-                phone: payload.phone,
-            });
-            if (response) dispatch(actions.addCustomerItem(response));
-        };
-        Add();
-    };
 
     const addOrders = (payload) => {
         const Add = async () => {
@@ -128,67 +39,11 @@ export const AppProvider = ({ children }) => {
         };
         Update();
     };
-
-    const searchCustomer = (keyword) => {
-        const Search = async () => {
-            const response = await customerServices.getCustomers({
-                params: {
-                    page: page,
-                    keyword: keyword,
-                },
-            });
-            if (response)
-                dispatch(
-                    actions.searchCustomer({
-                        dataList: response,
-                        keyword: keyword,
-                    }),
-                );
-        };
-        Search();
-    };
-
-    const filterCustomer = (filters) => {
-        const Filter = async () => {
-            const response = await customerServices.getCustomers({
-                params: {
-                    page: 1,
-                    keyword: keyword,
-                    filters: filters,
-                },
-            });
-            if (response) {
-                dispatch(
-                    actions.filterCustomer({
-                        dataList: response,
-                        filters: filters,
-                    }),
-                );
-            }
-        };
-        Filter();
-    };
-
     const value = {
-        orderList,
-        fetchOrders,
-        customerList,
-        fetchCustomers,
-        addCustomerItem,
-        customer,
-        setCustomer,
-        keyword,
-        searchCustomer,
-        filters,
-        filterCustomer,
         customerSide,
         setCustomerSide,
-        productSide,
-        setProductSide,
-        orderSide,
-        setOrderSide,
-        addOrders,
-        updateOrders,
+        cartSide,
+        setCartSide,
         openBar,
         setOpenBar,
         openModal,

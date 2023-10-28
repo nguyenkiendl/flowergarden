@@ -14,10 +14,8 @@ const cx = classNames.bind(styles);
 
 function Customer({ showButton = true }) {
     const navigate = useNavigate();
-    const refInputSearch = useRef(null);
     const [page, setPage] = useState(1);
     const [customerList, setCustomerList] = useState([]);
-    const { searchCustomer, filters, filterCustomer } = useContext(AppContext) || [];
     const [q, setQ] = useState('');
 
     // useEffect(() => {
@@ -29,11 +27,7 @@ function Customer({ showButton = true }) {
     // }, [q]);
 
     const fetchCustomers = async () => {
-        const response = await customerServices.getCustomers({
-            params: {
-                page: page,
-            },
-        });
+        const response = await customerServices.getCustomers();
         if (response) {
             setCustomerList([...customerList, ...response]);
         }
@@ -41,47 +35,27 @@ function Customer({ showButton = true }) {
 
     useEffect(() => {
         fetchCustomers();
-    }, [page]);
+    }, []);
 
-    useEffect(() => {
-        const ping = async () => {
-            const result = await customerServices.ping();
-            if (result && result.length > 0) {
-                const newCustomerList = mergeCustomers(result, customerList);
-                setCustomerList(newCustomerList);
-            }
-        };
-        const interval = setInterval(() => {
-            ping();
-        }, 1000 * 5);
-        return () => clearInterval(interval);
-    }, [customerList]);
+    // useEffect(() => {
+    //     const ping = async () => {
+    //         const result = await customerServices.ping();
+    //         if (result && result.length > 0) {
+    //             const newCustomerList = mergeCustomers(result, customerList);
+    //             setCustomerList(newCustomerList);
+    //         }
+    //     };
+    //     const interval = setInterval(() => {
+    //         ping();
+    //     }, 1000 * 5);
+    //     return () => clearInterval(interval);
+    // }, [customerList]);
 
     const handleLoadMore = () => {
         setPage(page + 1);
     };
 
-    const handleFilterStatus = (status) => {
-        filterCustomer({ status });
-    };
-
-    const handleFocus = (event) => {
-        event.target.select();
-    };
-
-    const handleSearch = () => {
-        searchCustomer(q);
-    };
-
     const handleClickNew = (customerId) => {
-        // const apiUpdate = async () => {
-        //     const response = await customerServices.updateCustomerStatus({
-        //         customer_id: customerId,
-        //         customer_status: 'ordering',
-        //     });
-        //     if (response) navigate(`/customer/${customerId}`);
-        // };
-        // apiUpdate();
         navigate(`/customer/${customerId}`);
     };
 
@@ -89,22 +63,6 @@ function Customer({ showButton = true }) {
         navigate(`/customer/${customerId}`);
     };
 
-    const btnAction = (customerId, status) => {
-        switch (status) {
-            case 'new':
-                return <Button onClick={() => handleClickNew(customerId)} text={'Chi tiết'} />;
-            case 'ordering':
-                return <Button onClick={() => handleClickOrdering(customerId)} text={'xem'} />;
-            case 'processing':
-                return <Button onClick={() => handleClickOrdering(customerId)} text={'xem'} />;
-            case 'return':
-                return <Button onClick={() => handleClickOrdering(customerId)} text={'xem'} />;
-            case 'complete':
-                return <Button onClick={() => handleClickOrdering(customerId)} text={'xem'} />;
-            default:
-                return '';
-        }
-    };
     return (
         <>
             <div className={cx('customers')}>
@@ -112,9 +70,6 @@ function Customer({ showButton = true }) {
                     {customerList?.map((item, index) => {
                         return <CustomerItem key={index} item={item} showButton={showButton} />;
                     })}
-                    {/* <button className="load-more" onClick={handleLoadMore}>
-                        Loadmore
-                    </button> */}
                 </div>
             </div>
         </>

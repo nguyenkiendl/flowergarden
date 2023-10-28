@@ -4,50 +4,56 @@ import { CART_STATUS } from '~/utils/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAdd, faMinus, faRemove } from '@fortawesome/free-solid-svg-icons';
 import { useContext, useEffect, useState } from 'react';
-import * as cartServices from '~/apiServices/cartServices';
 import { AppContext } from '~/context/AppContext';
 const cx = classNames.bind(styles);
 function CartItem({ item, onChange, onRemove }) {
     const [quantity, setQuantity] = useState(0);
-    const { productSide } = useContext(AppContext);
+    const { cartSide } = useContext(AppContext);
 
     useEffect(() => {
-        if (productSide === true) {
+        if (cartSide === true) {
             setQuantity(item.quantity);
         }
-    }, [productSide, item.quantity]);
+    }, [cartSide, quantity]);
 
-    const handleMinus = (event, item) => {
-        if (quantity === 0) event.currentTarget.disabled = true;
-        let newQuantity = item.quantity - 1;
-        setQuantity(newQuantity);
-        onChange(item.detail_id, newQuantity);
+    const handleMinus = (item) => {
+        if (quantity===1) {
+            setQuantity(0);
+            onRemove(item.id);
+        } else {
+            let newQuantity = quantity - 1;
+            setQuantity(newQuantity);
+            onChange(item.id, newQuantity);
+        }
+        
     };
-    const handleAdd = (event, item) => {
-        let newQuantity = item.quantity + 1;
+    const handleAdd = (item) => {
+        let newQuantity = quantity + 1;
         setQuantity(newQuantity);
-        onChange(item.detail_id, newQuantity);
+        onChange(item.id, newQuantity);
     };
 
-    const handleRemoveCartItem = (detailId) => {
-        onRemove(detailId);
+    const handleRemoveCartItem = (item) => {
+        setQuantity(0);
+        onRemove(item.id);
     };
     return (
         <>
-            <tr>
+            <tr hidden={quantity===0} data-id={item.id}>
                 <td width={100}>{item.product_name}</td>
                 <td width={50} className="text-center">
                     <div className={cx('btn-group')}>
                         <button
-                            onClick={(event) => handleMinus(event, item)}
-                            className={cx('btn-minus', { show: quantity > 0 })}
+                            onClick={() => handleMinus(item)}
+                            className={cx('btn-minus', { show: quantity >= 0 })}
+                            disabled={quantity===0}
                         >
                             <FontAwesomeIcon icon={faMinus} />
                         </button>
-                        <span className={cx('quantity', { show: quantity > 0 })}>{quantity}</span>
+                        <span className={cx('quantity', { show: quantity >= 0 })}>{quantity}</span>
                         <button
-                            onClick={(event) => handleAdd(event, item)}
-                            className={cx('btn-add', { show: quantity > 0 })}
+                            onClick={() => handleAdd(item)}
+                            className={cx('btn-add', { show: quantity >= 0 })}
                         >
                             <FontAwesomeIcon icon={faAdd} />
                         </button>
@@ -61,7 +67,7 @@ function CartItem({ item, onChange, onRemove }) {
                 </td>
                 <td width={100} className="text-right">
                     <button
-                        onClick={() => handleRemoveCartItem(item.detail_id)}
+                        onClick={() => handleRemoveCartItem(item)}
                         className={cx('btn-remove')}
                         // disabled={item.status !== 0}
                     >

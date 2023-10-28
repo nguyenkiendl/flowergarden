@@ -132,113 +132,54 @@ class Orders extends Database
         foreach ($datas as $data) {
             $productId = intval($data['product_id']);
             $quantity = intval($data['quantity']);
-            $exists = $this->checkExistOrder($orderId, $productId);
-            if ($exists) {
-                $this->updateOrder($orderId, $productId, $quantity);
-            } else {
+            $detailId = $this->checkOrderExist($orderId, $productId, $quantity);
+            if ($detailId!=0) {
+                $this->updateOrder($detailId, $quantity);
+            } else{
                 $this->addOrder($orderId, $productId, $quantity);
             }
         }
-        $resultsServices = $this->getOrderBy($orderId);
         $db->close();
-        return $resultsServices;
+        return true;
     }
 
-    public function updateOrders($customerId, $datas=[])
+    public function checkOrderExist($orderId, $productId, $quantity)
     {
         $db=$this->connect();
-        $createdAt = date('Y-m-d H:i:s');
-        $customerId = intval($customerId);
-        foreach ($datas as $data) {
-            $orderId = intval($data['order_id']);
-            $quantity = intval($data['quantity']);
-            if ($quantity == 0) {
-                $db->query("DELETE FROM orders WHERE order_id=$orderId");
-            } else {
-                $order = $db->query("SELECT product_id, quantity FROM `orders` WHERE order_id=$orderId");
-                while($row = $order->fetch_object()){
-                    if ($row && $row->product_id && $row->quantity) {
-                        $db->query("UPDATE `orders` SET quantity=$quantity WHERE order_id=$orderId");
-                        $newQuantity = $quantity - $row->quantity;
-                        $this->updateProductStore($row->product_id, $newQuantity);
-                    }
-                }
+        $detailId = 0;
+        $data = $db->query("SELECT detail_id FROM `order_detail` WHERE order_id=$orderId AND product_id=$productId");
+        while ($row = $data->fetch_object()){
+            if ($row->detail_id) {
+                $detailId = intval($row->detail_id);
             }
         }
-        $resultsServices = $this->getOrderBy($customerId);
         $db->close();
-        return $resultsServices;
+        return $detailId;
     }
 
-    public function checkExistOrder($orderId, $productId)
+    public function addOrder($orderId, $productId, $quantity)
     {
-    	$db=$this->connect();
-        $results = $db->query("
-            SELECT
-                detail_id
-            FROM 
-                `order_detail`
-            WHERE 
-                order_id = $orderId AND product_id=$productId
-        ");
-        if ($results->num_rows === 0) {
-            return false;
+        if($quantity > 0){
+            $db=$this->connect();
+            $createdAt = date('Y-m-d H:i:s');
+
+            $db->query("
+                INSERT INTO `order_detail` (`product_id`, `order_id`, `quantity`, `created_at`) 
+                VALUES ($productId, $orderId, $quantity, '$createdAt')
+            ");
+            $db->close();
+        }
+        return true;
+    }
+
+    public function updateOrder($detailId, $quantity)
+    {
+        $db=$this->connect();
+        if ($quantity === 0) {
+            $db->query("DELETE FROM `order_detail` WHERE `detail_id`=$detailId");
         } else {
-            return true;
+            $db->query("UPDATE `order_detail` SET quantity=$quantity WHERE detail_id=$detailId");
         }
-    }
-
-    public function addOrder($orderId, $productId, $quantity=1)
-    {
-    	$db=$this->connect();
-        $createdAt = date('Y-m-d H:i:s');
-        $db->query("
-            INSERT INTO `order_detail` (`product_id`, `order_id`, `quantity`, `created_at`) 
-            VALUES ($productId, $orderId, $quantity, '$createdAt')
-        ");
-        if ($db->insert_id) {
-
-            $this->updateProductStore($productId, $quantity);
-        }
-        $db->close();
-        return true;
-    }
-
-    public function updateOrder($orderId, $productId, $quantity)
-    {
-    	$db=$this->connect();
-        $db->query("UPDATE `order_detail` SET quantity=quantity+$quantity WHERE order_id=$orderId AND product_id=$productId");
-        $db->close();
-        return true;
-    }
-
-    public function removeOrder($orderId)
-    {
-    	$db=$this->connect();
-        $order = $db->query("SELECT product_id, quantity FROM `order_detail` WHERE order_id=$orderId");
-        while($row = $order->fetch_object()){
-            if ($row && $row->product_id && $row->quantity) {
-                $productId = intval($row->product_id);
-                $quantity = intval($row->quantity);
-                $db->query("start transaction;");
-                $updated=$db->query("UPDATE `products` SET product_store=product_store+$quantity WHERE product_id=$productId");
-                $removed=$db->query("DELETE FROM order_detail WHERE `order_id`=$orderId");
-                if ($updated && $removed) {
-                    $db->query("commit;");
-                } else {
-                    $db->query("rollback;");
-                }
-            }
-        }
-        $db->close();
-        return true;
-    }
-
-    public function updateProductStore($productId, $quantity)
-    {
-    	$db=$this->connect();
-        $sql = "UPDATE `products` SET product_store=product_store-$quantity WHERE product_id=$productId";
-        $db->query($sql);
         $db->close();
         return true;
     }

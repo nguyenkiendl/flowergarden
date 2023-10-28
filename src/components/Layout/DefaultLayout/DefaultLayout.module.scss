@@ -43,26 +43,4 @@
         overflow: auto;
         height: 100%;
     }
-
-    .footer {
-        position: fixed;
-        bottom: 0;
-        display: flex;
-        justify-content: space-evenly;
-        align-items: center;
-        width: 100%;
-        border-top: 1px solid #ccc;
-        button {
-            flex: auto;
-            padding: 10px;
-            &.btn-yes {
-                background: var(--bg-primary);
-                color: #fff;
-            }
-            &.btn-close {
-                background: #ff5722;
-                color: #fff;
-            }
-        }
-    }
 }
