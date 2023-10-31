@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Header.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,9 +7,10 @@ import { useContext, useEffect } from 'react';
 import { AppContext } from '~/context/AppContext';
 const cx = classNames.bind(styles);
 function Header() {
+    const navigate = useNavigate();
     const { openBar, setOpenBar, customerSide, setCustomerSide } = useContext(AppContext);
     const handleClick = (e) => {
-        setCustomerSide(true);
+        navigate('/');
     };
 
     const handleClickBar = () => {
@@ -21,9 +22,9 @@ function Header() {
                 <div onClick={handleClickBar} className={cx('menu')}>
                     <FontAwesomeIcon icon={faBars} />
                 </div>
-                <a href="" className={cx('page-title')}>
+                <Link to="/" className={cx('page-title')}>
                     <h1>FLOWER GARDEN</h1>
-                </a>
+                </Link>
                 <button onClick={handleClick} className={cx('btn-new')}>
                     <FontAwesomeIcon icon={faPlusCircle} />
                 </button>

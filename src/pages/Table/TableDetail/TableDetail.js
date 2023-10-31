@@ -37,6 +37,25 @@ function TableDetail() {
     const handleBooking = (orderId) => {
         navigate(`/table/${tableId}/${orderId}`);
     };
+
+    const handleCloseTable = (tableId, orderId) => {
+        const apiUpdate = async () => {
+            const response = await orderServices.bookingEnd({
+                table_id: Number(tableId),
+                order_id: Number(orderId),
+            });
+            if (response) {
+                const newOrder = detail.orders.map((obj) => {
+                    if (obj.order_id === orderId) {
+                        obj.order_status = 1;
+                    }
+                    return obj;
+                });
+                setDetail({ ...detail, orders: newOrder });
+            }
+        };
+        apiUpdate();
+    };
     return (
         <div className="table-detail">
             <div className="page-title">
@@ -61,7 +80,7 @@ function TableDetail() {
                             <th className="text-center">STT</th>
                             <th className="text-center">ORDER</th>
                             <th className="text-center">T.Thái</th>
-                            <th>Thời gian</th>
+                            <th>T.Gian</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -72,7 +91,7 @@ function TableDetail() {
                                     <td className="text-center">#{index + 1}</td>
                                     <td className="text-center">{item.order_id}</td>
                                     <td className="text-center">
-                                        <span className={cx('status', `status-${item.status}`)}>
+                                        <span className={cx('status', `status-${item.order_status}`)}>
                                             {ORDER_STATUS[item.order_status]}
                                         </span>
                                     </td>
@@ -80,14 +99,24 @@ function TableDetail() {
                                         <div className={cx('time-ago')}>{timeAgo(item.created_at)}</div>
                                     </td>
                                     <td className="text-right">
-                                        <button
-                                            className="btn-detail"
-                                            onClick={() => {
-                                                handleBooking(item.order_id);
-                                            }}
-                                        >
-                                            Chi tiết
-                                        </button>
+                                        <div className={cx('btn-group')}>
+                                            <button
+                                                className={cx('btn-detail')}
+                                                onClick={() => {
+                                                    handleBooking(item.order_id);
+                                                }}
+                                            >
+                                                Chi tiết
+                                            </button>
+                                            <button
+                                                className={cx('btn-close')}
+                                                onClick={() => {
+                                                    handleCloseTable(item.table_id, item.order_id);
+                                                }}
+                                            >
+                                                Đóng Bàn
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             );

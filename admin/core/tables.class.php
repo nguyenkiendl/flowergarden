@@ -105,7 +105,7 @@ class Tables extends Database
         if ($table) {
             $data = $db->query("
                 SELECT 
-                    detail.order_id, products.product_id, products.product_name, products.product_price, products.product_store, products.product_type, products.product_unit, detail.quantity, detail.status 
+                    detail.order_id, products.*, detail.quantity, detail.status 
                 FROM 
                     `order_detail` as detail
                 LEFT JOIN 

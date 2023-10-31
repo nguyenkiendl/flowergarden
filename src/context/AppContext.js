@@ -13,32 +13,6 @@ export const AppProvider = ({ children }) => {
     const [customerSide, setCustomerSide] = useState(false);
     const [cartSide, setCartSide] = useState(false);
     const [cartCount, setCartCount] = useState(0);
-
-    const addOrders = (payload) => {
-        const Add = async () => {
-            const response = await orderServices.addOrders({
-                order_id: payload.order_id,
-                datas: payload.datas,
-            });
-            if (response) {
-                dispatch(actions.addOrders(response));
-            }
-        };
-        Add();
-    };
-
-    const updateOrders = (payload) => {
-        const Update = async () => {
-            const response = await orderServices.updateOrders({
-                customer_id: payload.customer_id,
-                datas: payload.datas,
-            });
-            if (response) {
-                dispatch(actions.updateOrders(response));
-            }
-        };
-        Update();
-    };
     const value = {
         customerSide,
         setCustomerSide,

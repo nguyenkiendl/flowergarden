@@ -1,14 +1,5 @@
 import * as request from '~/utils/request';
 
-export const ping = async () => {
-    try {
-        const res = await request.get('tables/ping.php');
-        return res.data;
-    } catch (error) {
-        console.log(error);
-    }
-};
-
 export const getTables = async (params) => {
     try {
         const res = await request.get('tables/get_tables.php', params);

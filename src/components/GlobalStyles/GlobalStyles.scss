@@ -3,6 +3,7 @@
 
 :root {
     --primary: #212529;
+    --bg-close: #ff5722;
     --bg-primary: #1276c5;
     --bg-default: #9e9e9e;
     --bg-success: #009688;
@@ -30,6 +31,11 @@ body {
     line-height: 1.5;
     text-rendering: optimizeSpeed;
 }
+.print-layout {
+    font-family: arial;
+    font-size: 14px;
+    line-height: 1.125;
+}
 
 table {
     width: 100%;
@@ -49,23 +55,23 @@ table {
             &.text-center {
                 text-align: center;
             }
+            &.text-right {
+                text-align: right;
+            }
         }
     }
     tbody {
         tr {
-            border-bottom: 1px solid #f1f1f1;
             color: var(--primary);
             td {
-                padding: 5px;
+                padding: 3px 5px;
+                line-height: 1.25;
                 &.text-center {
                     text-align: center;
                 }
                 &.text-right {
                     text-align: right;
                 }
-            }
-            &:last-child {
-                border-bottom: none;
             }
         }
     }
@@ -94,10 +100,9 @@ table {
 .content {
     width: calc(100%);
     min-height: calc(100vh - var(--header-height));
-    background: #f2f2f2;
+    background: #fff;
     padding: 0 0 3rem;
 }
-
 input,
 select {
     display: block;
@@ -141,11 +146,12 @@ button[disabled] {
 }
 
 .form-row {
+    position: relative;
     display: flex;
     gap: 4px;
     align-items: flex-end;
     margin-bottom: 1em;
-    padding: 0 1em;
+    padding: 5px 1em;
     .col {
         width: 100%;
         display: inline-flex;
@@ -194,27 +200,11 @@ button[disabled] {
     }
 }
 
-.btn-detail {
-    width: auto;
-    padding: 5px 12px;
-    border-radius: 4px;
-    font-size: 13px;
-    background: var(--bg-primary);
-    color: #fff;
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
-    opacity: 0.9;
-    &:hover {
-        opacity: 1;
-    }
-}
-
 .page-title {
     background: #03a9f4;
     font-weight: 600;
     font-size: 18px;
-    padding: 1rem;
+    padding: 15px;
     color: #ffffff;
     display: flex;
     justify-content: space-between;

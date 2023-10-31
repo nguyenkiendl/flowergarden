@@ -8,8 +8,8 @@ import NavBar from '~/components/NavBar';
 import { dateNow } from '~/utils/filters';
 import ProductList from '~/components/ProductList';
 import * as cartServices from '~/apiServices/cartServices';
-import { AppContext } from '~/context/AppContext';
 import CartSide from '~/components/Layout/DefaultLayout/CartSide';
+import { BookProvider } from '~/context/BookContext';
 function Booking() {
     const { tableId, orderId } = useParams();
     const [detail, setDetail] = useState({});
@@ -35,9 +35,9 @@ function Booking() {
                 },
             });
             if (res !== undefined) {
-                const datas = res.map( (obj, index) => {
-                    return {...obj, id: index + 1}
-                })
+                const datas = res.map((obj, index) => {
+                    return { ...obj, id: index + 1 };
+                });
                 setCarts(datas);
             }
         };
@@ -58,29 +58,27 @@ function Booking() {
         //     }
         // };
         // addToCart();
-        
-        const existCart = carts.some( obj => obj.product_id === product.product_id);
-        if(existCart) {
-            setCarts( prevCart => {
-                const newCarts = prevCart.map( obj => {
+
+        const existCart = carts.some((obj) => obj.product_id === product.product_id);
+        if (existCart) {
+            setCarts((prevCart) => {
+                const newCarts = prevCart.map((obj) => {
                     if (obj.product_id === product.product_id) {
                         const newQuantity = obj.quantity + 1;
-                        return {...obj, quantity: newQuantity}
+                        return { ...obj, quantity: newQuantity };
                     }
                     return obj;
-                })
+                });
                 return newCarts;
-            })
-            
+            });
         } else {
             const newCarItem = {
                 ...product,
                 id: carts.length + 1,
-                quantity: 1
-            }
+                quantity: 1,
+            };
             setCarts([...carts, newCarItem]);
         }
-        
     };
     return (
         <div className="table-detail">
@@ -92,9 +90,11 @@ function Booking() {
 
                 <div>{dateNow()}</div>
             </div>
-            <ProductList onClick={handleClickAdd} />
-            <CartSide carts={carts} setCarts={setCarts}/>
-            <NavBar cartCount={cartCount} />
+            <BookProvider>
+                <ProductList onClick={handleClickAdd} />
+                <CartSide carts={carts} setCarts={setCarts} />
+                <NavBar cartCount={cartCount} />
+            </BookProvider>
         </div>
     );
 }

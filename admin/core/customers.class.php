@@ -10,81 +10,9 @@ class Customers extends Database
 		
 	}
 
-    public function getNewCustomers()
-    {
-        $db=$this->connect();
-        $data = $db->query("
-            SELECT 
-                customers.customer_id, customers.created_at, tickets.ticket_name, tickets.ticket_price, tickets.ticket_payment
-            FROM 
-                `customers` 
-            LEFT JOIN
-                `tickets` ON tickets.ticket_id = customers.ticket_id
-            ORDER BY 
-                customers.customer_id DESC
-        ");
-        $db->close();
-        $customers = [];
-        while ($row = $data->fetch_object()){
-            if ($row->customer_id) {
-                $cusotmer = [
-                    'value' => intval($row->customer_id),
-                    'label' => 'KH-'. $row->customer_id . ' (' .number_format($row->ticket_price).'đ)'
-                ];
-                $customers[] = $cusotmer;
-            }
-        }
-        return $customers;
-    }
-
-    public function ping()
-    {
-        $db=$this->connect();
-        $data = $db->query("SELECT COUNT(*) as count FROM `customers` WHERE customers.created_at >= NOW() - INTERVAL 1 MINUTE");
-        $count = 0;
-        $customers = [];
-        while ($row = $data->fetch_object()){
-            $count = intval($row->count);
-        }
-
-        if ($count > 0) {
-            $data = $db->query("
-                SELECT 
-                    customers.*, tickets.*
-                FROM 
-                    `customers` 
-                LEFT JOIN
-                    `tickets` ON tickets.ticket_id = customers.ticket_id
-                WHERE 
-                    customers.created_at >= NOW() - INTERVAL 1 MINUTE
-                ORDER BY 
-                    customers.customer_id DESC
-            ");
-            while ($row = $data->fetch_object()){
-                if ($row->customer_id) {
-                    $row->customer_id = intval($row->customer_id);
-                    $row->customer_number = intval($row->customer_number);
-                    $row->ticket_price = intval($row->ticket_price);
-                    $customers[] = $row;
-                }
-            }
-        }
-        $db->close();
-        return $customers;
-    }
-
-	public function getCustomers($perPage, $page, $keyword='', $filters=[])
+	public function getCustomers()
     {
     	$db=$this->connect();
-        $offset = ($page - 1) * $perPage;
-        $where = "1=1 ";
-        if ($filters && $filters['status']) {
-            $status = $filters['status'];
-            $where .= "AND customers.customer_status = '$status'";
-        }
-        if ($keyword!='') {
-            $where .= "AND customers.customer_id LIKE '%$keyword%'";
-        }
         $data = $db->query("
             SELECT 
                 customers.customer_id, customers.customer_number, customers.customer_type, customers.created_at, tickets.ticket_price, tickets.ticket_name, tickets.ticket_payment
@@ -96,7 +24,6 @@ class Customers extends Database
                  customers.created_at >= NOW() - INTERVAL 24 HOUR
             ORDER BY 
                 customers.customer_id DESC
-            LIMIT $offset,$perPage
         ");
         $db->close();
         $customers = [];
@@ -108,7 +35,6 @@ class Customers extends Database
                 $customers[] = $row;
             }
         }
-
         return $customers;
     }
 
@@ -242,10 +168,12 @@ class Customers extends Database
         $customer = (object)[];
         if ($db->insert_id) {
             $customerId = $db->insert_id;
-            $data = $db->query("SELECT * FROM `customers` WHERE customer_id=$customerId");
+            $data = $db->query("
+                SELECT customers.*, tickets.* FROM `customers` LEFT JOIN `tickets` ON tickets.ticket_id = customers.ticket_id WHERE customers.customer_id=$customerId");
             while ($row = $data->fetch_object()){
                 $row->customer_id = intval($row->customer_id);
                 $row->customer_number = intval($row->customer_number);
+                $row->ticket_price = intval($row->ticket_price);
                 $customer = $row;
                 $customer->orders = [];
             }

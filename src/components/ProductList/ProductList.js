@@ -8,6 +8,7 @@ import ProductItem from './ProductItem';
 
 const cx = classNames.bind(styles);
 function ProductList({ onClick }) {
+    const [tabs, setTabs] = useState([]);
     const [activeTab, setActiveTab] = useState('water');
     const [productList, setProductList] = useState([]);
     const [isReset, setIsReset] = useState(false);
@@ -24,11 +25,18 @@ function ProductList({ onClick }) {
         setActiveTab(tab);
     };
 
-    const tabContent = (type) => {
-        return productList.filter((obj) => {
-            return obj.product_type === type;
-        });
+    const tabControl = () => {
+        const newTabs =
+            productList?.map((obj) => {
+                return {
+                    key: obj.category_key,
+                    label: obj.category_name,
+                };
+            }) || [];
+        console.log(productList);
+        return newTabs;
     };
+
     const subHeadTitle = (type) => {
         return WATERS.find((obj) => {
             return obj.key === type;
@@ -40,7 +48,7 @@ function ProductList({ onClick }) {
             <div className={cx('product-list')}>
                 <nav className={cx('head')}>
                     <div className={cx('tabs')}>
-                        {PRODUCTS.map((tab, index) => {
+                        {tabControl().map((tab, index) => {
                             return (
                                 <span
                                     key={index}
@@ -55,28 +63,37 @@ function ProductList({ onClick }) {
                         })}
                     </div>
                 </nav>
-                <div className={cx('tab-content', { active: 'water' === activeTab })}>
-                    {WATERS.map((obj) => {
-                        return (
-                            <div key={obj.key} className={cx('product-section')}>
-                                <h4>{subHeadTitle(obj.key)}</h4>
-                                <div className={cx('product-row')}>
-                                    {tabContent(obj.key).map((item) => {
-                                        return (
-                                            <ProductItem
-                                                key={item.product_id}
-                                                item={item}
-                                                isReset={isReset}
-                                                onClick={onClick}
-                                            />
-                                        );
-                                    })}
-                                </div>
+                {productList.map((obj) => {
+                    return (
+                        <div
+                            key={obj.category_key}
+                            className={cx('tab-content', { active: obj.category_key === activeTab })}
+                        >
+                            <div className={cx('product-section')}>
+                                {Object.keys(obj.products).map((keyName) => {
+                                    const subProducts = obj.products[keyName];
+                                    return (
+                                        <div key={keyName} className={cx('product-row')}>
+                                            <h4>{subHeadTitle(keyName)}</h4>
+                                            {subProducts.map((item) => {
+                                                return (
+                                                    <ProductItem
+                                                        key={item.product_id}
+                                                        item={item}
+                                                        isReset={isReset}
+                                                        onClick={onClick}
+                                                    />
+                                                );
+                                            })}
+                                        </div>
+                                    );
+                                })}
                             </div>
-                        );
-                    })}
-                </div>
+                        </div>
+                    );
+                })}
             </div>
+            <div className={cx('fragment')}></div>
         </>
     );
 }

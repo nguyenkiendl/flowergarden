@@ -9,7 +9,7 @@
         display: none;
     }
     .btn-booking-begin {
-        background: #00bcd4;
+        background: #4caf50;
         color: #fff;
         font-size: 1em;
         text-align: center;
@@ -91,11 +91,45 @@
     border-radius: 4px;
     color: #fff;
     text-align: center;
-    background: var(--bg-default);
+    border: 1px solid var(--bg-default);
     &.status-0 {
-        background: var(--order-open);
+        color: var(--order-open);
+        border: 1px solid var(--order-open);
     }
     &.status-1 {
-        background: var(--order-close);
+        color: var(--order-close);
+        border: 1px solid var(--order-close);
     }
+}
+.btn-group {
+    display: flex;
+    gap: 3px;
+    button {
+        width: auto;
+        padding: 7px 5px;
+        border-radius: 4px;
+        font-size: 13px;
+        background: var(--bg-primary);
+        color: #fff;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+        opacity: 0.9;
+        &:hover {
+            opacity: 1;
+        }
+        &.btn-detail {
+            background: var(--bg-primary);
+            color: #fff;
+        }
+        &.btn-close {
+            background: var(--bg-close);
+            color: #fff;
+        }
+    }
+}
+.time-ago {
+    font-size: 10px;
+    white-space: nowrap;
+    color: #ff5722;
 }

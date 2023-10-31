@@ -1,10 +1,8 @@
 import classNames from 'classnames/bind';
 import styles from '~/components/Layout/DefaultLayout/DefaultLayout.module.scss';
 import Input from '~/components/Form/Input';
-import Select from '~/components/Form/Select';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { AppContext } from '~/context/AppContext';
-import { CUSTOMER_TYPE } from '~/utils/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +14,6 @@ function CustomerSide() {
     const [number, setNumber] = useState(1);
     const [customerId, setCustomerId] = useState(0);
     const [phone, setPhone] = useState('');
-    let optionsType = CUSTOMER_TYPE;
 
     const handleNumberChange = (number) => {
         setNumber(number);
@@ -104,9 +101,7 @@ function CustomerSide() {
             <div ref={wrapperRef} className={cx('right-sides', { show: customerSide })}>
                 <iframe
                     id="iframe-ticket"
-                    src={`${
-                        process.env.REACT_APP_BASEURL
-                    }/prints/ticket.php?customer_id=${customerId}&time=${Date.now()}`}
+                    src={`${process.env.REACT_APP_BASEURL}/prints/ticket.php?customer_id=${customerId}`}
                     style={{ display: 'none' }}
                     title="PRINT TICKET"
                 />

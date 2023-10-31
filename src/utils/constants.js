@@ -93,6 +93,26 @@ export const WATERS = [
         label: 'Nước ngọt',
         active: false,
     },
+    {
+        key: 'forest',
+        label: 'Đặc sản rừng',
+        active: false,
+    },
+    {
+        key: 'sea',
+        label: 'Hải sản',
+        active: false,
+    },
+    {
+        key: 'vegetable',
+        label: 'Rau củ',
+        active: false,
+    },
+    {
+        key: 'combo',
+        label: 'Combo BBQ',
+        active: false,
+    },
 ];
 
 export const CART_STATUS = {

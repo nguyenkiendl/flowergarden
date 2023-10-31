@@ -1,20 +1,29 @@
+.fragment {
+    height: 100px;
+}
+.product-section {
+    h4 {
+        padding: 7px 15px;
+        color: var(--bg-primary);
+        background: #efefef;
+    }
+}
 .product-row {
     display: flex;
     flex-wrap: wrap;
     border-top: 1px solid #ccc;
-    padding-bottom: 20px;
+    padding: 5px;
     > h4 {
         display: block;
         width: 100%;
     }
     .product-item {
         position: relative;
-        width: 130px;
+        width: 126px;
         max-height: 125px;
         overflow: hidden;
         gap: 5px;
         padding: 5px 5px 10px;
-        border-bottom: 1px solid #ccc;
 
         &:active {
             background: #ff9800;
@@ -38,7 +47,7 @@
             height: 100%;
             background: #fff;
             img {
-                max-width: 100%;
+                width: 100%;
                 height: 100%;
                 max-height: 125px;
                 object-fit: cover;
@@ -104,7 +113,7 @@
             font-size: 13px;
             font-weight: 500;
             position: absolute;
-            left: 3px;
+            left: 0;
             bottom: 0;
             background: #817d7d;
             color: #fff;
@@ -113,10 +122,15 @@
         }
         .price {
             color: #ff5722;
+            background: #ffeb3b;
+            line-height: 1.25;
+            padding: 0px 7px;
+            border-radius: 3px;
             position: absolute;
             right: 4px;
             top: 3px;
             font-weight: 600;
+            text-shadow: 0px 1px 1px #ffffff;
         }
     }
 }

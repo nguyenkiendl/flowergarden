@@ -5,128 +5,14 @@
 require_once __DIR__ . '/database.php';
 class Orders extends Database
 {
-	function __construct()
-	{
-
-	}
-
-    public function ping()
+    function __construct()
     {
-        $db=$this->connect();
-        $data = $db->query("SELECT COUNT(*) as count FROM `orders` WHERE orders.status='processing' AND orders.updated_at >= NOW() - INTERVAL 1 MINUTE");
-        
-        $count = 0;
-        $orders = [];
-        while ($row = $data->fetch_object()){
-            $count = intval($row->count);
-        }
-        if ($count > 0) {
-            $data = $db->query("
-                SELECT 
-                    customers.customer_id, customers.customer_code, customers.customer_status, detail.detail_id, detail.order_id, products.product_name, products.product_price, products.product_type, products.product_unit, detail.quantity, detail.created_at, detail.updated_at, detail.status  
-                FROM 
-                    `order_detail` as detail
-                LEFT JOIN
-                    `orders` ON orders.order_id = detail.order_id
-                LEFT JOIN
-                    `customers` ON customers.customer_id = orders.customer_id
-                LEFT JOIN
-                    `products` ON products.product_id = detail.product_id
-                WHERE 
-                    orders.status='processing' AND orders.updated_at >= NOW() - INTERVAL 1 MINUTE
-                ORDER BY 
-                    orders.order_id DESC
-            ");
-            while ($row = $data->fetch_object()){
-                if ($row->order_id) {
-                    $row->detail_id = intval($row->detail_id);
-                    $row->order_id = intval($row->order_id);
-                    $row->product_price = intval($row->product_price);
-                    $row->quantity = intval($row->quantity);
-                    $orders[] = $row;
-                }
-            }
-        }
-        $db->close();
-        return $orders;
-    }
 
-    public function getOrders($perPage, $page, $keyword='')
-    {
-        $db=$this->connect();
-        $offset = ($page - 1) * $perPage;
-        $where = "1=1 AND detail.status IN ('processing', 'done')";
-        if ($keyword!='') {
-            $where .= "AND customers.customer_code LIKE '%$keyword%'";
-        }
-        $data = $db->query("
-            SELECT 
-                customers.customer_id, customers.customer_code, customers.customer_status, detail.detail_id, detail.order_id, products.product_name, products.product_price, products.product_type, products.product_unit, detail.quantity, detail.created_at, detail.updated_at, detail.status  
-            FROM 
-                `order_detail` as detail
-            LEFT JOIN
-                `orders` ON orders.order_id = detail.order_id
-            LEFT JOIN
-                `customers` ON customers.customer_id = orders.customer_id
-            LEFT JOIN
-                `products` ON products.product_id = detail.product_id
-            WHERE 
-                $where
-            ORDER BY 
-                detail.detail_id ASC
-            LIMIT $offset,$perPage
-        ");
-        $db->close();
-        $orders = [];
-        while ($row = $data->fetch_object()){
-            if ($row->order_id) {
-                $row->detail_id = intval($row->detail_id);
-                $row->order_id = intval($row->order_id);
-                $row->product_price = intval($row->product_price);
-                $row->quantity = intval($row->quantity);
-                $orders[] = $row;
-            }
-        }
-
-        return $orders;
-    }
-
-    public function getOrdersBy($customerId)
-    {
-        $db=$this->connect();
-
-        $data = $db->query("
-            SELECT 
-                customers.customer_id, customers.customer_code, customers.customer_status,
-                orders.order_id, products.product_name, products.product_price, products.product_type, products.product_unit, orders.quantity, orders.created_at, orders.status  
-            FROM 
-                `orders` 
-            LEFT JOIN
-                `customers` ON customers.customer_id = orders.customer_id
-            LEFT JOIN
-                `products` ON products.product_id = orders.product_id
-            WHERE 
-                customers.customer_id=$customerId
-            ORDER BY 
-                orders.order_id DESC
-        ");
-        $db->close();
-        $orders = [];
-        while ($row = $data->fetch_object()){
-            if ($row->order_id) {
-                $row->order_id = intval($row->order_id);
-                $row->product_price = intval($row->product_price);
-                $row->quantity = intval($row->quantity);
-                $orders[] = $row;
-            }
-        }
-
-        return $orders;
     }
 
     public function addOrders($orderId, $datas=[])
     {
-    	$db=$this->connect();
+        $db=$this->connect();
         $createdAt = date('Y-m-d H:i:s');
         $orderId = intval($orderId);
         foreach ($datas as $data) {
@@ -186,7 +72,7 @@ class Orders extends Database
 
     public function getOrderBy($orderId)
     {
-    	$db=$this->connect();
+        $db=$this->connect();
         $results = [];
         $data = $db->query("
             SELECT 
@@ -228,83 +114,6 @@ class Orders extends Database
         $db->query("UPDATE `order_detail` SET status='$status', updated_at='$updateAt' WHERE detail_id=$detailId");
         $db->close();
         return true;
-    }
-
-    public function getOrdersByCustomer($customerId)
-    {
-        $db=$this->connect();
-        $customer = (object)[];
-        $customer->orders = [];
-        $data = $db->query("
-            SELECT 
-                customers.customer_id, customers.customer_number, tickets.ticket_name, customers.created_at, customers.customer_status
-            FROM 
-                `customers` 
-            LEFT JOIN 
-                `tickets` on tickets.ticket_id = customers.ticket_id 
-            WHERE 
-                customers.customer_id = $customerId
-        ");
-        while ($row = $data->fetch_object()){
-            $row->customer_id = intval($row->customer_id);
-            $row->customer_number = intval($row->customer_number);
-            $customer = $row;
-        }
-        if ($customer) {
-            $orders = [];
-            $data = $db->query("
-                SELECT 
-                    orders.order_id, tickets.ticket_payment, orders.created_at 
-                FROM 
-                    `orders` 
-                LEFT JOIN 
-                    `customers` on customers.customer_id = orders.customer_id 
-                LEFT JOIN 
-                    `tickets` on tickets.ticket_id = orders.ticket_id 
-                WHERE 
-                    customers.customer_id = $customerId
-                ORDER BY 
-                    orders.order_id ASC
-            ");
-            while ($row = $data->fetch_object()){
-                $row->order_id = intval($row->order_id);
-                $orders[] = $row;
-            }
-            $customer->orders = $orders;
-        }
-        $db->close();
-        return $customer;
-    }
-
-    public function addNewOrder($customerId)
-    {
-        $db=$this->connect();
-        $createdAt = date('Y-m-d H:i:s');
-        $db->query("
-            INSERT INTO `orders` ( `customer_id`, `ticket_id`, `created_at`) 
-            VALUES ($customerId, 2, '$createdAt')
-        ");
-        $order=(object)[];
-        if ($db->insert_id) {
-            $data = $db->query("
-                SELECT 
-                    orders.order_id, tickets.ticket_payment, orders.created_at 
-                FROM 
-                    `orders` 
-                LEFT JOIN 
-                    `tickets` on tickets.ticket_id = orders.ticket_id
-                WHERE 
-                    orders.customer_id = $customerId
-                ORDER BY 
-                    orders.order_id ASC
-            ");
-            while ($row = $data->fetch_object()){
-                $row->order_id = intval($row->order_id);
-                $order = $row;
-            }
-        }
-        $db->close();
-        return $order;
     }
 
     public function bookingBegin($tableId, $type)
@@ -392,7 +201,6 @@ class Orders extends Database
                 $row->order_id = intval($row->order_id);
                 $row->product_id = intval($row->product_id);
                 $row->product_price = intval($row->product_price);
-                $row->product_store = intval($row->product_store);
                 $row->quantity = intval($row->quantity);
                 $orders[] = $row;
             }
@@ -435,7 +243,6 @@ class Orders extends Database
                 $row->order_id = intval($row->order_id);
                 $row->product_id = intval($row->product_id);
                 $row->product_price = intval($row->product_price);
-                $row->product_store = intval($row->product_store);
                 $row->quantity = intval($row->quantity);
                 $orders[] = $row;
             }

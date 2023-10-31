@@ -108,7 +108,6 @@ class Carts extends Database
             $row->status = intval($row->status);
             $row->product_id = intval($row->product_id);
             $row->product_price = intval($row->product_price);
-            $row->product_store = intval($row->product_store);
             $row->quantity = intval($row->quantity);
             $results[] = $row;
         }

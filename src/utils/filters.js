@@ -34,6 +34,17 @@ export const timeAgo = (value) => {
     return moment(value).fromNow();
 };
 
+export const timeIn = (value) => {
+    if (!value) {
+        return '-';
+    }
+    return moment(value).format('DD/MM/YY hh:mm');
+};
+
+export const timePrint = () => {
+    return moment().format('hh:mm');
+};
+
 export const mergeCustomers = (arr1, arr2) => {
     let combinedArr = [];
 

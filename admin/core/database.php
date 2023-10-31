@@ -2,9 +2,9 @@
 date_default_timezone_set('Asia/Ho_Chi_Minh');
 class Database {
     private $servername = 'localhost';
-    private $username = 'root';
-    private $password = '123456';
-    private $dbname = 'flowergarden';
+    private $username = 'admin_flowergarden';
+    private $password = 'UL1M8SrWW';
+    private $dbname = 'admin_flowergarden';
 
     protected function connect()
     {

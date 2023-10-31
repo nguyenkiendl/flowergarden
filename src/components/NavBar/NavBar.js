@@ -1,19 +1,20 @@
 import classNames from 'classnames/bind';
 import styles from './NavBar.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartPlus, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faCartPlus, faChevronLeft, faPrint } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { AppContext } from '~/context/AppContext';
 import * as orderServices from '~/apiServices/orderServices';
+import { BookContext } from '~/context/BookContext';
 const cx = classNames.bind(styles);
 
 function NavBar({ cartCount }) {
     const navigate = useNavigate();
     const { tableId, orderId } = useParams();
     const { setCartSide } = useContext(AppContext);
-    const [ iframeSrc, setIframeSrc] = useState('');
-    
+    const { saveCart } = useContext(BookContext);
+
     const handleBack = () => {
         navigate(`/table/${tableId}`);
     };
@@ -22,15 +23,6 @@ function NavBar({ cartCount }) {
         const f = document.frames ? document.frames[id] : document.getElementById('iframe-processing');
         const w = f.contentWindow || f;
         w.postMessage({ action: 'print-processing' }, f.src);
-        const apiUpdate = async () => {
-            await orderServices.updateOrderStatus({
-                order_id: Number(orderId),
-                status: 1,
-            });
-        };
-        setTimeout(() => {
-            apiUpdate();
-        }, 1000);
     };
 
     const handlePrint = () => {
@@ -61,34 +53,55 @@ function NavBar({ cartCount }) {
         const w = f.contentWindow;
         w.postMessage({ action: 'print-bill' }, f.src);
     };
+
     return (
         <>
             <iframe
-                key={cartCount+ 1}
+                key={saveCart + 1}
                 id="iframe-bill"
-                src={`${process.env.REACT_APP_BASEURL}/prints/bill.php?order_id=${orderId}`}
+                src={`/print-bill/${orderId}`}
                 style={{ display: 'none' }}
                 title="PRINT BILL"
             />
             <iframe
+                key={saveCart + 2}
                 id="iframe-processing"
-                src={`${process.env.REACT_APP_BASEURL}/prints/processing.php?order_id=${orderId}&time=${Date.now()}`}
+                src={`/print-processing/${orderId}`}
                 style={{ display: 'none' }}
-                title="PRINT BILL"
+                title="PRINT PROCESSING"
             />
             <div className={cx('navbar')}>
-                <button className={cx('btn-back')} onClick={handleBack}>
-                    <FontAwesomeIcon icon={faChevronLeft} /> Quay lại
-                </button>
-                <button className={cx('btn-processing')} onClick={handleProcessing}>
-                    IN Chế Biến
-                </button>
-                <button className={cx('btn-print')} onClick={handlePrint}>
-                    IN BILL
-                </button>
-                <button className={cx('btn-order-add')} onClick={() => setCartSide(true)}>
-                    <FontAwesomeIcon icon={faCartPlus} /> Giỏ Hàng {cartCount}
-                </button>
+                <div className={cx('navbar-row')}>
+                    <button className={cx('btn-back')} onClick={handleBack}>
+                        <span>
+                            <FontAwesomeIcon icon={faChevronLeft} />
+                        </span>
+                    </button>
+                    <button className={cx('btn-processing')} onClick={handleProcessing} disabled={cartCount === 0}>
+                        <span>
+                            <FontAwesomeIcon icon={faPrint} />
+                        </span>
+                        <span>IN Chế Biến</span>
+                    </button>
+                    <button className={cx('btn-print')} onClick={handlePrint} disabled={cartCount === 0}>
+                        <span>
+                            <FontAwesomeIcon icon={faPrint} />
+                        </span>
+                        <span>IN BILL</span>
+                    </button>
+                    <button
+                        className={cx('btn-order-add')}
+                        onClick={() => setCartSide(true)}
+                        disabled={cartCount === 0}
+                    >
+                        <span>
+                            <FontAwesomeIcon icon={faCartPlus} />
+                            {cartCount}
+                        </span>
+                        <span>Giỏ Hàng</span>
+                    </button>
+                </div>
+                <br></br>
             </div>
         </>
     );
