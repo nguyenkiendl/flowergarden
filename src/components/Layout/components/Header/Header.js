@@ -19,15 +19,9 @@ function Header() {
     return (
         <header className={cx('header')}>
             <div className={cx('inner')}>
-                <div onClick={handleClickBar} className={cx('menu')}>
-                    <FontAwesomeIcon icon={faBars} />
-                </div>
                 <Link to="/" className={cx('page-title')}>
                     <h1>FLOWER GARDEN</h1>
                 </Link>
-                <button onClick={handleClick} className={cx('btn-new')}>
-                    <FontAwesomeIcon icon={faPlusCircle} />
-                </button>
             </div>
         </header>
     );

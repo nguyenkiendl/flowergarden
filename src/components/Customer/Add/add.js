@@ -41,7 +41,7 @@ function CusomerAdd({ onAddNew }) {
                 setCustomer(data);
                 setTimeout(() => {
                     handlePrint();
-                }, 200);
+                }, 400);
             } else {
                 alert(res.message);
             }
@@ -59,7 +59,7 @@ function CusomerAdd({ onAddNew }) {
         setShowPhone(!showPhone);
     };
     return (
-        <div>
+        <div className={cx('form')}>
             {customer ? (
                 <iframe
                     id="iframe-ticket"
@@ -70,66 +70,63 @@ function CusomerAdd({ onAddNew }) {
             ) : (
                 ''
             )}
-
-            <div className={cx('body')}>
-                <div className="form-row">
-                    <label className="col">
-                        <div className={cx('input-field')}>
-                            <span className={cx('input-icon')}>
-                                <FontAwesomeIcon icon={faUsers} />
-                            </span>
-                            <span className={cx('input-label')}>Số lượng:</span>
-                            <span className={cx('input-value')}>
-                                <Input
-                                    id="customer-number"
-                                    className="customer-number"
-                                    type="number"
-                                    min="1"
-                                    value={number}
-                                    onChange={handleNumberChange}
-                                />
-                            </span>
-                        </div>
-                        <div className={cx('number-selects')}>
-                            {numberSelects().map((n, index) => {
-                                return (
-                                    <span key={index} className={cx('number-item')} onClick={() => setNumber(n)}>
-                                        {n}
-                                    </span>
-                                );
-                            })}
-                        </div>
-                    </label>
-                    <button className={cx('btn-show')} onClick={handleShowPhone}>
-                        {showPhone ? 'Ẩn SĐT' : 'Hiện SĐT'}
-                    </button>
-                </div>
-
-                <div className={cx('form-row')} hidden={!showPhone}>
-                    <label className="col">
-                        <div className={cx('input-field')}>
-                            <span className={cx('input-icon')}>
-                                <FontAwesomeIcon icon={faUsers} />
-                            </span>
-                            <span className={cx('input-label')}>SĐT:</span>
-                            <span className={cx('input-value')}>
-                                <Input
-                                    id="customer-phone"
-                                    className="customer-phone"
-                                    type="phone"
-                                    value={phone}
-                                    onChange={handlePhoneChange}
-                                />
-                            </span>
-                        </div>
-                    </label>
-                </div>
-                <div className="form-row">
-                    <div className="col">
-                        <button className="btn-primary" onClick={handleAddCustomer}>
-                            Thêm Và In Vé
-                        </button>
+            <div className="form-row">
+                <label className="col">
+                    <div className={cx('input-field')}>
+                        <span className={cx('input-icon')}>
+                            <FontAwesomeIcon icon={faUsers} />
+                        </span>
+                        <span className={cx('input-label')}>Số lượng:</span>
+                        <span className={cx('input-value')}>
+                            <Input
+                                id="customer-number"
+                                className="customer-number"
+                                type="number"
+                                min="1"
+                                value={number}
+                                onChange={handleNumberChange}
+                            />
+                        </span>
                     </div>
+                    <div className={cx('number-selects')}>
+                        {numberSelects().map((n, index) => {
+                            return (
+                                <span key={index} className={cx('number-item')} onClick={() => setNumber(n)}>
+                                    {n}
+                                </span>
+                            );
+                        })}
+                    </div>
+                </label>
+                <button className={cx('btn-show')} onClick={handleShowPhone}>
+                    {showPhone ? 'Ẩn SĐT' : 'Hiện SĐT'}
+                </button>
+            </div>
+
+            <div className={cx('form-row')} hidden={!showPhone}>
+                <label className="col">
+                    <div className={cx('input-field')}>
+                        <span className={cx('input-icon')}>
+                            <FontAwesomeIcon icon={faUsers} />
+                        </span>
+                        <span className={cx('input-label')}>SĐT:</span>
+                        <span className={cx('input-value')}>
+                            <Input
+                                id="customer-phone"
+                                className="customer-phone"
+                                type="phone"
+                                value={phone}
+                                onChange={handlePhoneChange}
+                            />
+                        </span>
+                    </div>
+                </label>
+            </div>
+            <div className="form-row">
+                <div className="col">
+                    <button className="btn-primary" onClick={handleAddCustomer}>
+                        Thêm Và In Vé
+                    </button>
                 </div>
             </div>
         </div>

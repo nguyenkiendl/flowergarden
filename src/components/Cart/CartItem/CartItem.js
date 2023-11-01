@@ -17,7 +17,7 @@ function CartItem({ item, onChange, onRemove }) {
     }, [cartSide, quantity]);
 
     const handleMinus = (item) => {
-        if (quantity===1) {
+        if (quantity === 1) {
             setQuantity(0);
             onRemove(item.id);
         } else {
@@ -25,7 +25,6 @@ function CartItem({ item, onChange, onRemove }) {
             setQuantity(newQuantity);
             onChange(item.id, newQuantity);
         }
-        
     };
     const handleAdd = (item) => {
         let newQuantity = quantity + 1;
@@ -39,22 +38,19 @@ function CartItem({ item, onChange, onRemove }) {
     };
     return (
         <>
-            <tr hidden={quantity===0} data-id={item.id}>
+            <tr className={cx('tr')} hidden={quantity === 0} data-id={item.id}>
                 <td width={100}>{item.product_name}</td>
                 <td width={50} className="text-center">
                     <div className={cx('btn-group')}>
                         <button
                             onClick={() => handleMinus(item)}
                             className={cx('btn-minus', { show: quantity >= 0 })}
-                            disabled={quantity===0}
+                            disabled={quantity === 0}
                         >
                             <FontAwesomeIcon icon={faMinus} />
                         </button>
                         <span className={cx('quantity', { show: quantity >= 0 })}>{quantity}</span>
-                        <button
-                            onClick={() => handleAdd(item)}
-                            className={cx('btn-add', { show: quantity >= 0 })}
-                        >
+                        <button onClick={() => handleAdd(item)} className={cx('btn-add', { show: quantity >= 0 })}>
                             <FontAwesomeIcon icon={faAdd} />
                         </button>
                     </div>

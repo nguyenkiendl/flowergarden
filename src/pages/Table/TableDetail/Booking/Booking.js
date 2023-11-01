@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
 import * as tableServices from '~/apiServices/tableServices';
 import NavBar from '~/components/NavBar';
-import { dateNow } from '~/utils/filters';
+import { dateNow, formatPrice } from '~/utils/filters';
 import ProductList from '~/components/ProductList';
 import * as cartServices from '~/apiServices/cartServices';
 import CartSide from '~/components/Layout/DefaultLayout/CartSide';
@@ -80,15 +80,20 @@ function Booking() {
             setCarts([...carts, newCarItem]);
         }
     };
+
+    let cartPrice = carts?.reduce((total, item) => total + item.quantity * item.product_price, 0);
     return (
         <div className="table-detail">
             <div className="page-title">
-                <div>
-                    <h3>{detail.table_name}</h3>
-                    <span>Đơn: {detail.order_id}</span>
+                <div className={cx('group-title')}>
+                    <h3 className={cx('title')}>ĐƠN {detail.order_id}</h3>
+                    <span className={cx('sub-title')}>{detail.table_name}</span>
                 </div>
-
-                <div>{dateNow()}</div>
+                <div className={cx('time')}>{dateNow()}</div>
+                <div className={cx('cart-price')}>
+                    <span>Tổng: </span>
+                    <strong>{formatPrice(cartPrice)}đ</strong>
+                </div>
             </div>
             <BookProvider>
                 <ProductList onClick={handleClickAdd} />

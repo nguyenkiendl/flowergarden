@@ -1,10 +1,9 @@
 import classNames from 'classnames/bind';
 import styles from './Home.module.scss';
 import * as customerServices from '~/apiServices/customerServices';
-import { useContext, useEffect, useState } from 'react';
 import CustomerList from '~/components/Customer';
-import { AppContext } from '~/context/AppContext';
 import Add from '~/components/Customer/Add';
+import { useEffect, useState } from 'react';
 
 const cx = classNames.bind(styles);
 function Home() {

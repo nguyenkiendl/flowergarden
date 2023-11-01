@@ -1,5 +1,5 @@
 .header {
-    height: 60px;
+    height: 40px;
     position: sticky;
     top: 0px;
     z-index: 1;
@@ -8,6 +8,7 @@
     .inner {
         display: flex;
         width: 100%;
+        height: 100%;
     }
     .menu {
         color: #ff5722;
@@ -25,6 +26,8 @@
         justify-content: center;
         text-align: center;
         flex: 1;
+        line-height: 1;
+        text-decoration: none;
     }
     .btn-new {
         position: relative;

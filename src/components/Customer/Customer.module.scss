@@ -12,7 +12,7 @@
     }
 }
 .customer {
-    padding: 0.5rem 1rem 2rem;
+    padding: 0.5em 1em 2em;
 }
 .number-selects {
     display: flex;
@@ -85,10 +85,13 @@
     border-radius: 4px;
     min-height: 80px;
     padding: 1rem 1rem 2rem;
-    margin-bottom: 1em;
+    margin-bottom: 5px;
     border: 1px solid;
     &:first-child {
         margin-top: 1rem;
+    }
+    &:last-child {
+        margin-bottom: 0;
     }
     &.new {
         border-color: var(--s-new);
@@ -124,7 +127,7 @@
         }
     }
     .type {
-        font-weight: 800;
+        font-weight: 600;
     }
     .price {
         position: absolute;

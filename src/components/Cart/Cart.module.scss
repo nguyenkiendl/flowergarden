@@ -1,3 +1,6 @@
+.tr {
+    border-top: 1px solid #f2f2f2;
+}
 .thumbnail {
     position: relative;
     border: 1px solid #009688;
@@ -60,6 +63,7 @@
     border-top: 1px solid #ccc;
     background: #fff;
     box-shadow: 0 1px 6px 0 #20212447;
+    z-index: 3;
     .footer-row {
         display: flex;
         justify-content: space-evenly;

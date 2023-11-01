@@ -25,6 +25,7 @@ function PrintTicket() {
 
     const handleMessage = (event) => {
         if (event.data.action === 'print-ticket') {
+            console.log('print-ticket');
             window.focus();
             window.print();
         }
@@ -39,7 +40,12 @@ function PrintTicket() {
     }, []);
     return (
         <>
-            <PrintHead tableKey={customer.customer_id} orderId={''} time={customer.created_at} title={'VÉ THAM QUAN'} />
+            <PrintHead
+                tableKey={customer.customer_id}
+                orderId={''}
+                time={customer.created_at}
+                title={'PHIẾU THÔNG TIN'}
+            />
             <div className={cx('print-body')}>
                 <table>
                     <thead>

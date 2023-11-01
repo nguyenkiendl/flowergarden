@@ -1,21 +1,28 @@
-.btn-wrapper {
+.btn-group {
+    position: absolute;
+    right: 12px;
+    bottom: -7px;
     display: flex;
     align-items: center;
-    flex: 1;
-    justify-content: center;
-    background: #fff;
-    padding: 10px;
-    &.hide {
-        display: none;
-    }
-    .btn-booking-begin {
-        background: #4caf50;
-        color: #fff;
-        font-size: 1em;
+    gap: 5px;
+    flex: 1 1;
+    justify-content: space-around;
+    button {
+        font-size: 13px;
         text-align: center;
         padding: 7px 12px;
         cursor: pointer;
         border-radius: 4px;
+        color: #fff;
+        box-shadow: 2px 2px 0px 0px rgba(32, 33, 36, 0.2784313725);
+        &.btn-booking-begin {
+            background: #4caf50;
+        }
+
+        &.btn-booking-end {
+            background: var(--bg-close);
+            text-transform: uppercase;
+        }
     }
 }
 
@@ -101,35 +108,76 @@
         border: 1px solid var(--order-close);
     }
 }
-.btn-group {
-    display: flex;
-    gap: 3px;
-    button {
-        width: auto;
-        padding: 7px 5px;
-        border-radius: 4px;
-        font-size: 13px;
-        background: var(--bg-primary);
-        color: #fff;
-        text-align: center;
-        text-decoration: none;
-        cursor: pointer;
-        opacity: 0.9;
-        &:hover {
-            opacity: 1;
-        }
-        &.btn-detail {
-            background: var(--bg-primary);
-            color: #fff;
-        }
-        &.btn-close {
-            background: var(--bg-close);
-            color: #fff;
-        }
+.cart-price {
+    position: absolute;
+    bottom: 0;
+    right: 12px;
+    strong {
+        color: #ff5722;
     }
 }
 .time-ago {
     font-size: 10px;
     white-space: nowrap;
     color: #ff5722;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    background: #fff;
+    margin-bottom: 10px;
+    thead {
+        th {
+            text-transform: uppercase;
+            text-align: center;
+            padding: 5px 7px;
+            color: var(--primary);
+            border-bottom: 1px dashed var(--primary);
+            text-align: left;
+            background: #efefef;
+            &.text-center {
+                text-align: center;
+            }
+            &.text-right {
+                text-align: right;
+            }
+        }
+    }
+    tbody {
+        tr {
+            color: var(--primary);
+            td {
+                border-bottom: 1px solid #f2f2f2;
+                padding: 7px 10px;
+                line-height: 1.25;
+                &.text-center {
+                    text-align: center;
+                }
+                &.text-right {
+                    text-align: right;
+                }
+            }
+        }
+    }
+    tfoot {
+        tr {
+            border-top: 1px dashed var(--primary);
+            td {
+                padding: 10px;
+                &.text-center {
+                    text-align: center;
+                }
+                &.text-right {
+                    text-align: right;
+                }
+            }
+        }
+    }
+}
+.group-row {
+    white-space: nowrap;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }

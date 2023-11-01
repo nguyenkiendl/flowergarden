@@ -1,12 +1,12 @@
-.navbar {
+.navmain {
     position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
     background: #fff;
     box-shadow: 0 1px 6px 0 #20212447;
-    z-index: 2;
-    .navbar-row {
+    z-index: 1;
+    .navmain-row {
         display: flex;
         justify-content: space-evenly;
         align-items: center;
@@ -26,7 +26,8 @@
         svg {
             font-size: 22px;
         }
-        &.btn-order-add {
+        &.active,
+        &:active {
             color: #ff5722;
         }
     }

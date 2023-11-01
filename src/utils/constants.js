@@ -122,8 +122,8 @@ export const CART_STATUS = {
 };
 
 export const ORDER_STATUS = {
-    0: 'Mở bàn',
-    1: 'Đóng bàn',
+    0: 'Mở',
+    1: 'Đã Chốt Đơn',
 };
 
 export const PAYMENT_STATUS = {
