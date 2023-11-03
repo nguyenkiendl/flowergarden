@@ -36,7 +36,12 @@ class Products extends Database
             $row->product_price = doubleval($row->product_price);
             $products[$row->product_type][] = $row;
         }
-
+        $sorts = ['coffee', 'tea', 'juice', 'cream', 'soda', 'beer'];
+        uksort($products, function ($k1, $k2) use ($sorts) {
+            $i1 = array_search($k1, $sorts);
+            $i2 = array_search($k2, $sorts);
+            return $i1 - $i2;
+        });
         return $products;
     }
 }

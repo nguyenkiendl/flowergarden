@@ -68,6 +68,7 @@ class Tables extends Database
             $orders = [];
             while ($row = $data->fetch_object()){
                 if ($row->order_id) {
+                    $row->table_id = intval($row->table_id);
                     $row->order_id = intval($row->order_id);
                     $row->order_status = intval($row->order_status);
                     $orders[] = $row;

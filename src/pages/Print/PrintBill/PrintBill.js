@@ -44,7 +44,7 @@ function PrintBill() {
                 tableKey={print.table_key}
                 orderId={print.order_id}
                 time={print.created_at}
-                title={'PHIẾU TẠM TÍNH'}
+                title={'PHIẾU TÍNH TIỀN'}
             />
             <div className={cx('print-body')}>
                 <table>

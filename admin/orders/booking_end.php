@@ -11,17 +11,10 @@ if (empty($input['table_id'])) {
     return send_json(false, 'Not Found Table');
 }
 
-if (empty($input['order_id'])) {
-    $error = true;
-    return send_json(false, 'Not Found Order');
-}
-
-
 if ($error==false) {
     $tableId = $input['table_id'];
-    $orderId = $input['order_id'];
     $orders = new Orders();
-    $response = $orders->bookingEnd($tableId, $orderId);
+    $response = $orders->bookingEnd($tableId);
     return send_json(true, 'OK', $response);
 } else {
     return send_json(false, 'FAILED');

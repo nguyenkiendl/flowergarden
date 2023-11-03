@@ -102,7 +102,7 @@ class Orders extends Database
     {
         $db=$this->connect();
         $updateAt = date('Y-m-d H:i:s');
-        $db->query("UPDATE `order_detail` SET status=$status, updated_at='$updateAt' WHERE order_id=$orderId");
+        $db->query("UPDATE `orders` SET order_status=$status, updated_at='$updateAt' WHERE order_id=$orderId");
         $db->close();
         return true;
     }
@@ -149,11 +149,10 @@ class Orders extends Database
         return $order;
     }
 
-    public function bookingEnd($tableId, $orderId)
+    public function bookingEnd($tableId)
     {
         $db=$this->connect();
         $db->query("UPDATE `tables` SET table_status=0 WHERE table_id=$tableId");
-        $db->query("UPDATE `orders` SET order_status=1 WHERE order_id=$orderId");
         $db->close();
         return true;
     }
