@@ -8,8 +8,10 @@ import PrintTicket from '~/pages/Print/PrintTicket';
 import PrintBill from '~/pages/Print/PrintBill';
 import PrintProcessing from '~/pages/Print/PrintProcessing';
 import BookingDetail from '~/pages/Table/TableDetail/Booking/BookingDetail';
+import Admin from '~/pages/Admin';
+import Store from '~/pages/Admin/Store';
+import Bbq from '~/pages/Bbq';
 const publicRoutes = [
-    { path: '/', component: Home },
     { path: '/tables', component: Table },
     { path: '/table/:tableId/', component: TableDetail },
     { path: '/table/:tableId/:orderId', component: Booking },
@@ -17,10 +19,14 @@ const publicRoutes = [
     { path: '/print-ticket/:customerId', component: PrintTicket, layout: PrintLayout },
     { path: '/print-bill/:orderId', component: PrintBill, layout: PrintLayout },
     { path: '/print-processing/:orderId', component: PrintProcessing, layout: PrintLayout },
+    //BBQ
+    { path: '/', component: Bbq },
 ];
 
 const privateRoutes = [
     //private routes
+    { path: '/super-admin', component: Admin },
+    { path: '/stores', component: Store },
 ];
 
 export { publicRoutes, privateRoutes };

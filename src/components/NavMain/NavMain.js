@@ -2,15 +2,15 @@ import classNames from 'classnames/bind';
 import styles from './NavMain.module.scss';
 const cx = classNames.bind(styles);
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSitemap, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faBurger, faSitemap } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 function NavMain() {
-    const [active, setActive] = useState('customers');
+    const [active, setActive] = useState('bbq');
     const navigate = useNavigate();
-    const handleCustomers = () => {
-        setActive('customers');
+    const handleBbqs = () => {
+        setActive('');
         navigate('/');
     };
 
@@ -22,14 +22,11 @@ function NavMain() {
         <>
             <div className={cx('navmain')}>
                 <div className={cx('navmain-row')}>
-                    <button
-                        className={cx('btn-customers', { active: active === 'customers' })}
-                        onClick={handleCustomers}
-                    >
+                    <button className={cx('btn-bbq', { active: active === '/' })} onClick={handleBbqs}>
                         <span>
-                            <FontAwesomeIcon icon={faUsers} />
+                            <FontAwesomeIcon icon={faBurger} />
                         </span>
-                        <span>Khách Hàng</span>
+                        <span>BBQ</span>
                     </button>
                     <button className={cx('btn-table-map', { active: active === 'tables' })} onClick={handleTableMap}>
                         <span>

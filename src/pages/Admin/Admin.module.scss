@@ -1,0 +1,32 @@
+.filter-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    gap: 4px;
+    margin-bottom: 5px;
+    padding: 5px 1em;
+    label {
+        flex: 1;
+        position: relative;
+    }
+    .btn-filter {
+        width: 70px;
+        height: 44px;
+        color: #fff;
+        background: var(--bg-primary);
+        border: 1px solid var(--bg-primary);
+        opacity: 0.9;
+        text-transform: uppercase;
+        font-weight: 600;
+        cursor: pointer;
+    }
+    .filter-label {
+        position: absolute;
+        left: 3px;
+        top: 0;
+        font-size: 11px;
+        color: #ff5722;
+        font-weight: 500;
+        z-index: 1;
+    }
+}

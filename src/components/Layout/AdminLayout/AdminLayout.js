@@ -1,5 +1,5 @@
 import Header from '~/components/Layout/components/Header';
-function HeaderOnly({ children }) {
+function AdminLayout({ children }) {
     return (
         <div>
             <Header />
@@ -10,4 +10,4 @@ function HeaderOnly({ children }) {
     );
 }
 
-export default HeaderOnly;
+export default AdminLayout;

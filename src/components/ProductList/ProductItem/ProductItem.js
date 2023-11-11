@@ -1,10 +1,6 @@
 import classNames from 'classnames/bind';
 import styles from '../ProductList.module.scss';
 const cx = classNames.bind(styles);
-import imagedefault from '~/assets/images/cocacola.jpg';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAdd, faMinus } from '@fortawesome/free-solid-svg-icons';
-import { formatPrice } from '~/utils/filters';
 import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '~/context/AppContext';
 function ProductItem({ item, onClick }) {

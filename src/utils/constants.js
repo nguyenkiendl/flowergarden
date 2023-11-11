@@ -113,6 +113,11 @@ export const WATERS = [
         label: 'Combo BBQ',
         active: false,
     },
+    {
+        key: 'beef',
+        label: 'Bò',
+        active: false,
+    },
 ];
 
 export const CART_STATUS = {
