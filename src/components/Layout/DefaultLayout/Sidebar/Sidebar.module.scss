@@ -1,7 +1,6 @@
 aside.sidebar {
     position: fixed;
     max-width: var(--sidebar-width, 90px);
-    height: calc(100vh - var(--header-height));
     background: #2196f3;
     transition: all 0.2s cubic-bezier(0.39, 0.58, 0.57, 1);
     transform: translateX(-100%);

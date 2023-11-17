@@ -49,7 +49,7 @@ function TableDetail() {
                     return obj;
                 });
                 setDetail({ ...detail, orders: newOrder });
-                navigate(`/tables`);
+                navigate(`/table-plan`);
             }
         };
         apiUpdate();
@@ -68,7 +68,7 @@ function TableDetail() {
                     </button>
 
                     <button className={cx('btn-booking-end')} onClick={handleEndOrder}>
-                        Đóng bàn
+                        Đóng bàn & In bill
                     </button>
                 </div>
             </div>

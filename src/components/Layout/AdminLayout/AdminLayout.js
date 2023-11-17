@@ -1,11 +1,13 @@
-import Header from '~/components/Layout/components/Header';
+import NavAdmin from '~/components/NavAdmin';
+import AdminHeader from '../components/AdminHeader';
 function AdminLayout({ children }) {
     return (
-        <div>
-            <Header />
+        <div className="wrapper">
+            <AdminHeader />
             <div className="container">
                 <div className="content">{children}</div>
             </div>
+            <NavAdmin />
         </div>
     );
 }

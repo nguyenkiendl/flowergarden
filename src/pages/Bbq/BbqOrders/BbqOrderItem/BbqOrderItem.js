@@ -37,7 +37,7 @@ function BbqOrderItem({ item, onChange }) {
                         >
                             <FontAwesomeIcon icon={faMinus} />
                         </button>
-                        <span className={cx('quantity', { show: quantity >= 0 })}>{quantity}</span>
+                        <span className={cx('quantity', { show: quantity >= 0, red: quantity > 0 })}>{quantity}</span>
                         <button onClick={() => handleAdd(item)} className={cx('btn-add', { show: quantity >= 0 })}>
                             <FontAwesomeIcon icon={faAdd} />
                         </button>

@@ -6,7 +6,6 @@ import { BbqContext } from '~/context/BbqContext';
 
 function BbqStep() {
     const { step, setStep } = useContext(BbqContext);
-    console.log(step);
     const handleChangeStep = (s) => {
         setStep(s);
     };

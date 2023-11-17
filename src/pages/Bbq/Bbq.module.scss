@@ -189,7 +189,31 @@
         }
     }
 }
-
+.bbq-content {
+    padding: 0 10px;
+    h3 {
+        position: relative;
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: #1276c5;
+        display: inline-block;
+        font-size: 16px;
+        text-transform: uppercase;
+        &::before {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 2px;
+            background: transparent;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
+        svg {
+            margin-right: 5px;
+        }
+    }
+}
 .tr {
     border-top: 1px solid #f2f2f2;
 }
@@ -230,6 +254,9 @@
         display: none;
         &.show {
             display: block;
+        }
+        &.red {
+            color: red;
         }
     }
     .btn-minus {
@@ -283,5 +310,20 @@
         &.hide {
             display: none;
         }
+    }
+}
+.bbq-label {
+    display: inline-flex;
+    width: 95px;
+    font-weight: 500;
+}
+.total {
+    color: #f44336;
+    font-weight: 600;
+}
+.bbq-info {
+    strong {
+        text-decoration: underline;
+        color: #1789e3;
     }
 }

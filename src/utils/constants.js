@@ -110,12 +110,17 @@ export const WATERS = [
     },
     {
         key: 'combo',
-        label: 'Combo BBQ',
+        label: 'Combo',
         active: false,
     },
     {
         key: 'beef',
         label: 'Bò',
+        active: false,
+    },
+    {
+        key: 'towel',
+        label: 'Khăn',
         active: false,
     },
 ];
@@ -140,3 +145,12 @@ export const TABLE_STATUS = {
     0: 'Bàn Trống',
     1: 'Đang Có Khách',
 };
+
+export const BBQ_STATUS = {
+    0: 'Mới',
+    1: 'Đã Cọc',
+    2: 'Đã Thanh toán',
+    3: 'Hủy Bàn',
+};
+
+export const BBQ_PAYMENT_PERCENT = 0.3;

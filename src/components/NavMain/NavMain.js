@@ -9,26 +9,25 @@ import { useState } from 'react';
 function NavMain() {
     const [active, setActive] = useState('bbq');
     const navigate = useNavigate();
-    const handleBbqs = () => {
-        setActive('');
-        navigate('/');
-    };
 
-    const handleTableMap = () => {
-        setActive('tables');
-        navigate('/tables');
+    const handleChangeNav = (active) => {
+        setActive(active);
+        navigate(active);
     };
     return (
         <>
             <div className={cx('navmain')}>
                 <div className={cx('navmain-row')}>
-                    <button className={cx('btn-bbq', { active: active === '/' })} onClick={handleBbqs}>
+                    <button className={cx('btn-bbq', { active: active === '/' })} onClick={() => handleChangeNav('/')}>
                         <span>
                             <FontAwesomeIcon icon={faBurger} />
                         </span>
                         <span>BBQ</span>
                     </button>
-                    <button className={cx('btn-table-map', { active: active === 'tables' })} onClick={handleTableMap}>
+                    <button
+                        className={cx('btn-table-map', { active: active === '/table-plan' })}
+                        onClick={() => handleChangeNav('/table-plan')}
+                    >
                         <span>
                             <FontAwesomeIcon icon={faSitemap} />
                         </span>

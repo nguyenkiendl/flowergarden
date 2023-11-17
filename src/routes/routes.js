@@ -11,8 +11,13 @@ import BookingDetail from '~/pages/Table/TableDetail/Booking/BookingDetail';
 import Admin from '~/pages/Admin';
 import Store from '~/pages/Admin/Store';
 import Bbq from '~/pages/Bbq';
+import BbqFinish from '~/pages/Bbq/BbqFinish';
+import BbqList from '~/pages/Admin/BbqList';
+import BbqDetail from '~/pages/Admin/BbqList/BbqDetail';
+import BbqEdit from '~/pages/Admin/BbqList/BbqEdit';
+import BbqPrintProcessing from '~/pages/Admin/BbqList/BbqDetail/BbqPrintProcessing';
 const publicRoutes = [
-    { path: '/tables', component: Table },
+    { path: '/table-plan', component: Table },
     { path: '/table/:tableId/', component: TableDetail },
     { path: '/table/:tableId/:orderId', component: Booking },
     { path: '/booking-detail/:tableId/:orderId', component: BookingDetail },
@@ -21,12 +26,17 @@ const publicRoutes = [
     { path: '/print-processing/:orderId', component: PrintProcessing, layout: PrintLayout },
     //BBQ
     { path: '/', component: Bbq },
+    { path: '/bbq/:bbqId', component: BbqFinish },
 ];
 
 const privateRoutes = [
     //private routes
     { path: '/super-admin', component: Admin },
-    { path: '/stores', component: Store },
+    { path: '/super-admin/bbqs', component: BbqList },
+    { path: '/super-admin/bbq/:bbqId', component: BbqDetail },
+    { path: '/super-admin/bbq-edit/:bbqId/:edit', component: BbqEdit },
+    { path: '/super-admin/bbq-print-processing/:bbqId', component: BbqPrintProcessing, layout: PrintLayout },
+    { path: '/super-admin/stores', component: Store },
 ];
 
 export { publicRoutes, privateRoutes };

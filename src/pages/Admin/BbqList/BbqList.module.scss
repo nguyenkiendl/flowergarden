@@ -1,0 +1,199 @@
+.btn-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    button {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        flex: auto;
+        padding: 15px 10px;
+        background: transparent;
+        color: var(--bg-primary);
+        cursor: pointer;
+        svg {
+            font-size: 22px;
+        }
+        &.btn-in {
+            background: #1276c5;
+            color: #fff;
+        }
+        &.btn-payment {
+            background: #009688;
+            color: #fff;
+        }
+        &.btn-cancel {
+            background: #ff5722;
+            color: #fff;
+        }
+    }
+}
+.tr-border {
+    border: 1px solid #ccc;
+    td {
+        border-bottom: 2px solid #ccc;
+    }
+}
+.status {
+    left: 12px;
+    bottom: 8px;
+    display: inline-block;
+    padding: 2px 5px;
+    font-size: 13px;
+    color: #fff;
+    text-align: center;
+    border-bottom: 1px solid var(--bg-primary);
+    border-radius: 4px;
+    &.status-0 {
+        background: #15a1f1;
+    }
+    &.status-1 {
+        background: #07108b;
+    }
+    &.status-2 {
+        background: #078b0b;
+    }
+    &.status-3 {
+        background: #ff5722;
+    }
+}
+.bbq-content {
+    padding: 0 10px;
+    h3 {
+        position: relative;
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: #1276c5;
+        display: inline-block;
+        font-size: 16px;
+        text-transform: uppercase;
+        &::before {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 2px;
+            background: transparent;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
+        svg {
+            margin-right: 5px;
+        }
+    }
+}
+.bbq-label {
+    display: inline-flex;
+    width: 95px;
+    font-weight: 500;
+}
+.bbq-edit {
+    .number {
+        color: red;
+    }
+}
+.bbq-info {
+    p {
+        margin-bottom: 3px;
+        strong {
+            flex: 1;
+            svg {
+                color: var(--bg-primary);
+            }
+        }
+        .hide {
+            display: none;
+        }
+    }
+}
+.edit-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+    button {
+        font-size: 22px;
+        text-align: center;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: 4px;
+        color: #fff;
+        background: var(--bg-primary);
+        text-transform: uppercase;
+        box-shadow: 2px 2px 0px 0px rgba(32, 33, 36, 0.2784313725);
+        svg {
+            color: #fff;
+        }
+    }
+}
+.btn-group {
+    margin: 7px 0 15px;
+    button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        flex: auto;
+        padding: 12px 7px;
+        background: transparent;
+        color: #fff;
+        cursor: pointer;
+        border-radius: 4px;
+        svg {
+            font-size: 22px;
+        }
+        &.hide {
+            display: none;
+        }
+        &.btn-cancel {
+            background: #ff5722;
+        }
+        &.btn-payment {
+            background: #14bb38;
+        }
+        &.btn-deposit {
+            background: #0a5ebd;
+        }
+    }
+}
+.navbar {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background: #fff;
+    box-shadow: 0 1px 6px 0 #20212447;
+    z-index: 2;
+    .navbar-row {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        border-top: 1px solid #ccc;
+        background: #fff;
+    }
+    button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        flex: auto;
+        padding: 15px 10px;
+        background: transparent;
+        color: var(--bg-primary);
+        cursor: pointer;
+        svg {
+            font-size: 22px;
+        }
+        &.hide {
+            display: none;
+        }
+        &.btn-cancel {
+            color: #ff5722;
+        }
+        &.btn-payment {
+            color: #14bb38;
+        }
+    }
+}

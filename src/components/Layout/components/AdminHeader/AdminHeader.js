@@ -1,10 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
-import styles from './Header.module.scss';
+import styles from './AdminHeader.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faRotate } from '@fortawesome/free-solid-svg-icons';
 const cx = classNames.bind(styles);
-function Header() {
+function AdminHeader() {
     const navigate = useNavigate();
 
     const handleClickReload = () => {
@@ -16,7 +16,7 @@ function Header() {
                 <FontAwesomeIcon icon={faArrowLeft} />
             </button>
             <div className={cx('inner')}>
-                <Link to="/" className={cx('page-title')}>
+                <Link to="/super-admin" className={cx('page-title')}>
                     <h1>FLOWER GARDEN</h1>
                 </Link>
             </div>
@@ -27,4 +27,4 @@ function Header() {
     );
 }
 
-export default Header;
+export default AdminHeader;

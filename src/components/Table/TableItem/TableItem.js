@@ -14,6 +14,15 @@ function TableItem({ item }) {
                 onClick={() => handleClickDetail(item.table_id)}
             >
                 <div className={cx('table-name')}>{item.table_name}</div>
+                <ul className={cx('order-list')}>
+                    {item.orders?.map((order, index) => {
+                        return (
+                            <li key={index}>
+                                {order.time} - {order.name}
+                            </li>
+                        );
+                    })}
+                </ul>
             </div>
         </>
     );

@@ -2,19 +2,29 @@ import classNames from 'classnames/bind';
 import styles from '../Bbq.module.scss';
 const cx = classNames.bind(styles);
 import { formatPrice } from '~/utils/filters';
-import { Fragment, useContext } from 'react';
+import { Fragment, useContext, useEffect } from 'react';
 import { BbqContext } from '~/context/BbqContext';
 import BbqOrderItem from './BbqOrderItem';
 import { WATERS } from '~/utils/constants';
 import BbqNav from '../BbqNav';
+import * as bbqServices from '~/apiServices/bbqServices';
 
-function BbqOrders({ dataList, setDataList }) {
-    const { setStep, setOrders } = useContext(BbqContext);
-
+function BbqOrders() {
+    const { setStep, bbq, setBbqOrders } = useContext(BbqContext);
+    const { orders } = bbq;
+    useEffect(() => {
+        const fetchApi = async () => {
+            const result = await bbqServices.getBbqProducts();
+            if (result) {
+                setBbqOrders(result.orders);
+            }
+        };
+        if (Object.keys(orders).length === 0) fetchApi();
+    }, []);
     const handleUpdate = (productId, quantity) => {
         const newDataList = {};
-        Object.keys(dataList).map((keyName) => {
-            const products = dataList[keyName];
+        Object.keys(orders).map((keyName) => {
+            const products = orders[keyName];
             const newProducts = products.map((obj) => {
                 if (obj.product_id === productId) {
                     return { ...obj, quantity: quantity };
@@ -23,7 +33,7 @@ function BbqOrders({ dataList, setDataList }) {
             });
             newDataList[keyName] = newProducts;
         });
-        setDataList(newDataList);
+        setBbqOrders(newDataList);
     };
 
     const headTitle = (type) => {
@@ -34,8 +44,8 @@ function BbqOrders({ dataList, setDataList }) {
 
     const totalOrder = () => {
         let total = 0;
-        for (let keyName in dataList) {
-            const products = dataList[keyName];
+        for (let keyName in orders) {
+            const products = orders[keyName];
             for (let i in products) {
                 const item = products[i];
                 total += item.product_price * item.quantity;
@@ -46,62 +56,51 @@ function BbqOrders({ dataList, setDataList }) {
     };
 
     const handleContinues = () => {
-        const orders = [];
-        Object.keys(dataList).map((keyName) => {
-            const products = dataList[keyName];
-            const newProducts = products.filter((obj) => {
-                return obj.quantity !== 0;
-            });
-            if (newProducts.length) orders.push(newProducts);
-        });
-        setOrders(orders);
+        setBbqOrders(orders);
         setStep(3);
     };
 
     return (
-        <div className="orders">
-            <div id="order-list" className={cx('order-list')}>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>TÊN</th>
-                            <th className="text-center">SL</th>
-                            <th className="text-right">GIÁ</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {Object.keys(dataList)?.map((keyName) => {
-                            const products = dataList[keyName];
-                            return (
-                                <Fragment key={keyName}>
-                                    <tr className={cx('trhead')}>
-                                        <td colSpan={3}>{headTitle(keyName)}</td>
-                                    </tr>
-                                    {products?.map((item, index) => {
-                                        return <BbqOrderItem key={index} item={item} onChange={handleUpdate} />;
-                                    })}
-                                </Fragment>
-                            );
-                        })}
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colSpan={2}></td>
-                            <td className="text-right">Tổng: {formatPrice(totalOrder())}đ</td>
-                        </tr>
-                    </tfoot>
-                </table>
-                <div className="form-row">
-                    <div className="col">
-                        <button className="btn-primary" onClick={handleContinues} disabled={totalOrder() === 0}>
-                            Tiếp Tục
-                        </button>
+        <div className={cx('bbqs')}>
+            <div className={cx('product-section')}>
+                <div className="orders">
+                    <div id="order-list" className={cx('order-list')}>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>TÊN</th>
+                                    <th className="text-center">SL</th>
+                                    <th className="text-right">GIÁ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {Object.keys(orders)?.map((keyName) => {
+                                    const products = orders[keyName];
+                                    return (
+                                        <Fragment key={keyName}>
+                                            <tr className={cx('trhead')}>
+                                                <td colSpan={3}>{headTitle(keyName)}</td>
+                                            </tr>
+                                            {products?.map((item, index) => {
+                                                return <BbqOrderItem key={index} item={item} onChange={handleUpdate} />;
+                                            })}
+                                        </Fragment>
+                                    );
+                                })}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colSpan={2}></td>
+                                    <td className="text-right">Tổng: {formatPrice(totalOrder())}đ</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <br></br>
+                        <br></br>
                     </div>
+                    <BbqNav onNext={handleContinues} isDisable={totalOrder() === 0} />
                 </div>
-                <br></br>
-                <br></br>
             </div>
-            <BbqNav onNext={handleContinues} countOrders={totalOrder()} />
         </div>
     );
 }

@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import styles from '../Bbq.module.scss';
+import styles from '../BbqList.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight, faAnglesRight, faCartPlus, faChevronLeft, faLock } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
