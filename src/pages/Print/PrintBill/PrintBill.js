@@ -8,13 +8,13 @@ import { formatPrice, timeIn, timePrint } from '~/utils/filters';
 import PrintHead from '../PrintHead';
 import PrintFoot from '../PrintFoot';
 function PrintBill() {
-    const { orderId } = useParams();
+    const { tableId } = useParams();
     const [print, setPrint] = useState({ orders: [] });
     useEffect(() => {
         const fetchApi = async () => {
-            const response = await orderServices.printOrder({
+            const response = await orderServices.printTable({
                 params: {
-                    order_id: Number(orderId),
+                    table_id: Number(tableId),
                 },
             });
             setPrint(response);

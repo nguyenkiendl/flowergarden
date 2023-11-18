@@ -1,24 +1,22 @@
 import classNames from 'classnames/bind';
 import styles from './ProductList.module.scss';
 import { useContext, useEffect, useState } from 'react';
-import { AppContext } from '~/context/AppContext';
 import * as productServices from '~/apiServices/productServices';
-import { PRODUCTS, WATERS } from '~/utils/constants';
+import { WATERS } from '~/utils/constants';
 import ProductItem from './ProductItem';
-
+import { BookContext } from '~/context/BookContext';
+import Product from './Product/Product';
 const cx = classNames.bind(styles);
 function ProductList({ onClick }) {
-    const [tabs, setTabs] = useState([]);
     const [activeTab, setActiveTab] = useState('water');
-    const [productList, setProductList] = useState([]);
-    const [isReset, setIsReset] = useState(false);
-    const { productSide } = useContext(AppContext);
+    const { setShow, productList, setProductList } = useContext(BookContext);
+    const [product, setProduct] = useState({});
     useEffect(() => {
         const fetchApi = async () => {
             const result = await productServices.products();
             setProductList(result);
         };
-        fetchApi();
+        if (productList.length === 0) fetchApi();
     }, []);
 
     const handleTabControl = (tab) => {
@@ -33,7 +31,6 @@ function ProductList({ onClick }) {
                     label: obj.category_name,
                 };
             }) || [];
-        console.log(productList);
         return newTabs;
     };
 
@@ -43,6 +40,14 @@ function ProductList({ onClick }) {
         })?.label;
     };
 
+    const handleClick = (product) => {
+        if (activeTab === 'water') {
+            setShow(true);
+            setProduct(product);
+        } else {
+            onClick(product);
+        }
+    };
     return (
         <>
             <div className={cx('product-list')}>
@@ -80,8 +85,7 @@ function ProductList({ onClick }) {
                                                     <ProductItem
                                                         key={item.product_id}
                                                         item={item}
-                                                        isReset={isReset}
-                                                        onClick={onClick}
+                                                        onClick={() => handleClick(item)}
                                                     />
                                                 );
                                             })}
@@ -93,6 +97,7 @@ function ProductList({ onClick }) {
                     );
                 })}
             </div>
+            <Product item={product} />
             <div className={cx('fragment')}></div>
         </>
     );

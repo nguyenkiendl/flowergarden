@@ -15,6 +15,19 @@
         min-height: 85px;
         background: #fff;
         margin-bottom: 10px;
+        ul {
+            list-style: none;
+            li {
+                font-size: 12px;
+                display: flex;
+                width: 150px;
+                justify-content: space-between;
+                border-bottom: 1px dashed #ccc;
+                .quantity {
+                    white-space: nowrap;
+                }
+            }
+        }
         .date {
             position: absolute;
             right: 12px;
@@ -41,9 +54,7 @@
             text-align: right;
         }
         .status {
-            position: absolute;
-            left: 12px;
-            bottom: 8px;
+            position: relative;
             display: inline-block;
             padding: 2px 5px;
             font-size: 11px;
@@ -55,16 +66,19 @@
                 color: var(--order-open);
                 border: 1px solid var(--order-open);
             }
-            &.status-1 {
+            &.status-2 {
                 color: var(--order-close);
                 border: 1px solid var(--order-close);
             }
         }
+        .details {
+            margin-bottom: 5px;
+        }
         .btn-group {
-            position: absolute;
+            position: relative;
             display: flex;
-            right: 12px;
-            bottom: 7px;
+            justify-content: space-between;
+            align-items: flex-end;
             gap: 3px;
             &.hide {
                 display: none;

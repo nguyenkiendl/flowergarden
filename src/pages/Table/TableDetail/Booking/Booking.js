@@ -4,7 +4,7 @@ const cx = classNames.bind(styles);
 import { useParams } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
 import * as tableServices from '~/apiServices/tableServices';
-import NavBar from '~/components/NavBar';
+import NavBar from './NavBar';
 import { dateNow, formatPrice } from '~/utils/filters';
 import ProductList from '~/components/ProductList';
 import * as cartServices from '~/apiServices/cartServices';
@@ -47,18 +47,6 @@ function Booking() {
     const cartCount = carts.reduce((total, item) => total + item.quantity, 0);
 
     const handleClickAdd = (product) => {
-        // const addToCart = async () => {
-        //     const res = await cartServices.addToCart({
-        //         order_id: Number(orderId),
-        //         product_id: Number(productId),
-        //     });
-        //     if (res.status) {
-        //         const count = res.data;
-        //         setCartCount(count);
-        //     }
-        // };
-        // addToCart();
-
         const existCart = carts.some((obj) => obj.product_id === product.product_id);
         if (existCart) {
             setCarts((prevCart) => {

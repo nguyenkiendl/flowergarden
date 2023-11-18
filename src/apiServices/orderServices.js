@@ -9,18 +9,9 @@ export const addOrders = async (options) => {
     }
 };
 
-export const updateOrderStatus = async (datas) => {
+export const update = async (datas) => {
     try {
-        const res = await request.post('orders/update_order_status.php', datas);
-        return res.data;
-    } catch (error) {
-        console.log(error);
-    }
-};
-
-export const updateDetailStatus = async (datas) => {
-    try {
-        const res = await request.post('orders/update_detail_status.php', datas);
+        const res = await request.post('orders/update.php', datas);
         return res.data;
     } catch (error) {
         console.log(error);
@@ -66,6 +57,15 @@ export const printOrderBill = async (params) => {
 export const printOrder = async (params) => {
     try {
         const res = await request.get('prints/order.php', params);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const printTable = async (params) => {
+    try {
+        const res = await request.get('prints/table.php', params);
         return res.data;
     } catch (error) {
         console.log(error);

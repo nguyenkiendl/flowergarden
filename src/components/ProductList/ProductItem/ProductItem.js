@@ -1,15 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from '../ProductList.module.scss';
 const cx = classNames.bind(styles);
-import { useContext, useEffect, useState } from 'react';
-import { AppContext } from '~/context/AppContext';
 function ProductItem({ item, onClick }) {
-    const [quantity, setQuantity] = useState(0);
-    const { productSide } = useContext(AppContext);
-    useEffect(() => {
-        if (productSide === true) setQuantity(0);
-    }, [productSide]);
-
     return (
         <>
             <div className={cx('product-item')} onClick={() => onClick(item)}>

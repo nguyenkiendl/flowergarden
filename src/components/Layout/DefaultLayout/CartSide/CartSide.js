@@ -1,15 +1,13 @@
 import classNames from 'classnames/bind';
 import styles from '~/components/Layout/DefaultLayout/DefaultLayout.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faClose } from '@fortawesome/free-solid-svg-icons';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { faClose } from '@fortawesome/free-solid-svg-icons';
+import { useContext, useEffect, useRef } from 'react';
 import { AppContext } from '~/context/AppContext';
-import { useNavigate, useParams } from 'react-router-dom';
 import Cart from '~/components/Cart';
 const cx = classNames.bind(styles);
 
-function CartSide( {carts, setCarts} ) {
-    const { orderId } = useParams();
+function CartSide({ carts, setCarts }) {
     const { cartSide, setCartSide } = useContext(AppContext);
     const handleCloseService = () => {
         setCartSide(false);
@@ -36,7 +34,6 @@ function CartSide( {carts, setCarts} ) {
     return (
         <>
             <div ref={wrapperRef} className={cx('right-sides', { show: cartSide })}>
-                
                 <div className={cx('header')}>
                     <h3>Giỏ Hàng</h3>
                     <button onClick={handleCloseService} className={cx('btn-close')}>
@@ -44,7 +41,7 @@ function CartSide( {carts, setCarts} ) {
                     </button>
                 </div>
                 <div className={cx('body')}>
-                    <Cart carts={carts} setCarts={setCarts}/>
+                    <Cart carts={carts} setCarts={setCarts} />
                 </div>
             </div>
         </>

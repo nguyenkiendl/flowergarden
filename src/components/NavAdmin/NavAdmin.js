@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import styles from './NavAdmin.module.scss';
 const cx = classNames.bind(styles);
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBurger, faChartLine, faStore } from '@fortawesome/free-solid-svg-icons';
+import { faBurger, faChartLine, faGear, faGears, faStore } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
@@ -44,6 +44,15 @@ function NavAdmin() {
                             <FontAwesomeIcon icon={faStore} />
                         </span>
                         <span>KHO</span>
+                    </button>
+                    <button
+                        className={cx('btn-setting', { active: active === '/super-admin/settings' })}
+                        onClick={() => handleChangeNav('/super-admin/settings')}
+                    >
+                        <span>
+                            <FontAwesomeIcon icon={faGears} />
+                        </span>
+                        <span>CÀI ĐẶT</span>
                     </button>
                 </div>
                 <br></br>

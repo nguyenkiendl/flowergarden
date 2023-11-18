@@ -18,10 +18,16 @@
         &.btn-booking-begin {
             background: #4caf50;
         }
-
+        &.btn-print-bill {
+            background: var(--bg-primary);
+            text-transform: uppercase;
+        }
         &.btn-booking-end {
             background: var(--bg-close);
             text-transform: uppercase;
+        }
+        &.hide {
+            display: none;
         }
     }
 }

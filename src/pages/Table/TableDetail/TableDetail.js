@@ -29,7 +29,6 @@ function TableDetail() {
         const apiUpdate = async () => {
             const response = await orderServices.bookingBegin({
                 table_id: Number(tableId),
-                type: 'hotel',
             });
             if (response) navigate(`/table/${tableId}/${response.order_id}`);
         };
@@ -42,20 +41,28 @@ function TableDetail() {
                 table_id: Number(tableId),
             });
             if (response) {
-                const newOrder = detail.orders.map((obj) => {
-                    if (obj.order_id === orderId) {
-                        obj.order_status = 1;
-                    }
-                    return obj;
-                });
-                setDetail({ ...detail, orders: newOrder });
+                // const newOrder = detail.orders.map((obj) => {
+                //     if (obj.order_id === orderId) {
+                //         obj.order_status = 1;
+                //     }
+                //     return obj;
+                // });
+                setDetail({ ...detail, orders: [] });
                 navigate(`/table-plan`);
             }
         };
         apiUpdate();
     };
+
+    const handlePrint = () => {
+        const f = document.getElementById('iframe-bill');
+        const w = f.contentWindow;
+        w.postMessage({ action: 'print-bill' }, f.src);
+    };
+
     return (
         <div className="table-detail">
+            <iframe id="iframe-bill" src={`/print-bill/${tableId}`} style={{ display: 'none' }} title="PRINT BILL" />
             <div className="page-title">
                 <div className={cx('group-title')}>
                     <h3 className={cx('title')}>{detail.table_key}</h3>
@@ -67,8 +74,14 @@ function TableDetail() {
                         <FontAwesomeIcon icon={faPlusCircle} />
                     </button>
 
-                    <button className={cx('btn-booking-end')} onClick={handleEndOrder}>
-                        Đóng bàn & In bill
+                    <button className={cx('btn-print-bill', { hide: detail.table_status === 0 })} onClick={handlePrint}>
+                        In bill
+                    </button>
+                    <button
+                        className={cx('btn-booking-end', { hide: detail.table_status === 0 })}
+                        onClick={handleEndOrder}
+                    >
+                        Đóng bàn
                     </button>
                 </div>
             </div>
